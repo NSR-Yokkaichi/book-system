@@ -17,6 +17,8 @@ services:
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
+      PMA_USER: bookuser
+      PMA_PASSWORD: bookpassword
     ports:
       - "8080:80"
     depends_on:
