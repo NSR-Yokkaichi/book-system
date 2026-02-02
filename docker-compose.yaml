@@ -1,27 +1,25 @@
 name: book-system
 services:
   db:
-    image: mariadb:lts
+    image: postgres:18
     environment:
-      MARIADB_ROOT_PASSWORD: rootpassword
-      MARIADB_DATABASE: booksystem
-      MARIADB_USER: bookuser
-      MARIADB_PASSWORD: bookpassword
+      POSTGRES_PASSWORD: rootpassword
+      POSTGRES_DB: booksystem
+      POSTGRES_USER: bookuser
       TZ: "Asia/Tokyo"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql
     ports:
-      - "3306:3306"
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_USER: bookuser
-      PMA_PASSWORD: bookpassword
+      - "5432:5432"
+  adminer:
+    image: adminer
     ports:
-      - "8080:80"
+      - 8080:8080
     depends_on:
       - db
 volumes:
   db_data:
+
+networks:
+  booksystem:
+    driver: bridge
