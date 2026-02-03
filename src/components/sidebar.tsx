@@ -30,7 +30,6 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 
@@ -139,7 +138,6 @@ export default function Sidebar({ children }: Props) {
             <MenuIcon />
           </IconButton>
           
-          {/* flexGrow: 1 を追加して、右側にスペースを作る */}
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             図書システム
           </Typography>
@@ -165,7 +163,7 @@ export default function Sidebar({ children }: Props) {
         </Toolbar>
       </AppBar>
 
-      {/* アカウントメニューの中身 (Menuコンポーネント) */}
+      {/* アカウントメニューの中身*/}
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
