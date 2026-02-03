@@ -25,6 +25,15 @@ import PersonIcon from '@mui/icons-material/Person';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
+// アカウントメニュー用の追加インポート
+import Avatar from '@mui/material/Avatar';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Tooltip from '@mui/material/Tooltip';
+import PersonAdd from '@mui/icons-material/PersonAdd';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
+
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -81,16 +90,28 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
+
 type Props = {
   children: React.ReactNode;
 };
+
 export default function Sidebar({ children }: Props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  // --- アカウントメニュー用の状態管理 ---
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const menuOpen = Boolean(anchorEl);
+  const handleAccountClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleAccountClose = () => {
+    setAnchorEl(null);
+  };
+  // ----------------------------------
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -111,19 +132,77 @@ export default function Sidebar({ children }: Props) {
             onClick={handleDrawerOpen}
             edge="start"
             sx={[
-              {
-                mr: 2,
-              },
+              { mr: 2 },
               open && { display: "none" },
             ]}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          
+          {/* flexGrow: 1 を追加して、右側にスペースを作る */}
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             図書システム
           </Typography>
+
+          {/* --- ここからアカウントメニュー --- */}
+          <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+            <Typography sx={{ minWidth: 100, display: { xs: 'none', md: 'block' } }}>アカウント情報</Typography>
+            <Tooltip title="Account settings">
+              <IconButton
+                onClick={handleAccountClick}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls={menuOpen ? 'account-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={menuOpen ? 'true' : undefined}
+              >
+                <Avatar sx={{ width: 32, height: 32, bgcolor: 'orange' }}>M</Avatar>
+              </IconButton>
+            </Tooltip>
+          </Box>
+          {/* --- ここまでアカウントメニュー --- */}
+
         </Toolbar>
       </AppBar>
+
+      {/* アカウントメニューの中身 (Menuコンポーネント) */}
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={menuOpen}
+        onClose={handleAccountClose}
+        onClick={handleAccountClose}
+        slotProps={{
+          paper: {
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+              '& .MuiAvatar-root': { width: 32, height: 32, ml: -0.5, mr: 1 },
+              '&::before': {
+                content: '""', display: 'block', position: 'absolute', top: 0, right: 14, width: 10, height: 10,
+                bgcolor: 'background.paper', transform: 'translateY(-50%) rotate(45deg)', zIndex: 0,
+              },
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuItem onClick={handleAccountClose}><Avatar /> Profile</MenuItem>
+        <MenuItem onClick={handleAccountClose}><Avatar /> My account</MenuItem>
+        <Divider />
+        <MenuItem onClick={handleAccountClose}>
+          <ListItemIcon><Settings fontSize="small" /></ListItemIcon>
+          Settings
+        </MenuItem>
+        <MenuItem onClick={handleAccountClose}>
+          <ListItemIcon><Logout fontSize="small" /></ListItemIcon>
+          Logout
+        </MenuItem>
+      </Menu>
+
       <Drawer
         sx={{
           width: drawerWidth,
@@ -139,54 +218,40 @@ export default function Sidebar({ children }: Props) {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
+            {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
           <ListItem key={"search"} disablePadding>
             <ListItemButton>
-              <ListItemIcon>
-                <SearchIcon />
-              </ListItemIcon>
+              <ListItemIcon><SearchIcon /></ListItemIcon>
               <ListItemText primary={"検索"} />
             </ListItemButton>
           </ListItem>
           <ListItem key={"bookmark"} disablePadding>
             <ListItemButton>
-              <ListItemIcon>
-                <BookmarkIcon />
-              </ListItemIcon>
+              <ListItemIcon><BookmarkIcon /></ListItemIcon>
               <ListItemText primary={"予約"} />
-              </ListItemButton>
+            </ListItemButton>
           </ListItem>
           <ListItem key={"mypage"} disablePadding>
             <ListItemButton>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
+              <ListItemIcon><PersonIcon /></ListItemIcon>
               <ListItemText primary={"マイページ"} />
-              </ListItemButton>
+            </ListItemButton>
           </ListItem>
           <ListItem key={"request"} disablePadding>
             <ListItemButton>
-              <ListItemIcon>
-                <AddCircleOutlineIcon />
-              </ListItemIcon>
+              <ListItemIcon><AddCircleOutlineIcon /></ListItemIcon>
               <ListItemText primary={"リクエスト"} />
-              </ListItemButton>
+            </ListItemButton>
           </ListItem>
           <ListItem key={"return"} disablePadding>
             <ListItemButton>
-              <ListItemIcon>
-                <KeyboardReturnIcon />
-              </ListItemIcon>
+              <ListItemIcon><KeyboardReturnIcon /></ListItemIcon>
               <ListItemText primary={"本の返却"} />
-              </ListItemButton>
+            </ListItemButton>
           </ListItem>
         </List>
         <Divider />
@@ -203,6 +268,7 @@ export default function Sidebar({ children }: Props) {
           ))}
         </List>
       </Drawer>
+
       <Main open={open}>
         <DrawerHeader />
         {children}
