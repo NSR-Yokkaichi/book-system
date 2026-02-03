@@ -144,7 +144,7 @@ export default function Sidebar({ children }: Props) {
 
           {/* --- ここからアカウントメニュー --- */}
           <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-            <Typography sx={{ minWidth: 100, display: { xs: 'none', md: 'block' } }}>アカウント情報</Typography>
+            <Typography sx={{ minWidth: 100, display: { xs: 'none', md: 'block' } }}>アカウント</Typography>
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleAccountClick}
@@ -188,19 +188,18 @@ export default function Sidebar({ children }: Props) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleAccountClose}><Avatar /> Profile</MenuItem>
-        <MenuItem onClick={handleAccountClose}><Avatar /> My account</MenuItem>
+        <MenuItem onClick={handleAccountClose}><Avatar /> プロフィール</MenuItem>
         <Divider />
         <MenuItem onClick={handleAccountClose}>
           <ListItemIcon><Settings fontSize="small" /></ListItemIcon>
-          Settings
+          個人設定
         </MenuItem>
         <MenuItem onClick={handleAccountClose}>
           <ListItemIcon><Logout fontSize="small" /></ListItemIcon>
-          Logout
+          ログアウト
         </MenuItem>
       </Menu>
-
+        {/* ここまでがアカウントメニューの中身*/}
       <Drawer
         sx={{
           width: drawerWidth,
@@ -219,6 +218,7 @@ export default function Sidebar({ children }: Props) {
             {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
+        
         <Divider />
         <List>
           <ListItem key={"search"} disablePadding>
@@ -227,30 +227,35 @@ export default function Sidebar({ children }: Props) {
               <ListItemText primary={"検索"} />
             </ListItemButton>
           </ListItem>
+
           <ListItem key={"bookmark"} disablePadding>
             <ListItemButton>
               <ListItemIcon><BookmarkIcon /></ListItemIcon>
               <ListItemText primary={"予約"} />
             </ListItemButton>
           </ListItem>
+
           <ListItem key={"mypage"} disablePadding>
             <ListItemButton>
               <ListItemIcon><PersonIcon /></ListItemIcon>
               <ListItemText primary={"マイページ"} />
             </ListItemButton>
           </ListItem>
+
           <ListItem key={"request"} disablePadding>
             <ListItemButton>
               <ListItemIcon><AddCircleOutlineIcon /></ListItemIcon>
               <ListItemText primary={"リクエスト"} />
             </ListItemButton>
           </ListItem>
+
           <ListItem key={"return"} disablePadding>
             <ListItemButton>
               <ListItemIcon><KeyboardReturnIcon /></ListItemIcon>
               <ListItemText primary={"本の返却"} />
             </ListItemButton>
           </ListItem>
+
         </List>
         <Divider />
         <List>
