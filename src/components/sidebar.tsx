@@ -30,6 +30,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import { User } from "better-auth";
 
 const drawerWidth = 240;
 
@@ -92,10 +93,11 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 type Props = {
+  user: User;
   children: React.ReactNode;
 };
 
-export default function Sidebar({ children }: Props) {
+export default function Sidebar({ children, user }: Props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -150,9 +152,10 @@ export default function Sidebar({ children }: Props) {
                 aria-haspopup="true"
                 aria-expanded={menuOpen ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32, bgcolor: "orange" }}>
-                  M
-                </Avatar>
+                <Avatar
+                  sx={{ width: 32, height: 32, bgcolor: "orange" }}
+                  src={user.image!}
+                />
               </IconButton>
             </Tooltip>
           </Box>
