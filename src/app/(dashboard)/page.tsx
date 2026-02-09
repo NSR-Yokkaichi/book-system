@@ -1,6 +1,11 @@
-import Image from "next/image";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  console.log("session", session);
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans">
       next.jsなんもわからん
