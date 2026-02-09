@@ -22,6 +22,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import PersonIcon from "@mui/icons-material/Person";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
 // アカウントメニュー用の追加インポート
 import Avatar from "@mui/material/Avatar";
@@ -268,6 +269,15 @@ export default function Sidebar({ children, user }: Props) {
                 <AddCircleOutlineIcon />
               </ListItemIcon>
               <ListItemText primary={"リクエスト"} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem key={"borrow"} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <AddAPhotoIcon />
+              </ListItemIcon>
+              <ListItemText primary={"本の貸出"} />
             </ListItemButton>
           </ListItem>
 
