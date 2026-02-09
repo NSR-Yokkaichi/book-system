@@ -17,21 +17,19 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import SearchIcon from "@mui/icons-material/Search";
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import PersonIcon from '@mui/icons-material/Person';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import PersonIcon from "@mui/icons-material/Person";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 
 // アカウントメニュー用の追加インポート
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Tooltip from '@mui/material/Tooltip';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import Settings from "@mui/icons-material/Settings";
+import Logout from "@mui/icons-material/Logout";
 
 const drawerWidth = 240;
 
@@ -130,36 +128,35 @@ export default function Sidebar({ children }: Props) {
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={[
-              { mr: 2 },
-              open && { display: "none" },
-            ]}
+            sx={[{ mr: 2 }, open && { display: "none" }]}
           >
             <MenuIcon />
           </IconButton>
-          
+
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             図書システム
           </Typography>
 
           {/* --- ここからアカウントメニュー --- */}
-          <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-            <Typography sx={{ minWidth: 100, display: { xs: 'none', md: 'block' } }}>アカウント</Typography>
+          <Box
+            sx={{ display: "flex", alignItems: "center", textAlign: "center" }}
+          >
             <Tooltip title="Account settings">
               <IconButton
                 onClick={handleAccountClick}
                 size="small"
                 sx={{ ml: 2 }}
-                aria-controls={menuOpen ? 'account-menu' : undefined}
+                aria-controls={menuOpen ? "account-menu" : undefined}
                 aria-haspopup="true"
-                aria-expanded={menuOpen ? 'true' : undefined}
+                aria-expanded={menuOpen ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32, bgcolor: 'orange' }}>M</Avatar>
+                <Avatar sx={{ width: 32, height: 32, bgcolor: "orange" }}>
+                  M
+                </Avatar>
               </IconButton>
             </Tooltip>
           </Box>
           {/* --- ここまでアカウントメニュー --- */}
-
         </Toolbar>
       </AppBar>
 
@@ -174,31 +171,42 @@ export default function Sidebar({ children }: Props) {
           paper: {
             elevation: 0,
             sx: {
-              overflow: 'visible',
-              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              overflow: "visible",
+              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
               mt: 1.5,
-              '& .MuiAvatar-root': { width: 32, height: 32, ml: -0.5, mr: 1 },
-              '&::before': {
-                content: '""', display: 'block', position: 'absolute', top: 0, right: 14, width: 10, height: 10,
-                bgcolor: 'background.paper', transform: 'translateY(-50%) rotate(45deg)', zIndex: 0,
+              "& .MuiAvatar-root": { width: 32, height: 32, ml: -0.5, mr: 1 },
+              "&::before": {
+                content: '""',
+                display: "block",
+                position: "absolute",
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: "background.paper",
+                transform: "translateY(-50%) rotate(45deg)",
+                zIndex: 0,
               },
             },
           },
         }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Divider />
         <MenuItem onClick={handleAccountClose}>
-          <ListItemIcon><Settings fontSize="small" /></ListItemIcon>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
           個人設定
         </MenuItem>
         <MenuItem onClick={handleAccountClose}>
-          <ListItemIcon><Logout fontSize="small" /></ListItemIcon>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
           ログアウト
         </MenuItem>
       </Menu>
-        {/* ここまでがアカウントメニューの中身*/}
+      {/* ここまでがアカウントメニューの中身*/}
       <Drawer
         sx={{
           width: drawerWidth,
@@ -214,49 +222,61 @@ export default function Sidebar({ children }: Props) {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
           </IconButton>
         </DrawerHeader>
-        
+
         <Divider />
         <List>
           <ListItem key={"search"} disablePadding>
             <ListItemButton>
-              <ListItemIcon><SearchIcon /></ListItemIcon>
+              <ListItemIcon>
+                <SearchIcon />
+              </ListItemIcon>
               <ListItemText primary={"検索"} />
             </ListItemButton>
           </ListItem>
 
           <ListItem key={"bookmark"} disablePadding>
             <ListItemButton>
-              <ListItemIcon><BookmarkIcon /></ListItemIcon>
+              <ListItemIcon>
+                <BookmarkIcon />
+              </ListItemIcon>
               <ListItemText primary={"予約"} />
             </ListItemButton>
           </ListItem>
 
           <ListItem key={"mypage"} disablePadding>
             <ListItemButton>
-              <ListItemIcon><PersonIcon /></ListItemIcon>
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
               <ListItemText primary={"マイページ"} />
             </ListItemButton>
           </ListItem>
 
           <ListItem key={"request"} disablePadding>
             <ListItemButton>
-              <ListItemIcon><AddCircleOutlineIcon /></ListItemIcon>
+              <ListItemIcon>
+                <AddCircleOutlineIcon />
+              </ListItemIcon>
               <ListItemText primary={"リクエスト"} />
             </ListItemButton>
           </ListItem>
 
           <ListItem key={"return"} disablePadding>
             <ListItemButton>
-              <ListItemIcon><KeyboardReturnIcon /></ListItemIcon>
+              <ListItemIcon>
+                <KeyboardReturnIcon />
+              </ListItemIcon>
               <ListItemText primary={"本の返却"} />
             </ListItemButton>
           </ListItem>
-
         </List>
-        <Divider />
       </Drawer>
 
       <Main open={open}>
