@@ -188,7 +188,6 @@ export default function Sidebar({ children }: Props) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleAccountClose}><Avatar /> プロフィール</MenuItem>
         <Divider />
         <MenuItem onClick={handleAccountClose}>
           <ListItemIcon><Settings fontSize="small" /></ListItemIcon>
@@ -258,18 +257,6 @@ export default function Sidebar({ children }: Props) {
 
         </List>
         <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
 
       <Main open={open}>
