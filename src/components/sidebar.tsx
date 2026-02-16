@@ -32,6 +32,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { User } from "better-auth";
+import Link from "next/link";
 
 const drawerWidth = 240;
 
@@ -137,7 +138,9 @@ export default function Sidebar({ children, user }: Props) {
           </IconButton>
 
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            図書システム
+            <Link href="/" className="text-white no-underline">
+              図書システム
+            </Link>
           </Typography>
 
           {/* --- ここからアカウントメニュー --- */}
@@ -197,12 +200,17 @@ export default function Sidebar({ children, user }: Props) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleAccountClose}>
+        <MenuItem
+          onClick={handleAccountClose}
+          component={Link}
+          href="/settings"
+        >
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           個人設定
         </MenuItem>
+
         <MenuItem onClick={handleAccountClose}>
           <ListItemIcon>
             <Logout fontSize="small" />
