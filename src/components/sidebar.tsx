@@ -33,6 +33,8 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { User } from "better-auth";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
 const drawerWidth = 240;
 
@@ -113,6 +115,11 @@ export default function Sidebar({ children, user }: Props) {
     setAnchorEl(null);
   };
   // ----------------------------------
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+    redirect("/signin");
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -211,7 +218,7 @@ export default function Sidebar({ children, user }: Props) {
           個人設定
         </MenuItem>
 
-        <MenuItem onClick={handleAccountClose}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -244,7 +251,12 @@ export default function Sidebar({ children, user }: Props) {
 
         <Divider />
         <List>
-          <ListItem key={"search"} disablePadding>
+          <ListItem
+            key={"search"}
+            disablePadding
+            component={Link}
+            href="/books/search"
+          >
             <ListItemButton>
               <ListItemIcon>
                 <SearchIcon />
@@ -253,7 +265,12 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem key={"bookmark"} disablePadding>
+          <ListItem
+            key={"bookmark"}
+            disablePadding
+            component={Link}
+            href="/reservations"
+          >
             <ListItemButton>
               <ListItemIcon>
                 <BookmarkIcon />
@@ -262,7 +279,12 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem key={"mypage"} disablePadding>
+          <ListItem
+            key={"mypage"}
+            disablePadding
+            component={Link}
+            href="/mypage"
+          >
             <ListItemButton>
               <ListItemIcon>
                 <PersonIcon />
@@ -271,7 +293,12 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem key={"request"} disablePadding>
+          <ListItem
+            key={"request"}
+            disablePadding
+            component={Link}
+            href="/requests"
+          >
             <ListItemButton>
               <ListItemIcon>
                 <AddCircleOutlineIcon />
@@ -280,7 +307,12 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem key={"borrow"} disablePadding>
+          <ListItem
+            key={"borrow"}
+            disablePadding
+            component={Link}
+            href="/borrow"
+          >
             <ListItemButton>
               <ListItemIcon>
                 <AddAPhotoIcon />
@@ -289,7 +321,12 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem key={"return"} disablePadding>
+          <ListItem
+            key={"return"}
+            disablePadding
+            component={Link}
+            href="/return"
+          >
             <ListItemButton>
               <ListItemIcon>
                 <KeyboardReturnIcon />
