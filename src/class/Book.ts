@@ -45,7 +45,6 @@ export class Book {
    * @returns 作成された本のインスタンス
    */
   static async create(data: {
-    id: string;
     name: string;
     isbn: string;
     author?: string;
