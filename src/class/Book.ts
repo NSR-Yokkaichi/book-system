@@ -2,6 +2,11 @@ import prisma from "@/lib/prisma";
 import { Book as PrismaBook, Rental } from "../generated/prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
+export enum BookStatus {
+  Available = "available",
+  Rented = "rented",
+}
+
 export class Book {
   id: string;
   name: string;
@@ -12,11 +17,15 @@ export class Book {
   createdAt: Date;
   updatedAt: Date;
 
-  async getStatus(): Promise<"available" | "rented"> {
+  /**
+   * 本のステータスを確認する
+   * @returns 本のステータス
+   */
+  async getStatus(): Promise<BookStatus> {
     const rental = await prisma.rental.findFirst({
       where: { bookId: this.id },
     });
-    return rental ? "rented" : "available";
+    return rental ? BookStatus.Rented : BookStatus.Available;
   }
 
   constructor(data: PrismaBook) {
@@ -30,6 +39,11 @@ export class Book {
     this.updatedAt = data.updatedAt;
   }
 
+  /**
+   * 本を登録する
+   * @param data 作成する本のデータ
+   * @returns 作成された本のインスタンス
+   */
   static async create(data: {
     id: string;
     name: string;
@@ -52,7 +66,7 @@ export class Book {
   }
 
   /**
-   * Bookインスタンスの内容でDBを更新するよ！
+   * クラス(インスタンス)の内容をデータベースに上書きする
    * @returns 更新後のBookインスタンス
    */
   async save(): Promise<Book> {
@@ -72,14 +86,19 @@ export class Book {
   }
 
   /**
-   * BookインスタンスをDBから削除するよ！
-   * @returns 削除したBookインスタンス
+   * 本の登録を削除する
+   * @returns 削除された本の情報
    */
   async delete(): Promise<Book> {
     const deleted = await prisma.book.delete({ where: { id: this.id } });
     return new Book(deleted);
   }
 
+  /**
+   * 本を貸し出す
+   * @param user_id 借りる人(ユーザーID)
+   * @returns 貸出情報
+   */
   async rent(user_id: string): Promise<Rental> {
     const campus = await prisma.campus.findFirst();
     if (!campus) {
@@ -98,6 +117,9 @@ export class Book {
     return rental;
   }
 
+  /**
+   * 本を返却する
+   */
   async return() {
     const rental = await prisma.rental.findFirst({
       where: { bookId: this.id },
@@ -108,21 +130,40 @@ export class Book {
     await prisma.rental.delete({ where: { id: rental.id } });
   }
 
+  /**
+   * IDを指定して本の情報を取得する
+   * @param id 本のid
+   * @returns 本の情報
+   */
   static async findById(id: string): Promise<Book | null> {
     const found = await prisma.book.findUnique({ where: { id } });
     return found ? new Book(found) : null;
   }
 
+  /**
+   * 本の一覧を取得する
+   * @returns 本の情報の配列
+   */
   static async findAll(): Promise<Book[]> {
     const books = await prisma.book.findMany();
     return books.map((b) => new Book(b));
   }
 
+  /**
+   * ISBNコードを指定して本の情報を取得する
+   * @param isbn ISBNコード
+   * @returns 本の情報の配列
+   */
   static async findByISBN(isbn: string): Promise<Book[]> {
     const books = await prisma.book.findMany({ where: { isbn } });
     return books.map((b) => new Book(b));
   }
 
+  /**
+   * シールに紐つく本の情報を取得する
+   * @param sticker_id シールの番号
+   * @returns 本の情報もしくはnull
+   */
   static async findByStickerId(sticker_id: string): Promise<Book | null> {
     const found = await prisma.book.findFirst({ where: { sticker_id } });
     return found ? new Book(found) : null;
