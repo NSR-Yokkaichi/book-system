@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "book" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "sticker_id" TEXT,
     "isbn" TEXT NOT NULL,
@@ -14,9 +14,9 @@ CREATE TABLE "book" (
 
 -- CreateTable
 CREATE TABLE "rental" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "bookId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "studentId" UUID NOT NULL,
+    "bookId" UUID NOT NULL,
     "expiresAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE "rental" (
 
 -- CreateTable
 CREATE TABLE "student" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "userId" TEXT NOT NULL,
     "course" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -35,11 +35,22 @@ CREATE TABLE "student" (
     CONSTRAINT "student_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "campus" (
+    "id" UUID NOT NULL,
+    "name" TEXT NOT NULL,
+    "rentalDeadline" INTEGER NOT NULL DEFAULT 14,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "campus_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE INDEX "book_isbn_idx" ON "book"("isbn");
 
 -- CreateIndex
-CREATE INDEX "rental_userId_idx" ON "rental"("userId");
+CREATE INDEX "rental_studentId_idx" ON "rental"("studentId");
 
 -- CreateIndex
 CREATE INDEX "rental_bookId_idx" ON "rental"("bookId");
@@ -48,7 +59,7 @@ CREATE INDEX "rental_bookId_idx" ON "rental"("bookId");
 CREATE INDEX "student_course_idx" ON "student"("course");
 
 -- AddForeignKey
-ALTER TABLE "rental" ADD CONSTRAINT "rental_userId_fkey" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "rental" ADD CONSTRAINT "rental_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "student"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "rental" ADD CONSTRAINT "rental_bookId_fkey" FOREIGN KEY ("bookId") REFERENCES "book"("id") ON DELETE CASCADE ON UPDATE CASCADE;

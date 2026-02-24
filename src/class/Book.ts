@@ -54,7 +54,6 @@ export class Book {
   }): Promise<Book> {
     const created = await prisma.book.create({
       data: {
-        id: data.id,
         name: data.name,
         isbn: data.isbn,
         author: data.author,
@@ -167,5 +166,39 @@ export class Book {
   static async findByStickerId(sticker_id: string): Promise<Book | null> {
     const found = await prisma.book.findFirst({ where: { sticker_id } });
     return found ? new Book(found) : null;
+  }
+
+  /**
+   * 本を検索する
+   * @param query 検索データ(詳細検索もしくは簡易検索)
+   * @returns 検索結果の本の配列
+   */
+  static async search(
+    query:
+      | {
+          name?: string;
+          isbn?: string;
+          author?: string;
+          publisher?: string;
+        }
+      | string,
+  ): Promise<Book[]> {
+    let where = {};
+    if (typeof query === "string") {
+      where = {
+        OR: [
+          { name: { contains: query, mode: "insensitive" } },
+          { isbn: { contains: query, mode: "insensitive" } },
+          { author: { contains: query, mode: "insensitive" } },
+          { publisher: { contains: query, mode: "insensitive" } },
+        ],
+      };
+    } else {
+      where = Object.fromEntries(
+        Object.entries(query).filter(([_, value]) => value !== undefined),
+      );
+    }
+    const books = await prisma.book.findMany({ where });
+    return books.map((b) => new Book(b));
   }
 }
