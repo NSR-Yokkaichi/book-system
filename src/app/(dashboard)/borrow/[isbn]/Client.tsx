@@ -1,4 +1,6 @@
-import { Book, BookStatus } from "@/class/Book";
+"use client";
+
+import { BookStatus } from "@/class/Book";
 import {
   Card,
   CardContent,
@@ -8,30 +10,35 @@ import {
 } from "@mui/material";
 import { borrowAction } from "./action";
 
-export default function BooksView({ book }: { book: Book[] }) {
+export default function BooksView({
+  book,
+}: {
+  book: { id: string; sticker_id?: string; status: BookStatus }[];
+}) {
   const onClickHandler = async (bookid: string) => {
     await borrowAction(bookid);
   };
   return (
     <>
       {book.map(async (b) => {
-        const status = await b.getStatus();
         return (
           <Card variant="outlined" key={b.id}>
             <CardContent>
               <Typography variant="h5" component="h2">
-                シールID: {b.sticker_id}
+                {b.sticker_id
+                  ? `ステッカーID: ${b.sticker_id}`
+                  : "ステッカーIDなし"}
               </Typography>
               <Typography variant="body2" component="p">
                 ステータス:{" "}
-                {status === BookStatus.Available
+                {b.status === BookStatus.Available
                   ? "貸し出し可能"
                   : "貸し出し中"}
               </Typography>
             </CardContent>
             <CardActions>
               <Button
-                disabled={status === BookStatus.Rented}
+                disabled={b.status === BookStatus.Rented}
                 onClick={() => onClickHandler(b.id)}
               >
                 借りる

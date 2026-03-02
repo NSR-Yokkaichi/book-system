@@ -15,6 +15,13 @@ export default async function BorrowISBNPage({
     notFound();
   }
 
+  const bookWithStatus = await Promise.all(
+    book.map(async (b) => {
+      const status = await b.getStatus();
+      return { id: b.id, sticker_id: b.sticker_id, status };
+    }),
+  );
+
   return (
     <Stack>
       <Typography variant="h4" component="h1">
@@ -24,7 +31,7 @@ export default async function BorrowISBNPage({
         「{book[0].name} 」の貸し出しを行います。
       </Typography>
       <Stack>
-        <BooksView book={book} />
+        <BooksView book={bookWithStatus} />
       </Stack>
     </Stack>
   );

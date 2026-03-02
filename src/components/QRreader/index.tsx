@@ -11,6 +11,8 @@ export default function QrCameraScanner({
   mode: "borrow" | "return";
 }) {
   const [scanResult, setScanResult] = useState<string>("");
+  const [submitting, setSubmitting] = useState(false);
+  const lastSubmittedRef = useRef<string>("");
   const [error, setError] = useState<string>("");
   const qrRef = useRef<Html5Qrcode | null>(null);
 
@@ -51,18 +53,27 @@ export default function QrCameraScanner({
 
     return () => {
       if (qrRef.current) {
-        qrRef.current.stop().then(() => {
-          qrRef.current?.clear();
-        });
+        void qrRef.current
+          .stop()
+          .then(() => {
+            qrRef.current?.clear();
+          })
+          .catch(() => {});
       }
     };
   }, []);
 
   useEffect(() => {
     if (scanResult && mode === "borrow") {
-      borrowAction(scanResult);
+      if (submitting || lastSubmittedRef.current === scanResult) return;
+      lastSubmittedRef.current = scanResult;
+      setSubmitting(true);
+      void borrowAction(scanResult).catch(() => {
+        setError("貸し出し処理に失敗しました");
+        setSubmitting(false);
+      });
     }
-  }, [scanResult, mode]);
+  }, [scanResult, mode, submitting]);
 
   return (
     <div className="qr-uploader">
