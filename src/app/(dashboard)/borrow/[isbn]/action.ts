@@ -1,6 +1,6 @@
 "use server";
 
-import { Book } from "@/class/Book";
+import { Book, BookStatus } from "@/class/Book";
 import { Student } from "@/class/Student";
 import { redirect } from "next/navigation";
 
@@ -9,6 +9,9 @@ export const borrowAction = async (bookid: string) => {
     const book = await Book.findById(bookid);
     if (!book) {
       throw new Error("本が見つかりません");
+    }
+    if ((await book.getStatus()) !== BookStatus.Available) {
+      throw new Error("この本は貸し出し中です");
     }
     const student = await Student.findBySession();
     if (!student) {
