@@ -31,6 +31,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import HomeIcon from "@mui/icons-material/Home";
 import { User } from "better-auth";
 
 const drawerWidth = 240;
@@ -272,21 +273,12 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem key={"borrow"} disablePadding>
+          <ListItem key={"home"} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <AddAPhotoIcon />
+                <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary={"本の貸出"} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem key={"return"} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <KeyboardReturnIcon />
-              </ListItemIcon>
-              <ListItemText primary={"本の返却"} />
+              <ListItemText primary={"ホームメニュー"} />
             </ListItemButton>
           </ListItem>
         </List>
