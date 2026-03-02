@@ -11,16 +11,16 @@ import {
 import { borrowAction } from "./action";
 
 export default function BooksView({
-  book,
+  books,
 }: {
-  book: { id: string; sticker_id?: string; status: BookStatus }[];
+  books: { id: string; sticker_id?: string; status: BookStatus }[];
 }) {
   const onClickHandler = async (bookid: string) => {
     await borrowAction(bookid);
   };
   return (
     <>
-      {book.map((b) => {
+      {books.map((b) => {
         return (
           <Card variant="outlined" key={b.id}>
             <CardContent>

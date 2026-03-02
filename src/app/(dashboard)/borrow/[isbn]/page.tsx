@@ -31,7 +31,7 @@ export default async function BorrowISBNPage({
         「{book[0].name}」の貸し出しを行います。
       </Typography>
       <Stack>
-        <BooksView book={bookWithStatus} />
+        <BooksView books={bookWithStatus} />
       </Stack>
     </Stack>
   );
