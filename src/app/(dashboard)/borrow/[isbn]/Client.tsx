@@ -20,7 +20,7 @@ export default function BooksView({
   };
   return (
     <>
-      {book.map(async (b) => {
+      {book.map((b) => {
         return (
           <Card variant="outlined" key={b.id}>
             <CardContent>
