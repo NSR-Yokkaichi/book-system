@@ -33,6 +33,7 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import HomeIcon from "@mui/icons-material/Home";
 import { User } from "better-auth";
+import Link from "next/link";
 
 const drawerWidth = 240;
 
@@ -138,7 +139,9 @@ export default function Sidebar({ children, user }: Props) {
           </IconButton>
 
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            図書システム
+            <Link href="/admin" className="text-white no-underline">
+              図書システム
+            </Link>
           </Typography>
 
           {/* --- ここからアカウントメニュー --- */}
@@ -237,8 +240,8 @@ export default function Sidebar({ children, user }: Props) {
 
         <Divider />
         <List>
-<ListItem key={"home"} disablePadding>
-            <ListItemButton>
+          <ListItem key={"home"} disablePadding>
+            <ListItemButton href="/admin">
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
@@ -256,7 +259,7 @@ export default function Sidebar({ children, user }: Props) {
           </ListItem>
 
           <ListItem key={"bookmark"} disablePadding>
-            <ListItemButton href="/admin/books/page">
+            <ListItemButton href="/admin/books">
               <ListItemIcon>
                 <BookmarkIcon />
               </ListItemIcon>
@@ -281,8 +284,6 @@ export default function Sidebar({ children, user }: Props) {
               <ListItemText primary={"リクエスト確認"} />
             </ListItemButton>
           </ListItem>
-
-          
         </List>
       </Drawer>
 
