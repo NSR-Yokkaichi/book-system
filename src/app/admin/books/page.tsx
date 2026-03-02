@@ -11,6 +11,7 @@ import {
 
 export default async function Home() {
   const books = await Book.findAll();
+  console.log(books);
   const sampleBook: Book[] = [
     new Book({
       id: "1",
