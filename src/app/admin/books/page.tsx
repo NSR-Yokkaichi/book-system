@@ -41,6 +41,14 @@ export default async function Home() {
       <Typography variant="body1">
         こちらは管理者用のダッシュボードです。左側のメニューから各機能にアクセスできます。
       </Typography>
+      <Button
+        variant="contained"
+        color="primary"
+        href="/admin/books/new"
+        sx={{ mt: 2, alignSelf: "flex-start" }}
+      >
+        新しい本を登録
+      </Button>
       <Stack spacing={2} mt={4}>
         {sampleBook.map((book) => (
           <Card variant="outlined">
