@@ -11,29 +11,7 @@ import {
 
 export default async function Home() {
   const books = await Book.findAll();
-  console.log(books);
-  const sampleBook: Book[] = [
-    new Book({
-      id: "1",
-      name: "サンプルの本",
-      author: "サンプル著者",
-      isbn: "1234567890123",
-      sticker_id: null,
-      publisher: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }),
-    new Book({
-      id: "2",
-      name: "まだいの生態",
-      author: "サンプル著者",
-      isbn: "1234567890123",
-      sticker_id: null,
-      publisher: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }),
-  ];
+
   return (
     <Stack>
       <Typography variant="h4" gutterBottom>
@@ -51,7 +29,7 @@ export default async function Home() {
         新しい本を登録
       </Button>
       <Stack spacing={2} mt={4}>
-        {sampleBook.map((book) => (
+        {books.map((book) => (
           <Card variant="outlined">
             <CardContent>
               <Typography variant="h6">{book.name}</Typography>
