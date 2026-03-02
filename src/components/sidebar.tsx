@@ -33,6 +33,7 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { User } from "better-auth";
 import Link from "next/link";
+import HomeIcon from "@mui/icons-material/Home";
 import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 
@@ -251,6 +252,15 @@ export default function Sidebar({ children, user }: Props) {
 
         <Divider />
         <List>
+          <ListItem key={"home"} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={"ホームメニュー"} />
+            </ListItemButton>
+          </ListItem>
+
           <ListItem
             key={"search"}
             disablePadding
