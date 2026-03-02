@@ -1,37 +1,39 @@
 "use client";
-import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import HomeIcon from "@mui/icons-material/Home";
+import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import Logout from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu";
+import PersonIcon from "@mui/icons-material/Person";
+import SearchIcon from "@mui/icons-material/Search";
+import Settings from "@mui/icons-material/Settings";
+import MuiAppBar, {
+  type AppBarProps as MuiAppBarProps,
+} from "@mui/material/AppBar";
+// アカウントメニュー用の追加インポート
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import SearchIcon from "@mui/icons-material/Search";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import PersonIcon from "@mui/icons-material/Person";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-
-// アカウントメニュー用の追加インポート
-import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { styled, useTheme } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
-import { User } from "better-auth";
+import Typography from "@mui/material/Typography";
+import type { User } from "better-auth";
+import * as React from "react";
 
 const drawerWidth = 240;
 
@@ -236,6 +238,15 @@ export default function Sidebar({ children, user }: Props) {
 
         <Divider />
         <List>
+          <ListItem key={"home"} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={"ホームメニュー"} />
+            </ListItemButton>
+          </ListItem>
+
           <ListItem key={"search"} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -246,7 +257,7 @@ export default function Sidebar({ children, user }: Props) {
           </ListItem>
 
           <ListItem key={"bookmark"} disablePadding>
-            <ListItemButton>
+            <ListItemButton href="/admin/books/">
               <ListItemIcon>
                 <BookmarkIcon />
               </ListItemIcon>
@@ -269,24 +280,6 @@ export default function Sidebar({ children, user }: Props) {
                 <AddCircleOutlineIcon />
               </ListItemIcon>
               <ListItemText primary={"リクエスト確認"} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem key={"borrow"} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <AddAPhotoIcon />
-              </ListItemIcon>
-              <ListItemText primary={"本の貸出"} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem key={"return"} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <KeyboardReturnIcon />
-              </ListItemIcon>
-              <ListItemText primary={"本の返却"} />
             </ListItemButton>
           </ListItem>
         </List>

@@ -1,7 +1,7 @@
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { Rental } from "./Rental";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 
 export class Student {
   id: string;

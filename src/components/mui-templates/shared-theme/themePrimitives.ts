@@ -1,4 +1,9 @@
-import { createTheme, alpha, PaletteMode, Shadows } from "@mui/material/styles";
+import {
+  alpha,
+  createTheme,
+  type PaletteMode,
+  type Shadows,
+} from "@mui/material/styles";
 
 declare module "@mui/material/Paper" {
   interface PaperPropsVariantOverrides {
@@ -400,7 +405,7 @@ export const shape = {
   borderRadius: 8,
 };
 
-// @ts-ignore
+// @ts-expect-error
 const defaultShadows: Shadows = [
   "none",
   "var(--template-palette-baseShadow)",
