@@ -1,16 +1,15 @@
 "use client";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import HomeIcon from "@mui/icons-material/Home";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import Logout from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import Settings from "@mui/icons-material/Settings";
+import { Typography } from "@mui/material";
 import MuiAppBar, {
   type AppBarProps as MuiAppBarProps,
 } from "@mui/material/AppBar";
@@ -31,9 +30,9 @@ import MenuItem from "@mui/material/MenuItem";
 import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 import type { User } from "better-auth";
-import * as React from "react";
+import Link from "next/link";
+import React from "react";
 
 const drawerWidth = 240;
 
@@ -139,7 +138,9 @@ export default function Sidebar({ children, user }: Props) {
           </IconButton>
 
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            図書システム
+            <Link href="/admin" className="text-white no-underline">
+              図書システム
+            </Link>
           </Typography>
 
           {/* --- ここからアカウントメニュー --- */}
@@ -157,7 +158,7 @@ export default function Sidebar({ children, user }: Props) {
               >
                 <Avatar
                   sx={{ width: 32, height: 32, bgcolor: "orange" }}
-                  src={user.image!}
+                  src={user.image || undefined}
                 />
               </IconButton>
             </Tooltip>
@@ -239,7 +240,7 @@ export default function Sidebar({ children, user }: Props) {
         <Divider />
         <List>
           <ListItem key={"home"} disablePadding>
-            <ListItemButton>
+            <ListItemButton href="/admin" LinkComponent={Link}>
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
@@ -257,7 +258,7 @@ export default function Sidebar({ children, user }: Props) {
           </ListItem>
 
           <ListItem key={"bookmark"} disablePadding>
-            <ListItemButton href="/admin/books/">
+            <ListItemButton href="/admin/books">
               <ListItemIcon>
                 <BookmarkIcon />
               </ListItemIcon>

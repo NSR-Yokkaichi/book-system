@@ -1,0 +1,30 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { Book } from "@/class/Book";
+export const update = async (formData: FormData, id: string) => {
+  const book = await Book.findById(id);
+  if (!book) {
+    redirect("/admin/books");
+  }
+  const name = formData.get("name");
+  const isbn = formData.get("isbn");
+  if (
+    typeof name !== "string" ||
+    !name.trim() ||
+    typeof isbn !== "string" ||
+    !isbn.trim()
+  ) {
+    throw new Error("name and isbn are required");
+  }
+  const toOptional = (v: FormDataEntryValue | null) =>
+    typeof v === "string" && v.trim() ? v.trim() : undefined;
+
+  book.name = name.trim();
+  book.isbn = isbn.trim();
+  book.author = toOptional(formData.get("author"));
+  book.publisher = toOptional(formData.get("publisher"));
+  book.sticker_id = toOptional(formData.get("sticker_id"));
+  await book.save();
+  redirect(`/admin/books`);
+};

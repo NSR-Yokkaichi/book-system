@@ -167,7 +167,7 @@ export default function Sidebar({ children, user }: Props) {
               >
                 <Avatar
                   sx={{ width: 32, height: 32, bgcolor: "orange" }}
-                  src={user.image!}
+                  src={user.image || undefined}
                 />
               </IconButton>
             </Tooltip>
@@ -254,7 +254,7 @@ export default function Sidebar({ children, user }: Props) {
         <Divider />
         <List>
           <ListItem key={"home"} disablePadding>
-            <ListItemButton>
+            <ListItemButton href="/admin" LinkComponent={Link}>
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
@@ -262,13 +262,8 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem
-            key={"search"}
-            disablePadding
-            component={Link}
-            href="/books/search"
-          >
-            <ListItemButton>
+          <ListItem key={"search"} disablePadding>
+            <ListItemButton href="/books/search" LinkComponent={Link}>
               <ListItemIcon>
                 <SearchIcon />
               </ListItemIcon>
@@ -276,13 +271,8 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem
-            key={"bookmark"}
-            disablePadding
-            component={Link}
-            href="/reservations"
-          >
-            <ListItemButton>
+          <ListItem key={"bookmark"} disablePadding>
+            <ListItemButton href="/bookmarks" LinkComponent={Link}>
               <ListItemIcon>
                 <BookmarkIcon />
               </ListItemIcon>
@@ -290,13 +280,8 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem
-            key={"mypage"}
-            disablePadding
-            component={Link}
-            href="/mypage"
-          >
-            <ListItemButton>
+          <ListItem key={"mypage"} disablePadding>
+            <ListItemButton href="/mypage" LinkComponent={Link}>
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>
@@ -304,13 +289,8 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem
-            key={"request"}
-            disablePadding
-            component={Link}
-            href="/requests"
-          >
-            <ListItemButton>
+          <ListItem key={"request"} disablePadding>
+            <ListItemButton href="/request" LinkComponent={Link}>
               <ListItemIcon>
                 <AddCircleOutlineIcon />
               </ListItemIcon>
@@ -318,13 +298,8 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem
-            key={"borrow"}
-            disablePadding
-            component={Link}
-            href="/borrow"
-          >
-            <ListItemButton>
+          <ListItem key={"borrow"} disablePadding>
+            <ListItemButton href="/borrow" LinkComponent={Link}>
               <ListItemIcon>
                 <AddAPhotoIcon />
               </ListItemIcon>
@@ -332,13 +307,8 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem
-            key={"return"}
-            disablePadding
-            component={Link}
-            href="/return"
-          >
-            <ListItemButton>
+          <ListItem key={"return"} disablePadding>
+            <ListItemButton href="/return" LinkComponent={Link}>
               <ListItemIcon>
                 <KeyboardReturnIcon />
               </ListItemIcon>
