@@ -1,13 +1,12 @@
-import { Book } from "@/class/Book";
 import {
   Button,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   Stack,
   Typography,
 } from "@mui/material";
+import { Book } from "@/class/Book";
 
 export default async function Home() {
   const books = await Book.findAll();
@@ -30,7 +29,7 @@ export default async function Home() {
       </Button>
       <Stack spacing={2} mt={4}>
         {books.map((book) => (
-          <Card variant="outlined">
+          <Card key={book.id} variant="outlined">
             <CardContent>
               <Typography variant="h6">{book.name}</Typography>
               <Typography variant="subtitle1">著者: {book.author}</Typography>

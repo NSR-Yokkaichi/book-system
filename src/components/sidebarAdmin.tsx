@@ -5,11 +5,14 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import HomeIcon from "@mui/icons-material/Home";
+import HomeIcon from "@mui/icons-material/Home";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import Logout from "@mui/icons-material/Logout";
 import Logout from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
+import Settings from "@mui/icons-material/Settings";
 import Settings from "@mui/icons-material/Settings";
 import MuiAppBar, {
   type AppBarProps as MuiAppBarProps,
@@ -31,10 +34,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
-import HomeIcon from "@mui/icons-material/Home";
-import { User } from "better-auth";
+import type { User } from "better-auth";
 import Link from "next/link";
 
 const drawerWidth = 240;

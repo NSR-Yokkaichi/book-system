@@ -1,4 +1,3 @@
-import { Book } from "@/class/Book";
 import {
   Button,
   Card,
@@ -9,6 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { Book } from "@/class/Book";
 import { regist } from "./action";
 
 export default function NewBookPage() {
