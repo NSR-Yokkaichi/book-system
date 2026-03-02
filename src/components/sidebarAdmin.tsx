@@ -256,7 +256,7 @@ export default function Sidebar({ children, user }: Props) {
           </ListItem>
 
           <ListItem key={"bookmark"} disablePadding>
-            <ListItemButton href="/admin/books/page">
+            <ListItemButton href="/admin/books/">
               <ListItemIcon>
                 <BookmarkIcon />
               </ListItemIcon>
