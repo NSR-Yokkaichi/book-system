@@ -237,6 +237,15 @@ export default function Sidebar({ children, user }: Props) {
 
         <Divider />
         <List>
+<ListItem key={"home"} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={"ホームメニュー"} />
+            </ListItemButton>
+          </ListItem>
+
           <ListItem key={"search"} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -273,14 +282,7 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem key={"home"} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary={"ホームメニュー"} />
-            </ListItemButton>
-          </ListItem>
+          
         </List>
       </Drawer>
 
