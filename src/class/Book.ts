@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
-import { Book as PrismaBook, Rental } from "../generated/prisma/client";
-import { v4 as uuidv4 } from "uuid";
+import type { Book as PrismaBook } from "../generated/prisma/client";
+import { Rental } from "./Rental";
 
 export enum BookStatus {
   Available = "available",
@@ -94,25 +94,31 @@ export class Book {
 
   /**
    * 本を貸し出す
-   * @param user_id 借りる人(ユーザーID)
+   * @param studentId 借りる人(学生ID)
    * @returns 貸出情報
    */
-  async rent(user_id: string): Promise<Rental> {
+  async rent(studentId: string): Promise<Rental> {
     const campus = await prisma.campus.findFirst();
     if (!campus) {
       throw new Error("Campus not found");
     }
     const rental = await prisma.rental.create({
       data: {
-        id: uuidv4(),
         bookId: this.id,
-        userId: user_id,
+        studentId,
         expiresAt: new Date(
           Date.now() + campus.rentalDeadline * 24 * 60 * 60 * 1000,
         ),
       },
     });
-    return rental;
+    return new Rental(
+      rental.id,
+      rental.studentId,
+      rental.bookId,
+      rental.expiresAt,
+      rental.createdAt,
+      rental.updatedAt,
+    );
   }
 
   /**
