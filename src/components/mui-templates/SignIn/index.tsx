@@ -1,17 +1,17 @@
 "use client";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
-import MuiCard from "@mui/material/Card";
-import { styled } from "@mui/material/styles";
-import AppTheme from "../shared-theme/AppTheme";
-import { GoogleIcon, SitemarkIcon } from "./components/CustomIcons";
 import PasswordIcon from "@mui/icons-material/Password";
 import { Divider, Link, TextField } from "@mui/material";
-import { authClient } from "@/lib/auth-client";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import MuiCard from "@mui/material/Card";
+import CssBaseline from "@mui/material/CssBaseline";
+import Stack from "@mui/material/Stack";
+import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import React from "react";
+import { authClient } from "@/lib/auth-client";
+import AppTheme from "../shared-theme/AppTheme";
+import { GoogleIcon, SitemarkIcon } from "./components/CustomIcons";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",

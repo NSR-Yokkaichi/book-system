@@ -1,6 +1,4 @@
-import { Book } from "@/class/Book";
 import { Stack } from "@mui/material";
-import { bnBD } from "@mui/material/locale";
 
 export default async function BooksPage() {
   //const books = await Book.findAll();
