@@ -16,7 +16,12 @@ export default async function BookEditPage({
   return (
     <Stack>
       <Typography variant="h4">『{book.name}』の編集</Typography>
-      <Stack mt={2} spacing={3} component={"form"} action={update}>
+      <Stack
+        mt={2}
+        spacing={3}
+        component={"form"}
+        action={(formdata: FormData) => update(formdata, id)}
+      >
         <input type="hidden" name="id" value={book.id} />
         <TextField
           label="本の名前"
