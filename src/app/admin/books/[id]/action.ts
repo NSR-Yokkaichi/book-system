@@ -14,5 +14,5 @@ export const update = async (formData: FormData) => {
     book.publisher = formData.get("publisher") as string;
     book.sticker_id = formData.get("sticker_id") as string;
     await book.save();
-    redirect(`/admin/books/${id}`);
+    redirect(`/admin/books`);
 };
