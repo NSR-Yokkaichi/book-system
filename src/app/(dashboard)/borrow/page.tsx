@@ -1,5 +1,5 @@
-import QrCameraScanner from "@/components/QRreader";
 import { Stack, Typography } from "@mui/material";
+import QrCameraScanner from "@/components/QRreader";
 export default function Home() {
   return (
     <Stack>
