@@ -240,7 +240,7 @@ export default function Sidebar({ children, user }: Props) {
         <Divider />
         <List>
           <ListItem key={"home"} disablePadding>
-            <ListItemButton href="/admin">
+            <ListItemButton href="/admin" LinkComponent={Link}>
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
