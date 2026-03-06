@@ -46,6 +46,31 @@ export class Rental {
     );
   }
 
+  static async getByUserAndISBN(
+    studentId: string,
+    isbn: string,
+  ): Promise<Rental | null> {
+    const rental = await prisma.rental.findFirst({
+      where: {
+        studentId,
+        book: {
+          isbn,
+        },
+      },
+    });
+    if (!rental) {
+      return null;
+    }
+    return new Rental(
+      rental.id,
+      rental.studentId,
+      rental.bookId,
+      rental.expiresAt,
+      rental.createdAt,
+      rental.updatedAt,
+    );
+  }
+
   async save(): Promise<void> {
     await prisma.rental.update({
       where: { id: this.id },

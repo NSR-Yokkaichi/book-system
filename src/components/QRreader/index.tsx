@@ -3,7 +3,7 @@
 import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useRef, useState } from "react";
 import "./style.css";
-import { borrowAction } from "./action";
+import { borrowAction, returnAction } from "./action";
 
 export default function QrCameraScanner({
   mode,
@@ -44,7 +44,7 @@ export default function QrCameraScanner({
             console.log(errorMessage);
           },
         );
-      } catch (err) {
+      } catch {
         setError("カメラ起動に失敗しました 📸");
       }
     };
@@ -68,8 +68,16 @@ export default function QrCameraScanner({
       if (submitting || lastSubmittedRef.current === scanResult) return;
       lastSubmittedRef.current = scanResult;
       setSubmitting(true);
-      void borrowAction(scanResult).catch(() => {
-        setError("貸し出し処理に失敗しました");
+      void borrowAction(scanResult).catch((e) => {
+        setError(e.message || "貸し出し処理に失敗しました");
+        setSubmitting(false);
+      });
+    } else if (scanResult && mode === "return") {
+      if (submitting || lastSubmittedRef.current === scanResult) return;
+      lastSubmittedRef.current = scanResult;
+      setSubmitting(true);
+      void returnAction(scanResult).catch((e) => {
+        setError(e.message || "返却処理に失敗しました");
         setSubmitting(false);
       });
     }
