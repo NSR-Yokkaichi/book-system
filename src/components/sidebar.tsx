@@ -254,11 +254,11 @@ export default function Sidebar({ children, user }: Props) {
         <Divider />
         <List>
           <ListItem key={"home"} disablePadding>
-            <ListItemButton href="/admin" LinkComponent={Link}>
+            <ListItemButton href="/" LinkComponent={Link}>
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary={"ホームメニュー"} />
+              <ListItemText primary={""} />
             </ListItemButton>
           </ListItem>
 
