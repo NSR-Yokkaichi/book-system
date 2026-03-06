@@ -8,7 +8,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import Logout from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
-import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import Settings from "@mui/icons-material/Settings";
 import MuiAppBar, {
@@ -277,15 +276,6 @@ export default function Sidebar({ children, user }: Props) {
                 <BookmarkIcon />
               </ListItemIcon>
               <ListItemText primary={"予約"} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem key={"mypage"} disablePadding>
-            <ListItemButton href="/mypage" LinkComponent={Link}>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary={"マイページ"} />
             </ListItemButton>
           </ListItem>
 
