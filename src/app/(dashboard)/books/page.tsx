@@ -1,30 +1,26 @@
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
+import { Book } from "@/class/Book";
+import BookList from "@/components/BookList";
 
-export default async function BooksPage() {
-  //const books = await Book.findAll();
-  const books = [
-    {
-      id: "1",
-      name: "The Great Gatsby",
-      author: "F. Scott Fitzgerald",
-      isbn: "978-0-7432-7356-5",
-    },
-    {
-      id: "1",
-      name: "The Great Gatsby",
-      author: "F. Scott Fitzgerald",
-      isbn: "978-0-7432-7356-5",
-    },
-  ];
+export default async function Home() {
+  const books = await Book.findAll();
+
+  const booksWithStatus = await Promise.all(
+    books.map(async (book) => {
+      const status = await book.getStatus();
+      return { ...book, status };
+    }),
+  );
+
   return (
     <Stack>
-      {books.map((book) => (
-        <div key={book.id}>
-          <h2>{book.name}</h2>
-          <p>{book.author}</p>
-          <p>{book.isbn}</p>
-        </div>
-      ))}
+      <Typography variant="h4" gutterBottom>
+        図書管理
+      </Typography>
+      <Typography variant="body1">
+        図書の一覧です。新しい図書を登録したり、既存の図書を編集したりできます。
+      </Typography>
+      <BookList booksWithStatus={booksWithStatus} />
     </Stack>
   );
 }

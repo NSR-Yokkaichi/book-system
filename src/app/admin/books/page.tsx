@@ -1,23 +1,24 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import { Book } from "@/class/Book";
+import BookList from "@/components/BookList";
 
 export default async function Home() {
   const books = await Book.findAll();
 
+  const booksWithStatus = await Promise.all(
+    books.map(async (book) => {
+      const status = await book.getStatus();
+      return { ...book, status };
+    }),
+  );
+
   return (
     <Stack>
       <Typography variant="h4" gutterBottom>
-        図書管理システムへようこそ
+        図書管理
       </Typography>
       <Typography variant="body1">
-        こちらは管理者用のダッシュボードです。左側のメニューから各機能にアクセスできます。
+        図書の一覧です。新しい図書を登録したり、既存の図書を編集したりできます。
       </Typography>
       <Button
         variant="contained"
@@ -27,26 +28,7 @@ export default async function Home() {
       >
         新しい本を登録
       </Button>
-      <Stack spacing={2} mt={4}>
-        {books.map((book) => (
-          <Card key={book.id} variant="outlined">
-            <CardContent>
-              <Typography variant="h6">{book.name}</Typography>
-              <Typography variant="subtitle1">著者: {book.author}</Typography>
-              <Typography variant="body2">ISBN: {book.isbn}</Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                color="primary"
-                variant="outlined"
-                href={`/admin/books/${book.id}`}
-              >
-                編集
-              </Button>
-            </CardActions>
-          </Card>
-        ))}
-      </Stack>
+      <BookList booksWithStatus={booksWithStatus} isAdmin={true} />
     </Stack>
   );
 }
