@@ -258,7 +258,7 @@ export default function Sidebar({ children, user }: Props) {
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary={""} />
+              <ListItemText primary={"ホーム"} />
             </ListItemButton>
           </ListItem>
 
