@@ -1,7 +1,9 @@
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth"; // お使いの認証ライブラリ
+import StudentCourseSelector from "@/components/StudentCourseSelector";
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 
 export default async function SettingsPage() {
@@ -14,11 +16,21 @@ export default async function SettingsPage() {
     redirect("/signin");
   }
 
+  const student = await prisma.student.findUnique({
+    where: { userId: session.user.id },
+  });
+
+  // 学生情報がない場合はリダイレクト
+  if (!student) {
+    redirect("/");
+  }
+
   // サーバーアクション（このファイル内で定義可能）
   async function updateUsername(formData: FormData) {
     "use server";
 
     const newName = formData.get("username") as string;
+    const newCourse = formData.get("course") as string;
 
     if (!newName || newName.length < 2) return;
 
@@ -27,37 +39,38 @@ export default async function SettingsPage() {
       where: { id: session!.user.id },
       data: { name: newName },
     });
-
-    console.log("名前を更新しました:", newName);
+    await prisma.student.update({
+      where: { userId: session!.user.id },
+      data: { course: newCourse },
+    });
 
     // キャッシュを更新して、サイドバーなどの表示を最新にする
     revalidatePath("/", "layout");
   }
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
-      <h1 className="text-xl font-bold mb-6">プロフィール設定</h1>
+    <Stack spacing={2} p={2} component={"main"} justifyContent={"center"}>
+      <Typography variant="h4">ユーザー設定</Typography>
 
-      <form action={updateUsername} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            ユーザーネーム
-          </label>
-          <input
-            name="username"
-            type="text"
-            defaultValue={session.user.name} // 現在の値を初期表示
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 text-black"
-          />
-        </div>
+      <Stack
+        component="form"
+        action={updateUsername}
+        spacing={2}
+        maxWidth="400px"
+      >
+        <TextField
+          name="username"
+          label="ユーザー名"
+          defaultValue={session.user.name || ""}
+        />
+        <StudentCourseSelector
+          defaultValue={student?.course || "週1日コース"}
+        />
 
-        <button
-          type="submit"
-          className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition"
-        >
-          保存する
-        </button>
-      </form>
-    </div>
+        <Button type="submit" variant="contained" color="primary">
+          更新
+        </Button>
+      </Stack>
+    </Stack>
   );
 }

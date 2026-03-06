@@ -3,13 +3,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  MenuItem,
-  Select,
   Typography,
 } from "@mui/material";
+import StudentCourseSelector from "../StudentCourseSelector";
 import { initStudentAction } from "./action";
 
-export default async function StudentInitializeGuard({
+export default async function StudentInitialize({
   uid,
   open,
 }: {
@@ -25,16 +24,7 @@ export default async function StudentInitializeGuard({
             あなたの学生情報が初期化されていません。登録してください。
           </Typography>
           <input type="hidden" name="uid" value={uid} />
-          <Select
-            label="コース"
-            defaultValue="週1日コース"
-            fullWidth
-            name="course"
-          >
-            <MenuItem value="週1日コース">週1</MenuItem>
-            <MenuItem value="週3日コース">週3</MenuItem>
-            <MenuItem value="週5日コース">週5</MenuItem>
-          </Select>
+          <StudentCourseSelector />
         </DialogContent>
         <DialogActions>
           <Button color="primary" variant="contained" type="submit">
