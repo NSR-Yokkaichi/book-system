@@ -1,14 +1,4 @@
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Book } from "@/class/Book";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import { regist } from "./action";
 
 export default function NewBookPage() {
