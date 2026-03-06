@@ -8,12 +8,11 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import { redirect } from "next/navigation";
 import React from "react";
 import { authClient } from "@/lib/auth-client";
 import AppTheme from "../shared-theme/AppTheme";
 import { GoogleIcon, SitemarkIcon } from "./components/CustomIcons";
-import { admin } from "better-auth/plugins";
-import { redirect } from "next/navigation";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
