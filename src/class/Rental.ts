@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { Book } from "./Book";
 
 export class Rental {
   id: string;
@@ -69,6 +70,16 @@ export class Rental {
       rental.createdAt,
       rental.updatedAt,
     );
+  }
+
+  async getBook(): Promise<Book> {
+    const book = await prisma.book.findUnique({
+      where: { id: this.bookId },
+    });
+    if (!book) {
+      throw new Error("Book not found");
+    }
+    return new Book(book);
   }
 
   async save(): Promise<void> {
