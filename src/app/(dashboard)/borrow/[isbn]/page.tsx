@@ -18,7 +18,7 @@ export default async function BorrowISBNPage({
   const bookWithStatus = await Promise.all(
     books.map(async (b) => {
       const status = await b.getStatus();
-      return { id: b.id, sticker_id: b.sticker_id, status };
+      return { id: b.id, sticker_id: b.stickerId, status };
     }),
   );
 

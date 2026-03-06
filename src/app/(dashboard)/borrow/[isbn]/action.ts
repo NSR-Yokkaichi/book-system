@@ -17,8 +17,15 @@ export const borrowAction = async (bookid: string) => {
     if (!student) {
       throw new Error("ユーザーが見つかりません");
     }
-    await book.rent(student.id);
-    redirect("/borrow/success");
+    const rental = await book.rent(student.id);
+    const expiresAt = rental.expiresAt.toLocaleString("sv-SE", {
+      timeZone: "Asia/Tokyo",
+      formatMatcher: "basic",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    redirect(`/borrow/success?expiresAt=${encodeURIComponent(expiresAt)}`);
   } catch (err) {
     throw err;
   }

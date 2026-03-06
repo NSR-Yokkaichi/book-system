@@ -13,7 +13,7 @@ export class Book {
   isbn: string;
   author?: string;
   publisher?: string;
-  sticker_id?: string;
+  stickerId?: string;
   createdAt: Date;
   updatedAt: Date;
 
@@ -34,7 +34,7 @@ export class Book {
     this.isbn = data.isbn;
     this.author = data.author || undefined;
     this.publisher = data.publisher || undefined;
-    this.sticker_id = data.sticker_id || undefined;
+    this.stickerId = data.sticker_id || undefined;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
   }
@@ -75,7 +75,7 @@ export class Book {
         isbn: this.isbn,
         author: this.author,
         publisher: this.publisher,
-        sticker_id: this.sticker_id,
+        sticker_id: this.stickerId,
       },
     });
     // プロパティを最新化

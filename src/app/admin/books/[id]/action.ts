@@ -24,7 +24,7 @@ export const update = async (formData: FormData, id: string) => {
   book.isbn = isbn.trim();
   book.author = toOptional(formData.get("author"));
   book.publisher = toOptional(formData.get("publisher"));
-  book.sticker_id = toOptional(formData.get("sticker_id"));
+  book.stickerId = toOptional(formData.get("sticker_id"));
   await book.save();
   redirect(`/admin/books`);
 };

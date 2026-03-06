@@ -53,7 +53,7 @@ export default async function BookEditPage({
           label="ステッカーID"
           name="sticker_id"
           fullWidth
-          defaultValue={book.sticker_id}
+          defaultValue={book.stickerId}
         />
         <Button type="submit" variant="contained" color="primary">
           更新
