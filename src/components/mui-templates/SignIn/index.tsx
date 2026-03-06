@@ -12,6 +12,8 @@ import React from "react";
 import { authClient } from "@/lib/auth-client";
 import AppTheme from "../shared-theme/AppTheme";
 import { GoogleIcon, SitemarkIcon } from "./components/CustomIcons";
+import { admin } from "better-auth/plugins";
+import { redirect } from "next/navigation";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -98,7 +100,11 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   );
 }
 
-export function SignInWithPassword() {
+export function SignInWithPassword({
+  isFirstAccount,
+}: {
+  isFirstAccount?: boolean;
+}) {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   return (
@@ -137,15 +143,33 @@ export function SignInWithPassword() {
               disabled={!username || !password}
               onClick={async () => {
                 // @を含むか
-                if (username.includes("@")) {
-                  await authClient.signIn.email({
+                if (!isFirstAccount) {
+                  if (username.includes("@")) {
+                    await authClient.signIn.email({
+                      email: username,
+                      password,
+                    });
+                  } else {
+                    await authClient.signIn.username({
+                      username: username,
+                      password: password,
+                    });
+                  }
+                  redirect("/admin");
+                } else {
+                  await authClient.signUp.email({
+                    name: "Admin",
+                    username: "admin",
                     email: username,
                     password,
                   });
-                } else {
-                  await authClient.signIn.username({
-                    username: username,
-                    password: password,
+                  await fetch("/api/promote-to-admin", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email: username }),
+                    credentials: "include",
                   });
                 }
               }}
