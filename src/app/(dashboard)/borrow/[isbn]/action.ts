@@ -1,8 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { Book, BookStatus } from "@/class/Book";
+import { Book } from "@/class/Book";
 import { Student } from "@/class/Student";
+import { BookStatus } from "@/class/types/Book";
 
 export const borrowAction = async (bookid: string) => {
   try {

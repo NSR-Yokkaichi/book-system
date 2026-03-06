@@ -22,15 +22,17 @@ export default async function Home() {
       </Alert>
       {rentals && rentals.length > 0 ? (
         <RentalList
-          booksWithExpires={await Promise.all(
-            rentals.map(async (rental) => {
-              const book = await rental.getBook();
-              return {
-                ...book,
-                expiresAt: rental.expiresAt,
-              };
-            }),
-          )}
+          booksWithExpires={
+            await Promise.all(
+              rentals.map(async (rental) => {
+                const book = await rental.getBook();
+                return {
+                  ...book,
+                  expiresAt: rental.expiresAt,
+                };
+              }),
+            )
+          }
         />
       ) : (
         <Typography variant="body1">現在貸出中の本はありません。</Typography>

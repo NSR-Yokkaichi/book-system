@@ -1,11 +1,7 @@
 import prisma from "@/lib/prisma";
 import type { Book as PrismaBook } from "../generated/prisma/client";
 import { Rental } from "./Rental";
-
-export enum BookStatus {
-  Available = "available",
-  Rented = "rented",
-}
+import { BookStatus } from "./types/Book";
 
 export class Book {
   id: string;

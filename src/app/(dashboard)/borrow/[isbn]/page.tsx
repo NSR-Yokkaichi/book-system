@@ -1,3 +1,5 @@
+"use server";
+
 import { Stack, Typography } from "@mui/material";
 import { notFound } from "next/navigation";
 import { Book } from "@/class/Book";
@@ -23,7 +25,7 @@ export default async function BorrowISBNPage({
   );
 
   return (
-    <Stack>
+    <Stack spacing={2}>
       <Typography variant="h4" component="h1">
         本の貸し出し
       </Typography>

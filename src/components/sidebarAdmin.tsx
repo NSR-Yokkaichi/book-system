@@ -32,7 +32,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import type { User } from "better-auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
+import { authClient } from "@/lib/auth-client";
 
 const drawerWidth = 240;
 
@@ -122,6 +124,11 @@ export default function Sidebar({ children, user }: Props) {
     setOpen(false);
   };
 
+  const handleLogout = async () => {
+    await authClient.signOut();
+    redirect("/signin");
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -206,7 +213,7 @@ export default function Sidebar({ children, user }: Props) {
           </ListItemIcon>
           個人設定
         </MenuItem>
-        <MenuItem onClick={handleAccountClose}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

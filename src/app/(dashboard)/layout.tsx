@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { headers } from "next/headers";
+import { Student } from "@/class/Student";
+import StudentInitializeGuard from "@/components/StudentInitializeGuard";
 import Sidebar from "@/components/sidebar";
 import { auth } from "@/lib/auth";
 
@@ -28,11 +30,13 @@ export default async function RootLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+  const student = await Student.findBySession();
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <StudentInitializeGuard uid={session!.user.id} open={!student} />
         <Sidebar user={session!.user}>{children}</Sidebar>
       </body>
     </html>

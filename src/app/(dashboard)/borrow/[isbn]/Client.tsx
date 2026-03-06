@@ -7,7 +7,7 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
-import { BookStatus } from "@/class/Book";
+import { BookStatus } from "@/class/types/Book";
 import { borrowAction } from "./action";
 
 export default function BooksView({

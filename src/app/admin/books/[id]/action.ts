@@ -2,7 +2,11 @@
 
 import { redirect } from "next/navigation";
 import { Book } from "@/class/Book";
-export const update = async (formData: FormData, id: string) => {
+export const update = async (formData: FormData) => {
+  const id = formData.get("id");
+  if (typeof id !== "string") {
+    throw new Error("Invalid form data");
+  }
   const book = await Book.findById(id);
   if (!book) {
     redirect("/admin/books");
