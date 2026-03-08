@@ -261,15 +261,15 @@ export default function Sidebar({ children, user }: Props) {
             </ListItemButton>
           </ListItem>
 
-          <ListItem key={"search"} disablePadding>
-            <ListItemButton href="/books/search" LinkComponent={Link}>
+          <ListItem key={"books"} disablePadding>
+            <ListItemButton href="/books" LinkComponent={Link}>
               <ListItemIcon>
                 <SearchIcon />
               </ListItemIcon>
-              <ListItemText primary={"検索"} />
+              <ListItemText primary={"本一覧"} />
             </ListItemButton>
           </ListItem>
-
+          {/*}
           <ListItem key={"bookmark"} disablePadding>
             <ListItemButton href="/bookmarks" LinkComponent={Link}>
               <ListItemIcon>
@@ -287,7 +287,7 @@ export default function Sidebar({ children, user }: Props) {
               <ListItemText primary={"リクエスト"} />
             </ListItemButton>
           </ListItem>
-
+          */}
           <ListItem key={"borrow"} disablePadding>
             <ListItemButton href="/borrow" LinkComponent={Link}>
               <ListItemIcon>

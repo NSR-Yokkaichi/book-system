@@ -1,5 +1,4 @@
 "use client";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -7,7 +6,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import Logout from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
-import SearchIcon from "@mui/icons-material/Search";
 import Settings from "@mui/icons-material/Settings";
 import { Typography } from "@mui/material";
 import MuiAppBar, {
@@ -207,7 +205,11 @@ export default function Sidebar({ children, user }: Props) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleAccountClose}>
+        <MenuItem
+          onClick={handleAccountClose}
+          component={Link}
+          href="/admin/settings"
+        >
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
@@ -254,7 +256,7 @@ export default function Sidebar({ children, user }: Props) {
               <ListItemText primary={"ホームメニュー"} />
             </ListItemButton>
           </ListItem>
-
+          {/*
           <ListItem key={"search"} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -263,7 +265,7 @@ export default function Sidebar({ children, user }: Props) {
               <ListItemText primary={"検索"} />
             </ListItemButton>
           </ListItem>
-
+          */}
           <ListItem key={"bookmark"} disablePadding>
             <ListItemButton href="/admin/books">
               <ListItemIcon>
@@ -274,14 +276,14 @@ export default function Sidebar({ children, user }: Props) {
           </ListItem>
 
           <ListItem key={"mypage"} disablePadding>
-            <ListItemButton>
+            <ListItemButton href="/admin/borrows">
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>
-              <ListItemText primary={"貸し出している本一覧"} />
+              <ListItemText primary={"貸出一覧"} />
             </ListItemButton>
           </ListItem>
-
+          {/*
           <ListItem key={"request"} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -290,6 +292,7 @@ export default function Sidebar({ children, user }: Props) {
               <ListItemText primary={"リクエスト確認"} />
             </ListItemButton>
           </ListItem>
+          */}
         </List>
       </Drawer>
 
