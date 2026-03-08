@@ -7,7 +7,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { type Book, BookStatus } from "@/class/Book";
+import type { Book } from "@/class/Book";
+import { BookStatus } from "@/class/types/Book";
 
 export default function BookList({
   booksWithStatus,

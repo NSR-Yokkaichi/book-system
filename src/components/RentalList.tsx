@@ -28,13 +28,13 @@ export default function BookList({
             sx={{ display: "flex", flexDirection: "column", gap: 1 }}
           >
             <Typography variant="h6">{book.name}</Typography>
-            <Stack direction="column" spacing={2}>
+            <Stack direction="column">
               <Typography variant="subtitle1">
                 返却期限: {book.expiresAt.toLocaleDateString()}
               </Typography>
               <Typography variant="subtitle1">著者: {book.author}</Typography>
-              <Typography variant="body2">ISBN: {book.isbn}</Typography>
-              <Typography variant="body2">
+              <Typography variant="body1">ISBN: {book.isbn}</Typography>
+              <Typography variant="body1">
                 シール番号: {book.stickerId ? book.stickerId : "未登録"}
               </Typography>
             </Stack>
