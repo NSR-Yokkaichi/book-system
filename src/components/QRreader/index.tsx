@@ -3,6 +3,8 @@
 import { Html5Qrcode } from "html5-qrcode";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./style.css";
+import ISBN from "isbn3";
+import { redirect } from "next/navigation";
 import { borrowAction, returnAction } from "./action";
 
 function getCameraErrorMessage(error: unknown) {
@@ -64,7 +66,7 @@ async function safeStopAndClearScanner(scanner: Html5Qrcode) {
 export default function QrCameraScanner({
   mode,
 }: {
-  mode: "borrow" | "return";
+  mode: "borrow" | "return" | "register";
 }) {
   const [scanResult, setScanResult] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
@@ -249,6 +251,14 @@ export default function QrCameraScanner({
         setError(e.message || "返却処理に失敗しました");
         setSubmitting(false);
       });
+    } else if (scanResult && mode === "register") {
+      if (submitting || lastSubmittedRef.current === scanResult) return;
+      lastSubmittedRef.current = scanResult;
+      setSubmitting(true);
+      if (ISBN.audit(scanResult).validIsbn === false) {
+        return;
+      }
+      redirect(`/admin/books/new?isbn=${scanResult}`);
     }
   }, [scanResult, mode, submitting]);
 
