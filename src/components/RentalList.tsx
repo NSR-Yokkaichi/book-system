@@ -1,16 +1,8 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Card, CardContent, Stack, Typography } from "@mui/material";
 import type { Book } from "@/class/Book";
 
 export default function BookList({
   booksWithExpires,
-  isAdmin = false,
 }: {
   booksWithExpires: (Omit<
     Book,
@@ -39,17 +31,6 @@ export default function BookList({
               </Typography>
             </Stack>
           </CardContent>
-          {isAdmin && (
-            <CardActions>
-              <Button
-                color="primary"
-                variant="outlined"
-                href={`/admin/books/${book.id}`}
-              >
-                編集
-              </Button>
-            </CardActions>
-          )}
         </Card>
       ))}
     </Stack>
