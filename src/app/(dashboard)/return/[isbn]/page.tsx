@@ -37,10 +37,10 @@ export default async function BorrowISBNPage({
   return (
     <Stack>
       <Typography variant="h4" component="h1">
-        本の貸し出し
+        本の返却
       </Typography>
       <Typography variant="body1" component="p">
-        「{book.name}」の貸し出しを行います。
+        「{book.name}」の返却を行います。
       </Typography>
       <Stack>
         <BooksReturn book={bookWithStatus} />

@@ -25,7 +25,8 @@ export default function BooksReturn({
           ステッカーID: {book.stickerId || "なし"}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          状態: {book.status}
+          状態:{" "}
+          {book.status === BookStatus.Available ? "利用可能" : "貸し出し中"}
         </Typography>
       </CardContent>
       <CardActions>
@@ -34,7 +35,7 @@ export default function BooksReturn({
           variant="contained"
           color="primary"
           onClick={() => onClickHandler(book.isbn)}
-          disabled={book.status !== BookStatus.Available}
+          disabled={book.status !== BookStatus.Rented}
         >
           返却
         </Button>
