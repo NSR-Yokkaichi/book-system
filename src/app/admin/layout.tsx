@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { headers } from "next/headers";
+import CampusInitialize from "@/components/CampusInitializeGuard";
 import Sidebar from "@/components/sidebarAdmin";
 import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,12 +30,14 @@ export default async function RootLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+  const campus = await prisma.campus.findFirst(); // キャンパス情報が存在するか確認
   return (
-    <html lang="en">
+    <html lang="ja">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Sidebar user={session!.user}>{children}</Sidebar>
+        <CampusInitialize open={!campus} />
       </body>
     </html>
   );

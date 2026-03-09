@@ -15,5 +15,5 @@ export const initStudentAction = async (formData: FormData) => {
       course,
     },
   });
-  redirect("/", RedirectType.push);
+  redirect("/?ok=true", RedirectType.push);
 };

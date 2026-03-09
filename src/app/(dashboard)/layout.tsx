@@ -32,7 +32,7 @@ export default async function RootLayout({
   });
   const student = await Student.findBySession();
   return (
-    <html lang="en">
+    <html lang="ja">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
