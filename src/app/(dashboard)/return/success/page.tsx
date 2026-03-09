@@ -58,7 +58,7 @@ export default function ReturnSuccessPage() {
           <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
             <Button
               component={Link}
-              href="/dashboard"
+              href="/"
               variant="contained"
               fullWidth
               startIcon={<HomeIcon />}
