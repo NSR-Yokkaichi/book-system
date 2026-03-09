@@ -32,6 +32,8 @@ export default async function SettingsPage() {
     // --- PW変更の処理もここに追加可能 ---
     const newPassword = formData.get("newPassword") as string;
 
+    const email = formData.get("email") as string | null;
+
     if (newPassword) {
       await auth.api.setUserPassword({
         headers: await headers(),
@@ -45,7 +47,7 @@ export default async function SettingsPage() {
     // --- ここでDB更新処理 ---
     await prisma.user.update({
       where: { id: session!.user.id },
-      data: { name: newName },
+      data: { name: newName, email: email || undefined },
     });
 
     // キャッシュを更新して、サイドバーなどの表示を最新にする
@@ -66,6 +68,13 @@ export default async function SettingsPage() {
           name="username"
           label="ユーザー名"
           defaultValue={session.user.name || ""}
+        />
+
+        <TextField
+          name="email"
+          label="メールアドレス"
+          defaultValue={session.user.email || ""}
+          disabled
         />
 
         <TextField
