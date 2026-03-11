@@ -1,5 +1,10 @@
 import { SignInWithPassword } from "@/components/mui-templates/SignIn";
 import prisma from "@/lib/prisma";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "返却完了",
+};
 
 export const dynamic = "force-dynamic";
 
