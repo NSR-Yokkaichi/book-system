@@ -1,9 +1,10 @@
 "use server";
 
+import type { User } from "better-auth";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
-export async function updateUser(formData: FormData) {
+export async function updateUser(formData: FormData, currentUser: User) {
   const newName = formData.get("username") as string;
 
   if (!newName || newName.length < 2) return;
@@ -26,16 +27,20 @@ export async function updateUser(formData: FormData) {
   }
 
   // --- ここでDB更新処理 ---
-  await auth.api.updateUser({
-    headers: await headers(),
-    body: {
-      name: newName,
-    },
-  });
-  await auth.api.changeEmail({
-    headers: await headers(),
-    body: {
-      newEmail: email,
-    },
-  });
+  if (newName !== currentUser.name) {
+    await auth.api.updateUser({
+      headers: await headers(),
+      body: {
+        name: newName,
+      },
+    });
+  }
+  if (email && email !== currentUser.email) {
+    await auth.api.updateUser({
+      headers: await headers(),
+      body: {
+        email: email,
+      },
+    });
+  }
 }

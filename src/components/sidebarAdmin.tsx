@@ -31,9 +31,9 @@ import Tooltip from "@mui/material/Tooltip";
 import type { User } from "better-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { SnackbarProvider } from "notistack";
 import React from "react";
 import { authClient } from "@/lib/auth-client";
-import { SnackbarProvider } from "notistack";
 
 const drawerWidth = 240;
 

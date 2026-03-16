@@ -11,7 +11,7 @@ export default function SettingsPageClient({ user }: { user: User }) {
   // サーバーアクション（このファイル内で定義可能）
   async function updateUsername(formData: FormData) {
     try {
-      await updateUser(formData);
+      await updateUser(formData, user);
       enqueueSnackbar("ユーザー情報を更新しました", { variant: "success" });
     } catch (error) {
       enqueueSnackbar(
