@@ -131,7 +131,7 @@ export default function Sidebar({ children, user }: Props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} variant="outlined">
         <Toolbar>
           <IconButton
             color="inherit"

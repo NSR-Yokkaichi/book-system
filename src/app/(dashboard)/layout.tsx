@@ -3,9 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { headers } from "next/headers";
 import { Student } from "@/class/Student";
+import AppThemeProvider from "@/components/AppThemeProvider";
 import StudentInitializeGuard from "@/components/StudentInitializeGuard";
 import Sidebar from "@/components/sidebar";
 import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,14 +32,21 @@ export default async function RootLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
+
   const student = await Student.findBySession();
   return (
     <html lang="ja">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <StudentInitializeGuard uid={session!.user.id} open={!student} />
-        <Sidebar user={session!.user}>{children}</Sidebar>
+        <AppThemeProvider>
+          <StudentInitializeGuard uid={session.user.id} open={!student} />
+          <Sidebar user={session.user}>{children}</Sidebar>
+        </AppThemeProvider>
       </body>
     </html>
   );
