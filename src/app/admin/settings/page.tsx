@@ -1,10 +1,4 @@
-import {
-  Button,
-  FormHelperText,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -63,11 +57,22 @@ export default async function SettingsPage() {
         action={updateUsername}
         spacing={2}
         maxWidth="400px"
+        bgcolor={"background.paper"}
+        p={2}
+        borderRadius={2}
+        border={"1px solid #ccc"}
       >
         <TextField
           name="username"
           label="ユーザー名"
           defaultValue={session.user.name || ""}
+          helperText={
+            <>
+              ユーザー名はログイン時に使用します。
+              <br />
+              他のユーザーと重複しないようにしてください。
+            </>
+          }
         />
 
         <TextField
@@ -81,10 +86,14 @@ export default async function SettingsPage() {
           name="newPassword"
           label="新しいパスワード"
           type="password"
+          helperText={
+            <>
+              パスワードを変更する場合のみ入力してください。
+              <br />
+              変更しない場合は空のままにしてください。
+            </>
+          }
         />
-        <FormHelperText>
-          パスワードを変更する場合のみ入力してください。変更しない場合は空のままにしてください。
-        </FormHelperText>
 
         <Button type="submit" variant="contained" color="primary">
           更新
