@@ -1,7 +1,5 @@
 "use client";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import HomeIcon from "@mui/icons-material/Home";
@@ -253,7 +251,11 @@ export default function Sidebar({ children, user }: Props) {
         <Divider />
         <List>
           <ListItem key={"home"} disablePadding>
-            <ListItemButton href="/" LinkComponent={Link}>
+            <ListItemButton
+              href="/"
+              LinkComponent={Link}
+              onClick={handleDrawerClose}
+            >
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
@@ -262,7 +264,11 @@ export default function Sidebar({ children, user }: Props) {
           </ListItem>
 
           <ListItem key={"books"} disablePadding>
-            <ListItemButton href="/books" LinkComponent={Link}>
+            <ListItemButton
+              href="/books"
+              LinkComponent={Link}
+              onClick={handleDrawerClose}
+            >
               <ListItemIcon>
                 <SearchIcon />
               </ListItemIcon>
@@ -271,7 +277,7 @@ export default function Sidebar({ children, user }: Props) {
           </ListItem>
           {/*}
           <ListItem key={"bookmark"} disablePadding>
-            <ListItemButton href="/bookmarks" LinkComponent={Link}>
+            <ListItemButton href="/bookmarks" LinkComponent={Link} onClick={handleDrawerClose}>
               <ListItemIcon>
                 <BookmarkIcon />
               </ListItemIcon>
@@ -280,7 +286,7 @@ export default function Sidebar({ children, user }: Props) {
           </ListItem>
 
           <ListItem key={"request"} disablePadding>
-            <ListItemButton href="/request" LinkComponent={Link}>
+            <ListItemButton href="/request" LinkComponent={Link} onClick={handleDrawerClose}>
               <ListItemIcon>
                 <AddCircleOutlineIcon />
               </ListItemIcon>
@@ -289,7 +295,11 @@ export default function Sidebar({ children, user }: Props) {
           </ListItem>
           */}
           <ListItem key={"borrow"} disablePadding>
-            <ListItemButton href="/borrow" LinkComponent={Link}>
+            <ListItemButton
+              href="/borrow"
+              LinkComponent={Link}
+              onClick={handleDrawerClose}
+            >
               <ListItemIcon>
                 <AddAPhotoIcon />
               </ListItemIcon>
@@ -298,7 +308,11 @@ export default function Sidebar({ children, user }: Props) {
           </ListItem>
 
           <ListItem key={"return"} disablePadding>
-            <ListItemButton href="/return" LinkComponent={Link}>
+            <ListItemButton
+              href="/return"
+              LinkComponent={Link}
+              onClick={handleDrawerClose}
+            >
               <ListItemIcon>
                 <KeyboardReturnIcon />
               </ListItemIcon>
