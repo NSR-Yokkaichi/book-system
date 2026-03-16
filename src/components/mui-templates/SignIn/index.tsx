@@ -71,8 +71,14 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             Sign in
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Book-systemにログイン
+            四日市キャンパス図書管理システムにログイン
           </Typography>
+          <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
+            アカウントをお持ちではありませんか？{" "}
+            <Link href="/signup" underline="hover">
+              サインアップ
+            </Link>
+          </Box>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Button
               fullWidth
@@ -120,7 +126,7 @@ export function SignInWithPassword({
             Sign in as admin
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            管理者としてBook-systemにログイン
+            管理者として四日市キャンパス図書管理システムにログイン
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <TextField

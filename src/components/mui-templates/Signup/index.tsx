@@ -73,7 +73,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             Sign up
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Book-systemに新規登録
+            四日市キャンパス図書管理システムに新規登録
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <Button
@@ -100,12 +100,10 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
                 );
                 const { latitude, longitude } = position.coords;
                 if (
-                  !(
-                    latitude < campasPositionCodes.minLatitude ||
-                    latitude > campasPositionCodes.maxLatitude ||
-                    longitude < campasPositionCodes.minLongitude ||
-                    longitude > campasPositionCodes.maxLongitude
-                  )
+                  latitude < campasPositionCodes.minLatitude ||
+                  latitude > campasPositionCodes.maxLatitude ||
+                  longitude < campasPositionCodes.minLongitude ||
+                  longitude > campasPositionCodes.maxLongitude
                 ) {
                   enqueueSnackbar(
                     "四日市キャンパス周辺からのみサインアップできます。現在地の位置情報を確認してください。",
@@ -151,7 +149,7 @@ export function SignInWithPassword({
             Sign in as admin
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            管理者としてBook-systemにログイン
+            管理者として四日市キャンパス図書管理システムにログイン
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <TextField
