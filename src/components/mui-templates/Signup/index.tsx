@@ -8,12 +8,12 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { redirect } from "next/navigation";
+import { useSnackbar } from "notistack";
 import React from "react";
+import { campasPositionCodes } from "@/config";
 import { authClient } from "@/lib/auth-client";
 import AppTheme from "../shared-theme/AppTheme";
 import { GoogleIcon, SitemarkIcon } from "./components/CustomIcons";
-import { enqueueSnackbar, useSnackbar } from "notistack";
-import { campasPositionCodes } from "@/config";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
