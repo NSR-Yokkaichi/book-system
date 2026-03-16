@@ -35,14 +35,14 @@ export default async function BorrowISBNPage({
     status: await book.getStatus(),
   };
   return (
-    <Stack>
+    <Stack spacing={2}>
       <Typography variant="h4" component="h1">
         本の返却
       </Typography>
       <Typography variant="body1" component="p">
         「{book.name}」の返却を行います。
       </Typography>
-      <Stack>
+      <Stack spacing={2}>
         <BooksReturn book={bookWithStatus} />
       </Stack>
     </Stack>

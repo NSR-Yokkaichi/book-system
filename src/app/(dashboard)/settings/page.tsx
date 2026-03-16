@@ -49,14 +49,18 @@ export default async function SettingsPage() {
   }
 
   return (
-    <Stack spacing={2} p={2} component={"main"} justifyContent={"center"}>
+    <Stack spacing={2} component={"main"} justifyContent={"center"}>
       <Typography variant="h4">ユーザー設定</Typography>
 
       <Stack
         component="form"
         action={updateUsername}
         spacing={2}
+        padding={2}
         maxWidth="400px"
+        bgcolor={"background.paper"}
+        borderRadius={2}
+        border={"1px solid #ccc"}
       >
         <TextField
           name="username"
