@@ -1,104 +1,25 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
-import { revalidatePath } from "next/cache";
+"use server";
+
+import { Stack, Typography } from "@mui/material";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth"; // お使いの認証ライブラリ
-import prisma from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import SettingsPageClient from "./Client";
 
 export default async function SettingsPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
   // セッションがない場合はリダイレクト
   if (!session) {
     redirect("/signin");
-  }
-
-  // サーバーアクション（このファイル内で定義可能）
-  async function updateUsername(formData: FormData) {
-    "use server";
-
-    const newName = formData.get("username") as string;
-
-    if (!newName || newName.length < 2) return;
-
-    // --- PW変更の処理もここに追加可能 ---
-    const newPassword = formData.get("newPassword") as string;
-
-    const email = formData.get("email") as string | null;
-
-    if (newPassword) {
-      await auth.api.setUserPassword({
-        headers: await headers(),
-        body: {
-          newPassword: newPassword,
-          userId: session!.user.id,
-        },
-      });
-    }
-
-    // --- ここでDB更新処理 ---
-    await prisma.user.update({
-      where: { id: session!.user.id },
-      data: { name: newName, email: email || undefined },
-    });
-
-    // キャッシュを更新して、サイドバーなどの表示を最新にする
-    revalidatePath("/", "layout");
   }
 
   return (
     <Stack spacing={2} p={2} component={"main"} justifyContent={"center"}>
       <Typography variant="h4">ユーザー設定</Typography>
 
-      <Stack
-        component="form"
-        action={updateUsername}
-        spacing={2}
-        maxWidth="400px"
-        bgcolor={"background.paper"}
-        p={2}
-        borderRadius={2}
-        border={"1px solid #ccc"}
-      >
-        <TextField
-          name="username"
-          label="ユーザー名"
-          defaultValue={session.user.name || ""}
-          helperText={
-            <>
-              ユーザー名はログイン時に使用します。
-              <br />
-              他のユーザーと重複しないようにしてください。
-            </>
-          }
-        />
-
-        <TextField
-          name="email"
-          label="メールアドレス"
-          defaultValue={session.user.email || ""}
-          disabled
-        />
-
-        <TextField
-          name="newPassword"
-          label="新しいパスワード"
-          type="password"
-          helperText={
-            <>
-              パスワードを変更する場合のみ入力してください。
-              <br />
-              変更しない場合は空のままにしてください。
-            </>
-          }
-        />
-
-        <Button type="submit" variant="contained" color="primary">
-          更新
-        </Button>
-      </Stack>
+      <SettingsPageClient user={session.user} />
     </Stack>
   );
 }
