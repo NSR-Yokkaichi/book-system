@@ -1,0 +1,214 @@
+"use client";
+import { TextField } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import MuiCard from "@mui/material/Card";
+import CssBaseline from "@mui/material/CssBaseline";
+import Stack from "@mui/material/Stack";
+import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import { redirect } from "next/navigation";
+import React from "react";
+import { authClient } from "@/lib/auth-client";
+import AppTheme from "../shared-theme/AppTheme";
+import { GoogleIcon, SitemarkIcon } from "./components/CustomIcons";
+import { enqueueSnackbar, useSnackbar } from "notistack";
+import { campasPositionCodes } from "@/config";
+
+const Card = styled(MuiCard)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignSelf: "center",
+  width: "100%",
+  padding: theme.spacing(4),
+  gap: theme.spacing(2),
+  margin: "auto",
+  [theme.breakpoints.up("sm")]: {
+    maxWidth: "450px",
+  },
+  boxShadow:
+    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
+  ...theme.applyStyles("dark", {
+    boxShadow:
+      "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
+  }),
+}));
+
+const SignInContainer = styled(Stack)(({ theme }) => ({
+  height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
+  minHeight: "100%",
+  padding: theme.spacing(2),
+  [theme.breakpoints.up("sm")]: {
+    padding: theme.spacing(4),
+  },
+  "&::before": {
+    content: '""',
+    display: "block",
+    position: "absolute",
+    zIndex: -1,
+    inset: 0,
+    backgroundImage:
+      "radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))",
+    backgroundRepeat: "no-repeat",
+    ...theme.applyStyles("dark", {
+      backgroundImage:
+        "radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))",
+    }),
+  },
+}));
+
+export default function SignUp(props: { disableCustomTheme?: boolean }) {
+  const { enqueueSnackbar } = useSnackbar();
+  return (
+    <AppTheme {...props}>
+      <CssBaseline enableColorScheme />
+      <SignInContainer direction="column" justifyContent="space-between">
+        <Card variant="outlined">
+          <SitemarkIcon />
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
+          >
+            Sign up
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Book-systemに新規登録
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={async () => {
+                // 位置情報を確認する
+                const permission = await navigator.permissions.query({
+                  name: "geolocation",
+                });
+                if (permission.state === "denied") {
+                  enqueueSnackbar(
+                    "位置情報の利用が許可されていないため、サインアップできません。位置情報の利用を許可してください。",
+                    { variant: "error" },
+                  );
+                  return;
+                }
+                const position = await new Promise<GeolocationPosition>(
+                  (resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                      timeout: 10000,
+                    });
+                  },
+                );
+                const { latitude, longitude } = position.coords;
+                if (
+                  !(
+                    latitude < campasPositionCodes.minLatitude ||
+                    latitude > campasPositionCodes.maxLatitude ||
+                    longitude < campasPositionCodes.minLongitude ||
+                    longitude > campasPositionCodes.maxLongitude
+                  )
+                ) {
+                  enqueueSnackbar(
+                    "四日市キャンパス周辺からのみサインアップできます。現在地の位置情報を確認してください。",
+                    { variant: "error" },
+                  );
+                  return;
+                }
+
+                await authClient.signIn.social({
+                  provider: "google",
+                  requestSignUp: true,
+                });
+              }}
+              startIcon={<GoogleIcon />}
+            >
+              nnn.ed.jpでサインアップ
+            </Button>
+          </Box>
+        </Card>
+      </SignInContainer>
+    </AppTheme>
+  );
+}
+
+export function SignInWithPassword({
+  isFirstAccount,
+}: {
+  isFirstAccount?: boolean;
+}) {
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  return (
+    <AppTheme>
+      <CssBaseline enableColorScheme />
+      <SignInContainer direction="column" justifyContent="space-between">
+        <Card variant="outlined">
+          <SitemarkIcon />
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
+          >
+            Sign in as admin
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            管理者としてBook-systemにログイン
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <TextField
+              label="Username / Email"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              fullWidth
+            />
+            <Button
+              fullWidth
+              variant="outlined"
+              disabled={!username || !password}
+              onClick={async () => {
+                // @を含むか
+                if (!isFirstAccount) {
+                  if (username.includes("@")) {
+                    await authClient.signIn.email({
+                      email: username,
+                      password,
+                    });
+                  } else {
+                    await authClient.signIn.username({
+                      username: username,
+                      password: password,
+                    });
+                  }
+                  redirect("/admin");
+                } else {
+                  await authClient.signUp.email({
+                    name: "Admin",
+                    username: "admin",
+                    email: username,
+                    password,
+                  });
+                  await fetch("/api/promote-to-admin", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email: username }),
+                    credentials: "include",
+                  });
+                }
+              }}
+            >
+              管理者としてログイン
+            </Button>
+          </Box>
+        </Card>
+      </SignInContainer>
+    </AppTheme>
+  );
+}

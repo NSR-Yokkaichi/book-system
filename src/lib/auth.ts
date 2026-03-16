@@ -12,6 +12,9 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      hd: "nnn.ed.jp",
+      disableImplicitSignUp: true,
+      disableSignUp: false,
     },
   },
   emailAndPassword: {

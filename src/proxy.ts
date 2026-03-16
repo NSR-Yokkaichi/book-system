@@ -18,5 +18,5 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!signin|_next|api|img).*)"], // Specify the routes the middleware applies to
+  matcher: ["/((?!signin|signup|_next|api|img).*)"], // Specify the routes the middleware applies to
 };
