@@ -2,12 +2,17 @@
 
 import { ThemeProvider } from "@mui/material/styles";
 import type { ReactNode } from "react";
-import { theme } from "@/components/theme";
+import { adminTheme, studentsTheme } from "@/lib/theme";
 
 type Props = {
+  isAdmin?: boolean;
   children: ReactNode;
 };
 
-export default function AppThemeProvider({ children }: Props) {
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+export default function AppThemeProvider({ children, isAdmin = false }: Props) {
+  return (
+    <ThemeProvider theme={isAdmin ? adminTheme : studentsTheme}>
+      {children}
+    </ThemeProvider>
+  );
 }
