@@ -1,7 +1,7 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect, unauthorized } from "next/navigation";
 import StudentCourseSelector from "@/components/StudentCourseSelector";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
@@ -34,13 +34,17 @@ export default async function SettingsPage() {
 
     if (!newName || newName.length < 2) return;
 
+    if (!session) {
+      unauthorized();
+    }
+
     // --- ここでDB更新処理 ---
     await prisma.user.update({
-      where: { id: session!.user.id },
+      where: { id: session?.user.id },
       data: { name: newName },
     });
     await prisma.student.update({
-      where: { userId: session!.user.id },
+      where: { userId: session?.user.id },
       data: { course: newCourse },
     });
 
