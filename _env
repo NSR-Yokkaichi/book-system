@@ -4,3 +4,10 @@ BETTER_AUTH_URL=http://localhost:3000
 DATABASE_URL=postgresql://bookuser:rootpassword@localhost:5432/booksystem
 GOOGLE_CLIENT_ID=xxxxxxx
 GOOGLE_CLIENT_SECRET=xxxxxxx
+
+SMTP_HOST="smtp.example.com"
+SMTP_PORT=465
+SMTP_USER="your-email@example.com"
+SMTP_PASS="your-password"
+SMTP_SECURE=false
+SMTP_TLS=false

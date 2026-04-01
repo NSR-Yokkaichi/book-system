@@ -36,10 +36,10 @@ export async function updateUser(formData: FormData, currentUser: User) {
     });
   }
   if (email && email !== currentUser.email) {
-    await auth.api.updateUser({
+    await auth.api.changeEmail({
       headers: await headers(),
       body: {
-        email: email,
+        newEmail: email,
       },
     });
   }
