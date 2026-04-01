@@ -92,7 +92,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             </Button>
           </Box>
           <Divider sx={{ my: 2 }}> もしくは </Divider>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Box width={"100%"}>
             <Link href="/signin/admin">
               <Button fullWidth variant="outlined" startIcon={<PasswordIcon />}>
                 管理者としてログイン
