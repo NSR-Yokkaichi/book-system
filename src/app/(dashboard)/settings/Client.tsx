@@ -23,7 +23,7 @@ export default function SettingsPageClient({
     user.displayUsername || user.name || "",
   );
   const [expiresByGraduateAt, setExpiresByGraduateAt] = useState(
-    user.expiresByGraduateAt || 2027,
+    user.expiresByGraduateAt?.toString() || "2027",
   );
   return (
     <Stack spacing={2} component={"main"} justifyContent={"center"}>
@@ -69,7 +69,7 @@ export default function SettingsPageClient({
           label="卒業予定年"
           type="number"
           value={expiresByGraduateAt}
-          onChange={(e) => setExpiresByGraduateAt(Number(e.target.value))}
+          onChange={(e) => setExpiresByGraduateAt(e.target.value)}
           fullWidth
           required
         />
