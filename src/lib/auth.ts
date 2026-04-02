@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { admin, username } from "better-auth/plugins";
+import { admin, haveIBeenPwned, username } from "better-auth/plugins";
 // If your Prisma file is located elsewhere, you can change the path
 import prisma from "@/lib/prisma";
 import { transporter } from "./email";
@@ -64,6 +64,13 @@ export const auth = betterAuth({
       });
     },
   },
-  plugins: [username(), admin({ defaultRole: "student" })],
+  plugins: [
+    username(),
+    admin({ defaultRole: "student" }),
+    haveIBeenPwned({
+      customPasswordCompromisedMessage:
+        "パスワードが過去に漏洩している可能性があります。別のパスワードを選択してください。",
+    }),
+  ],
   experimental: { joins: true },
 });
