@@ -1,8 +1,9 @@
 import { Stack, Typography } from "@mui/material";
+import { headers } from "next/headers";
 import { notFound, unauthorized } from "next/navigation";
 import { Book } from "@/class/Book";
 import { Rental } from "@/class/Rental";
-import { Student } from "@/class/Student";
+import { auth } from "@/lib/auth";
 import BooksReturn from "./Client";
 
 export default async function BorrowISBNPage({
@@ -12,12 +13,12 @@ export default async function BorrowISBNPage({
 }) {
   const { isbn } = await params;
 
-  const student = await Student.findBySession();
-  if (!student) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user) {
     unauthorized();
   }
 
-  const rental = await Rental.getByUserAndISBN(student.id, isbn);
+  const rental = await Rental.getByUserAndISBN(session.user.id, isbn);
 
   if (!rental) {
     notFound();
