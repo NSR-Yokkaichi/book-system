@@ -1,5 +1,3 @@
-"use server";
-
 import { Stack, Typography } from "@mui/material";
 import { notFound } from "next/navigation";
 import { Book } from "@/class/Book";
