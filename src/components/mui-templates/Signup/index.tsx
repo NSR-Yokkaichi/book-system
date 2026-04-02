@@ -100,10 +100,11 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
                 );
                 const { latitude, longitude } = position.coords;
                 if (
-                  latitude < campasPositionCodes.minLatitude ||
-                  latitude > campasPositionCodes.maxLatitude ||
-                  longitude < campasPositionCodes.minLongitude ||
-                  longitude > campasPositionCodes.maxLongitude
+                  (latitude < campasPositionCodes.minLatitude ||
+                    latitude > campasPositionCodes.maxLatitude ||
+                    longitude < campasPositionCodes.minLongitude ||
+                    longitude > campasPositionCodes.maxLongitude) &&
+                  process.env.NODE_ENV === "production"
                 ) {
                   enqueueSnackbar(
                     "四日市キャンパス周辺からのみサインアップできます。現在地の位置情報を確認してください。",
