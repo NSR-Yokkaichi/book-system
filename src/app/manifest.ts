@@ -15,7 +15,12 @@ export default function manifest(): MetadataRoute.Manifest {
     id: "https://book.unipro-n.com/",
     icons: [
       {
-        src: "/icon.png",
+        src: "/icon_192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        src: "/icon_512.png",
         sizes: "512x512",
         type: "image/png",
       },
