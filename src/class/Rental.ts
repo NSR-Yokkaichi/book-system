@@ -89,6 +89,21 @@ export class Rental {
     );
   }
 
+  static async findAll(): Promise<Rental[]> {
+    const rentals = await prisma.rental.findMany();
+    return rentals.map(
+      (rental) =>
+        new Rental(
+          rental.id,
+          rental.userId,
+          rental.bookId,
+          rental.expiresAt,
+          rental.createdAt,
+          rental.updatedAt,
+        ),
+    );
+  }
+
   async getBook(): Promise<Book> {
     const book = await prisma.book.findUnique({
       where: { id: this.bookId },
@@ -97,6 +112,16 @@ export class Rental {
       throw new Error("Book not found");
     }
     return new Book(book);
+  }
+
+  async getStudent() {
+    const student = await prisma.user.findUnique({
+      where: { id: this.userId },
+    });
+    if (!student) {
+      throw new Error("Student not found");
+    }
+    return student;
   }
 
   async save(): Promise<void> {
