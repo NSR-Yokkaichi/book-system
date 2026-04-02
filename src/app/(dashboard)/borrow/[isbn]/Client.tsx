@@ -10,20 +10,25 @@ import {
 import { useSnackbar } from "notistack";
 import { BookStatus } from "@/class/types/Book";
 import { borrowAction } from "./action";
+import { useState } from "react";
 
 export default function BooksView({
   books,
 }: {
   books: { id: string; sticker_id?: string; status: BookStatus }[];
 }) {
+  const [inProgress, setInProgress] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const onClickHandler = async (bookid: string) => {
+    setInProgress(true);
     try {
       await borrowAction(bookid);
       enqueueSnackbar("本を借りました", { variant: "success" });
     } catch (error) {
       console.error(error);
       enqueueSnackbar("本の貸出に失敗しました", { variant: "error" });
+    } finally {
+      setInProgress(false);
     }
   };
   return (
@@ -46,7 +51,7 @@ export default function BooksView({
             </CardContent>
             <CardActions>
               <Button
-                disabled={b.status === BookStatus.Rented}
+                disabled={b.status === BookStatus.Rented || inProgress}
                 onClick={() => onClickHandler(b.id)}
               >
                 借りる
