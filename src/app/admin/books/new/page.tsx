@@ -8,9 +8,12 @@ export default async function NewBookPage({
   searchParams: Promise<{
     auto?: string;
     isbn?: string;
+    title?: string;
+    author?: string;
+    publisher?: string;
   }>;
 }) {
-  const { auto, isbn } = await searchParams;
+  const { auto, isbn, title, author, publisher } = await searchParams;
   return (
     <Stack>
       <Typography variant="h4" gutterBottom>
@@ -27,7 +30,13 @@ export default async function NewBookPage({
           maxWidth="400px"
           action={regist}
         >
-          <TextField label="本の名前" name="name" required fullWidth />
+          <TextField
+            label="本の名前"
+            name="name"
+            required
+            fullWidth
+            defaultValue={title}
+          />
           <TextField
             label="ISBN"
             name="isbn"
@@ -41,8 +50,18 @@ export default async function NewBookPage({
           >
             QRコードで登録
           </Button>
-          <TextField label="著者" name="author" fullWidth />
-          <TextField label="出版社" name="publisher" fullWidth />
+          <TextField
+            label="著者"
+            name="author"
+            fullWidth
+            defaultValue={author}
+          />
+          <TextField
+            label="出版社"
+            name="publisher"
+            fullWidth
+            defaultValue={publisher}
+          />
           <TextField label="ステッカーID" name="sticker_id" fullWidth />
           <Button type="submit" variant="contained" color="primary">
             登録

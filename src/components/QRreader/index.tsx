@@ -4,8 +4,9 @@ import { Html5Qrcode } from "html5-qrcode";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./style.css";
 import ISBN from "isbn3";
-import { redirect } from "next/navigation";
-import { borrowAction, returnAction } from "./action";
+import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
+import { borrowAction, getBookInfoFromISBN, returnAction } from "./action";
 
 function getCameraErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : String(error ?? "");
@@ -79,6 +80,8 @@ export default function QrCameraScanner({
   const startAttemptIdRef = useRef(0);
   const [isScannerReady, setIsScannerReady] = useState(false);
   const [debugMessage, setDebugMessage] = useState<string>("");
+  const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   const startScanner = useCallback(async () => {
     let shouldRetry = false;
@@ -255,12 +258,28 @@ export default function QrCameraScanner({
       if (submitting || lastSubmittedRef.current === scanResult) return;
       lastSubmittedRef.current = scanResult;
       setSubmitting(true);
+      console.log("Scanned ISBN:", scanResult);
       if (ISBN.audit(scanResult).validIsbn === false) {
         return;
       }
-      redirect(`/admin/books/new?isbn=${scanResult}`);
+      void getBookInfoFromISBN(scanResult)
+        .then((bookInfo) => {
+          enqueueSnackbar("書籍情報の取得に成功しました！", {
+            variant: "success",
+          });
+          router.push(
+            `/admin/books/new?isbn=${scanResult}&title=${encodeURIComponent(bookInfo?.title ?? "")}&author=${encodeURIComponent(bookInfo?.author ?? "")}&publisher=${encodeURIComponent(bookInfo?.publisherName ?? "")}`,
+          );
+        })
+        .catch((e) => {
+          console.log("Error fetching book info:", e);
+          enqueueSnackbar("書籍情報の取得に失敗しました", {
+            variant: "error",
+          });
+          setSubmitting(false);
+        });
     }
-  }, [scanResult, mode, submitting]);
+  }, [scanResult, mode, submitting, router, enqueueSnackbar]);
 
   return (
     <div className="qr-uploader">
