@@ -32,7 +32,7 @@ model User {
   banExpires DateTime?
   rentals    Rental[]
 
-  course              String
+  course              String?
   expiresByGraduateAt Int?
 
   @@unique([email])
