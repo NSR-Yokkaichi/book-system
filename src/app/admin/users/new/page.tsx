@@ -24,7 +24,7 @@ export default function UserCreatePage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [role, setRole] = useState("user");
+  const [role, setRole] = useState("student");
   const [isProgress, setIsProgress] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(true);
 
@@ -120,7 +120,7 @@ export default function UserCreatePage() {
           value={role}
           onChange={(e) => setRole(e.target.value as string)}
         >
-          <MenuItem value="user">ユーザー</MenuItem>
+          <MenuItem value="student">生徒</MenuItem>
           <MenuItem value="admin">管理者</MenuItem>
         </Select>
         <Button
