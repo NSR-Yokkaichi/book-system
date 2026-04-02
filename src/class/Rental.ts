@@ -72,6 +72,23 @@ export class Rental {
     );
   }
 
+  static async getByUserId(userId: string): Promise<Rental[]> {
+    const rentals = await prisma.rental.findMany({
+      where: { userId },
+    });
+    return rentals.map(
+      (rental) =>
+        new Rental(
+          rental.id,
+          rental.userId,
+          rental.bookId,
+          rental.expiresAt,
+          rental.createdAt,
+          rental.updatedAt,
+        ),
+    );
+  }
+
   async getBook(): Promise<Book> {
     const book = await prisma.book.findUnique({
       where: { id: this.bookId },
