@@ -1,12 +1,14 @@
 "use client";
 
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useState } from "react";
 
 export default function StudentCourseSelector({
   defaultValue = "1days",
 }: {
   defaultValue?: string;
 }) {
+  const [course, setCourse] = useState(defaultValue);
   return (
     <FormControl fullWidth>
       <InputLabel id="course-label">コース</InputLabel>
@@ -14,7 +16,8 @@ export default function StudentCourseSelector({
         id="course"
         labelId="course-label"
         label="コース"
-        defaultValue={defaultValue}
+        value={course}
+        onChange={(e) => setCourse(e.target.value)}
         fullWidth
         name="course"
       >

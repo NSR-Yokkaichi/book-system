@@ -1,23 +1,25 @@
+"use client";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   FormControl,
-  InputLabel,
   TextField,
   Typography,
 } from "@mui/material";
+import { useSnackbar } from "notistack";
 import StudentCourseSelector from "../StudentCourseSelector";
 import { updateStudentInfo } from "./actions";
 
-export default async function StudentInitialize({
+export default function StudentInitialize({
   uid,
   open,
 }: {
   uid: string;
   open: boolean;
 }) {
+  const { enqueueSnackbar } = useSnackbar();
   return (
     <Dialog open={open}>
       <form
@@ -30,13 +32,23 @@ export default async function StudentInitialize({
           if (!["1days", "3days", "5days", "online"].includes(course)) return;
           const expNum = Number(expiresByGraduateAt);
           if (Number.isNaN(expNum)) return;
-          await updateStudentInfo({
-            course: course as "1days" | "3days" | "5days" | "online",
-            expiresByGraduateAt: expNum,
-          });
+          try {
+            await updateStudentInfo({
+              course: course as "1days" | "3days" | "5days" | "online",
+              expiresByGraduateAt: expNum,
+            });
+            enqueueSnackbar("学生情報を登録しました", { variant: "success" });
+          } catch (e) {
+            console.log(e);
+            enqueueSnackbar("学生情報の登録に失敗しました", {
+              variant: "error",
+            });
+          }
         }}
       >
-        <DialogContent>
+        <DialogContent
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        >
           <Typography variant="h6">学生情報の登録</Typography>
           <Typography variant="body1">
             あなたの学生情報が初期化されていません。登録してください。
@@ -44,11 +56,12 @@ export default async function StudentInitialize({
           <input type="hidden" name="uid" value={uid} />
           <StudentCourseSelector />
           <FormControl fullWidth>
-            <InputLabel htmlFor="expiresByGraduateAt">卒業予定日</InputLabel>
             <TextField
               id="expiresByGraduateAt"
               name="expiresByGraduateAt"
-              type="date"
+              label="卒業予定年"
+              type="number"
+              defaultValue={2027}
               fullWidth
               required
             />
