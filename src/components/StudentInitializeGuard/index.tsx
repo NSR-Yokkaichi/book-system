@@ -28,10 +28,23 @@ export default function StudentInitialize({
           const expiresByGraduateAt = formdata.get(
             "expiresByGraduateAt",
           ) as string;
-          if (!course || !expiresByGraduateAt) return;
-          if (!["1days", "3days", "5days", "online"].includes(course)) return;
+          const currentYear = new Date().getFullYear();
           const expNum = Number(expiresByGraduateAt);
-          if (Number.isNaN(expNum)) return;
+          if (!Number.isInteger(expNum) || expNum < currentYear) {
+            enqueueSnackbar("卒業予定年は今年以降の整数で入力してください", {
+              variant: "error",
+            });
+            return;
+          }
+          if (!["1days", "3days", "5days", "online"].includes(course)) {
+            enqueueSnackbar(
+              "コースは1days, 3days, 5days, onlineのいずれかを選択してください",
+              {
+                variant: "error",
+              },
+            );
+            return;
+          }
           try {
             await updateStudentInfo({
               course: course as "1days" | "3days" | "5days" | "online",

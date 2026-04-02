@@ -12,7 +12,7 @@ export default async function SettingsPage() {
   }
 
   // 学生情報がない場合はリダイレクト
-  if (!session.user.course || !session.user.expiresByGraduateAt) {
+  if (!session.user.course || session.user.expiresByGraduateAt === null) {
     redirect("/");
   }
 
