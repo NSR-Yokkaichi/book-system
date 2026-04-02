@@ -89,7 +89,7 @@ export class Rental {
     );
   }
 
-  static async findAll(): Promise<Rental[]> {
+  static async getAll(): Promise<Rental[]> {
     const rentals = await prisma.rental.findMany();
     return rentals.map(
       (rental) =>

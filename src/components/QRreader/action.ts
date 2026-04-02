@@ -16,7 +16,7 @@ export const borrowAction = async (isbn: string) => {
     if (!session?.user) {
       unauthorized();
     }
-    const book = await Book.findByISBN(isbn);
+    const book = await Book.getByISBN(isbn);
     if (!book || book.length === 0) {
       throw new Error("本が見つかりません");
     }

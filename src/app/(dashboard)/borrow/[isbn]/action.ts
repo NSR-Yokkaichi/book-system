@@ -10,7 +10,7 @@ export const borrowAction = async (bookid: string) => {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) throw new Error("ユーザーが認証されていません");
-    const book = await Book.findById(bookid);
+    const book = await Book.getById(bookid);
     if (!book) {
       throw new Error("本が見つかりません");
     }

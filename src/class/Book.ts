@@ -142,7 +142,7 @@ export class Book {
    * @param id 本のid
    * @returns 本の情報
    */
-  static async findById(id: string): Promise<Book | null> {
+  static async getById(id: string): Promise<Book | null> {
     const found = await prisma.book.findUnique({ where: { id } });
     return found ? new Book(found) : null;
   }
@@ -151,7 +151,7 @@ export class Book {
    * 本の一覧を取得する
    * @returns 本の情報の配列
    */
-  static async findAll(): Promise<Book[]> {
+  static async getAll(): Promise<Book[]> {
     const books = await prisma.book.findMany();
     return books.map((b) => new Book(b));
   }
@@ -161,7 +161,7 @@ export class Book {
    * @param isbn ISBNコード
    * @returns 本の情報の配列
    */
-  static async findByISBN(isbn: string): Promise<Book[]> {
+  static async getByISBN(isbn: string): Promise<Book[]> {
     const books = await prisma.book.findMany({ where: { isbn } });
     return books.map((b) => new Book(b));
   }
@@ -171,7 +171,7 @@ export class Book {
    * @param sticker_id シールの番号
    * @returns 本の情報もしくはnull
    */
-  static async findByStickerId(sticker_id: string): Promise<Book | null> {
+  static async getByStickerId(sticker_id: string): Promise<Book | null> {
     const found = await prisma.book.findFirst({ where: { sticker_id } });
     return found ? new Book(found) : null;
   }

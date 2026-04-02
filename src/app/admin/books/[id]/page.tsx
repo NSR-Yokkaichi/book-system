@@ -9,7 +9,7 @@ export default async function BookEditPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const book = await Book.findById(id);
+  const book = await Book.getById(id);
   if (!book) {
     notFound();
   }

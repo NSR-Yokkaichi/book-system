@@ -44,7 +44,7 @@ export class Campus {
    * @param id キャンパスのID
    * @returns キャンパスのデータ
    */
-  static async findById(id: string): Promise<Campus | null> {
+  static async getById(id: string): Promise<Campus | null> {
     const campus = await prisma.campus.findUnique({
       where: { id },
     });
@@ -55,7 +55,7 @@ export class Campus {
    * キャンパスを全て取得する
    * @returns キャンパスのデータの配列
    */
-  static async findAll(): Promise<Campus[]> {
+  static async getAll(): Promise<Campus[]> {
     const campuses = await prisma.campus.findMany();
     return campuses.map((campus) => new Campus(campus));
   }

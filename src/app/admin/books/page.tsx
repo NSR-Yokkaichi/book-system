@@ -3,7 +3,7 @@ import { Book } from "@/class/Book";
 import BookList from "@/components/BookList";
 
 export default async function Home() {
-  const books = await Book.findAll();
+  const books = await Book.getAll();
 
   const booksWithStatus = await Promise.all(
     books.map(async (book) => {

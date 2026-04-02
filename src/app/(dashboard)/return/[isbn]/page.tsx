@@ -24,7 +24,7 @@ export default async function BorrowISBNPage({
     notFound();
   }
 
-  const book = await Book.findById(rental.bookId);
+  const book = await Book.getById(rental.bookId);
   if (!book) {
     notFound();
   }

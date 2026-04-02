@@ -12,7 +12,7 @@ export default async function BorrowISBNPage({
 }) {
   const { isbn } = await params;
 
-  const books = await Book.findByISBN(isbn);
+  const books = await Book.getByISBN(isbn);
   if (books.length === 0) {
     notFound();
   }

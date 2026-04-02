@@ -7,7 +7,7 @@ export const update = async (formData: FormData) => {
   if (typeof id !== "string") {
     throw new Error("Invalid form data");
   }
-  const book = await Book.findById(id);
+  const book = await Book.getById(id);
   if (!book) {
     redirect("/admin/books");
   }
