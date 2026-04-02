@@ -35,6 +35,8 @@ model User {
   course              String?
   expiresByGraduateAt Int?
 
+  passkeys Passkey[]
+
   @@unique([email])
   @@unique([username])
   @@index([course])
@@ -131,4 +133,23 @@ model Campus {
   updatedAt      DateTime @updatedAt
 
   @@map("campus")
+}
+
+model Passkey {
+  id           String    @id
+  name         String?
+  publicKey    String
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentialID String
+  counter      Int
+  deviceType   String
+  backedUp     Boolean
+  transports   String?
+  createdAt    DateTime?
+  aaguid       String?
+
+  @@index([userId])
+  @@index([credentialID])
+  @@map("passkey")
 }

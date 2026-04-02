@@ -4,6 +4,7 @@ import { admin, haveIBeenPwned, username } from "better-auth/plugins";
 // If your Prisma file is located elsewhere, you can change the path
 import prisma from "@/lib/prisma";
 import { transporter } from "./email";
+import { passkey } from "@better-auth/passkey";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -71,6 +72,7 @@ export const auth = betterAuth({
       customPasswordCompromisedMessage:
         "パスワードが過去に漏洩している可能性があります。別のパスワードを選択してください。",
     }),
+    passkey(),
   ],
   experimental: { joins: true },
 });
