@@ -26,6 +26,20 @@ export const auth = betterAuth({
     changeEmail: {
       enabled: true,
     },
+    additionalFields: {
+      course: {
+        type: ["1days", "3days", "5days", "online"],
+        required: false,
+        input: true,
+        index: true,
+      },
+      expiresByGraduateAt: {
+        type: "number",
+        required: false,
+        input: true,
+        index: true,
+      },
+    },
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
@@ -50,5 +64,6 @@ export const auth = betterAuth({
       });
     },
   },
-  plugins: [username(), admin()],
+  plugins: [username(), admin({ defaultRole: "student" })],
+  experimental: { joins: true },
 });

@@ -90,18 +90,25 @@ export class Book {
 
   /**
    * 本を貸し出す
-   * @param studentId 借りる人(学生ID)
+   * @param userId 借りる人(学生のID)
    * @returns 貸出情報
    */
-  async rent(studentId: string): Promise<Rental> {
+  async rent(userId: string): Promise<Rental> {
     const campus = await prisma.campus.findFirst();
     if (!campus) {
       throw new Error("Campus not found");
     }
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new Error("User not found");
+    }
+    if (user.role !== "student") {
+      throw new Error("Only students can rent books");
+    }
     const rental = await prisma.rental.create({
       data: {
         bookId: this.id,
-        studentId,
+        userId,
         expiresAt: new Date(
           Date.now() + campus.rentalDeadline * 24 * 60 * 60 * 1000,
         ),
@@ -109,7 +116,7 @@ export class Book {
     });
     return new Rental(
       rental.id,
-      rental.studentId,
+      rental.userId,
       rental.bookId,
       rental.expiresAt,
       rental.createdAt,

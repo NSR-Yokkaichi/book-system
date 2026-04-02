@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Student } from "@/class/Student";
 import AppThemeProvider from "@/components/AppThemeProvider";
 import StudentInitializeGuard from "@/components/StudentInitializeGuard";
 import Sidebar from "@/components/sidebar";
@@ -37,14 +36,16 @@ export default async function RootLayout({
     redirect("/signin");
   }
 
-  const student = await Student.findBySession();
   return (
     <html lang="ja">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AppThemeProvider>
-          <StudentInitializeGuard uid={session.user.id} open={!student} />
+          <StudentInitializeGuard
+            uid={session.user.id}
+            open={!session.user.course || !session.user.expiresByGraduateAt}
+          />
           <Sidebar user={session.user}>{children}</Sidebar>
         </AppThemeProvider>
       </body>

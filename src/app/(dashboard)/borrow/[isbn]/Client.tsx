@@ -7,6 +7,8 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import { useSnackbar } from "notistack";
+import { useState } from "react";
 import { BookStatus } from "@/class/types/Book";
 import { borrowAction } from "./action";
 
@@ -15,8 +17,19 @@ export default function BooksView({
 }: {
   books: { id: string; sticker_id?: string; status: BookStatus }[];
 }) {
+  const [inProgress, setInProgress] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const onClickHandler = async (bookid: string) => {
-    await borrowAction(bookid);
+    setInProgress(true);
+    try {
+      await borrowAction(bookid);
+      enqueueSnackbar("本を借りました", { variant: "success" });
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar("本の貸出に失敗しました", { variant: "error" });
+    } finally {
+      setInProgress(false);
+    }
   };
   return (
     <>
@@ -38,7 +51,7 @@ export default function BooksView({
             </CardContent>
             <CardActions>
               <Button
-                disabled={b.status === BookStatus.Rented}
+                disabled={b.status === BookStatus.Rented || inProgress}
                 onClick={() => onClickHandler(b.id)}
               >
                 借りる

@@ -1,17 +1,18 @@
 "use server";
 
+import { headers } from "next/headers";
 import { notFound, redirect, unauthorized } from "next/navigation";
 import { Rental } from "@/class/Rental";
-import { Student } from "@/class/Student";
+import { auth } from "@/lib/auth";
 
 export const returnAction = async (isbn: string) => {
   try {
-    const student = await Student.findBySession();
-    if (!student) {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) {
       unauthorized();
     }
 
-    const rental = await Rental.getByUserAndISBN(student.id, isbn);
+    const rental = await Rental.getByUserAndISBN(session.user.id, isbn);
     if (!rental) {
       notFound();
     }

@@ -3,7 +3,7 @@ import { Book } from "./Book";
 
 export class Rental {
   id: string;
-  studentId: string;
+  userId: string;
   bookId: string;
   expiresAt: Date;
   createdAt: Date;
@@ -11,14 +11,14 @@ export class Rental {
 
   constructor(
     id: string,
-    studentId: string,
+    userId: string,
     bookId: string,
     expiresAt: Date,
     createdAt: Date,
     updatedAt: Date,
   ) {
     this.id = id;
-    this.studentId = studentId;
+    this.userId = userId;
     this.bookId = bookId;
     this.expiresAt = expiresAt;
     this.createdAt = createdAt;
@@ -26,20 +26,20 @@ export class Rental {
   }
 
   static async create(data: {
-    studentId: string;
+    userId: string;
     bookId: string;
     expiresAt: Date;
   }): Promise<Rental> {
     const created = await prisma.rental.create({
       data: {
-        studentId: data.studentId,
+        userId: data.userId,
         bookId: data.bookId,
         expiresAt: data.expiresAt,
       },
     });
     return new Rental(
       created.id,
-      created.studentId,
+      created.userId,
       created.bookId,
       created.expiresAt,
       created.createdAt,
@@ -48,12 +48,12 @@ export class Rental {
   }
 
   static async getByUserAndISBN(
-    studentId: string,
+    userId: string,
     isbn: string,
   ): Promise<Rental | null> {
     const rental = await prisma.rental.findFirst({
       where: {
-        studentId,
+        userId,
         book: {
           isbn,
         },
@@ -64,11 +64,28 @@ export class Rental {
     }
     return new Rental(
       rental.id,
-      rental.studentId,
+      rental.userId,
       rental.bookId,
       rental.expiresAt,
       rental.createdAt,
       rental.updatedAt,
+    );
+  }
+
+  static async getByUserId(userId: string): Promise<Rental[]> {
+    const rentals = await prisma.rental.findMany({
+      where: { userId },
+    });
+    return rentals.map(
+      (rental) =>
+        new Rental(
+          rental.id,
+          rental.userId,
+          rental.bookId,
+          rental.expiresAt,
+          rental.createdAt,
+          rental.updatedAt,
+        ),
     );
   }
 
@@ -86,7 +103,7 @@ export class Rental {
     await prisma.rental.update({
       where: { id: this.id },
       data: {
-        studentId: this.studentId,
+        userId: this.userId,
         bookId: this.bookId,
         expiresAt: this.expiresAt,
       },

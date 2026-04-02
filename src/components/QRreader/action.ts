@@ -1,18 +1,19 @@
 "use server";
 
 import ISBN from "isbn3";
+import { headers } from "next/headers";
 import { redirect, unauthorized } from "next/navigation";
 import { Book } from "@/class/Book";
 import { Rental } from "@/class/Rental";
-import { Student } from "@/class/Student";
+import { auth } from "@/lib/auth";
 
 export const borrowAction = async (isbn: string) => {
   try {
     if (ISBN.audit(isbn).validIsbn === false) {
       return;
     }
-    const student = await Student.findBySession();
-    if (!student) {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) {
       unauthorized();
     }
     const book = await Book.findByISBN(isbn);
@@ -31,11 +32,11 @@ export const returnAction = async (isbn: string) => {
     if (ISBN.audit(isbn).validIsbn === false) {
       return;
     }
-    const student = await Student.findBySession();
-    if (!student) {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) {
       unauthorized();
     }
-    const rental = await Rental.getByUserAndISBN(student.id, isbn);
+    const rental = await Rental.getByUserAndISBN(session.user.id, isbn);
     if (!rental) {
       throw new Error("貸し出し情報が見つかりません");
     }

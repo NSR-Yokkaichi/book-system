@@ -1,10 +1,15 @@
 import { Alert, Stack, Typography } from "@mui/material";
-import { Student } from "@/class/Student";
+import { headers } from "next/headers";
+import { unauthorized } from "next/navigation";
+import { Rental } from "@/class/Rental";
 import RentalList from "@/components/RentalList";
+import { auth } from "@/lib/auth";
 
 export default async function Home() {
-  const student = await Student.findBySession();
-  const rentals = await student?.getRentals();
+  const session = await auth.api.getSession({ headers: await headers() });
+  const user = session?.user;
+  if (!user) unauthorized();
+  const rentals = await Rental.getByUserId(user.id);
   const isExpiresed = rentals?.some((rental) => rental.expiresAt < new Date());
   return (
     <Stack>
