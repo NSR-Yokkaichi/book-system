@@ -2,6 +2,11 @@ import { Stack, Typography } from "@mui/material";
 import { Rental } from "@/class/Rental";
 import BorrowList from "@/components/BorrowList";
 
+export const metadata = {
+  title: "貸出者一覧",
+  description: "四日市キャンパス 図書管理システムの貸出者一覧ページです。",
+};
+
 export default async function BorrowPage() {
   const rentalList = await Rental.getAll();
   return (

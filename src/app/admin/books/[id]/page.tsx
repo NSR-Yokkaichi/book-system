@@ -3,6 +3,11 @@ import { notFound } from "next/navigation";
 import { Book } from "@/class/Book";
 import Client from "./Client";
 
+export const metadata = {
+  title: "図書編集",
+  description: "四日市キャンパス 図書管理システムの図書編集ページです。",
+};
+
 export default async function BookEditPage({
   params,
 }: {

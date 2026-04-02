@@ -5,6 +5,11 @@ import { Rental } from "@/class/Rental";
 import RentalList from "@/components/RentalList";
 import { auth } from "@/lib/auth";
 
+export const metadata = {
+  title: "ダッシュボード - 四日市キャンパス 図書管理システム",
+  description: "四日市キャンパス 図書管理システムのダッシュボードページです。",
+};
+
 export default async function Home() {
   const session = await auth.api.getSession({ headers: await headers() });
   const user = session?.user;

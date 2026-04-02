@@ -3,7 +3,9 @@ import { SignInWithPassword } from "@/components/mui-templates/SignIn";
 import prisma from "@/lib/prisma";
 
 export const metadata: Metadata = {
-  title: "返却完了",
+  title: "管理者サインイン",
+  description:
+    "四日市キャンパス 図書管理システムの管理者サインインページです。",
 };
 
 export const dynamic = "force-dynamic";

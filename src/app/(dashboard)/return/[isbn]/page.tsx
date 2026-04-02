@@ -6,6 +6,11 @@ import { Rental } from "@/class/Rental";
 import { auth } from "@/lib/auth";
 import BooksReturn from "./Client";
 
+export const metadata = {
+  title: "本の返却",
+  description: "四日市キャンパス 図書管理システムの本の返却ページです。",
+};
+
 export default async function BorrowISBNPage({
   params,
 }: {

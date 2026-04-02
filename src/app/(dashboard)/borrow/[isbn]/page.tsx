@@ -5,6 +5,11 @@ import { notFound } from "next/navigation";
 import { Book } from "@/class/Book";
 import BooksView from "./Client";
 
+export const metadata = {
+  title: "本の貸し出し",
+  description: "四日市キャンパス 図書管理システムの本の貸し出しページです。",
+};
+
 export default async function BorrowISBNPage({
   params,
 }: {

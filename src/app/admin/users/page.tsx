@@ -1,7 +1,13 @@
 import { Button, Stack, Typography } from "@mui/material";
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import UsersDataGrid from "@/components/UsersDataGrid";
 import { auth } from "@/lib/auth";
+
+export const metadata: Metadata = {
+  title: "ユーザー管理",
+  description: "四日市キャンパス 図書管理システムのユーザー管理ページです。",
+};
 
 export default async function UsersPage() {
   const users = await auth.api.listUsers({

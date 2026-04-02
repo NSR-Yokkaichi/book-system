@@ -1,5 +1,11 @@
 import { Stack, Typography } from "@mui/material";
 import QrCameraScanner from "@/components/QRreader";
+
+export const metadata = {
+  title: "本の返却",
+  description: "四日市キャンパス 図書管理システムの本の返却ページです。",
+};
+
 export default function Home() {
   return (
     <Stack>

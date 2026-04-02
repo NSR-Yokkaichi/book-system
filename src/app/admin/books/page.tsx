@@ -2,6 +2,11 @@ import { Button, Stack, Typography } from "@mui/material";
 import { Book } from "@/class/Book";
 import BookList from "@/components/BookList";
 
+export const metadata = {
+  title: "図書管理",
+  description: "四日市キャンパス 図書管理システムの図書管理ページです。",
+};
+
 export default async function Home() {
   const books = await Book.getAll();
 

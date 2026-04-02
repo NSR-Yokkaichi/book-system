@@ -2,6 +2,11 @@ import { Button, Stack, TextField, Typography } from "@mui/material";
 import QrCameraScanner from "@/components/QRreader";
 import { regist } from "./action";
 
+export const metadata = {
+  title: "新しい本を登録",
+  description: "四日市キャンパス 図書管理システムの新しい本を登録ページです。",
+};
+
 export default async function NewBookPage({
   searchParams,
 }: {

@@ -3,6 +3,11 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import SettingsPageClient from "./Client";
 
+export const metadata = {
+  title: "ユーザー設定",
+  description: "四日市キャンパス 図書管理システムのユーザー設定ページです。",
+};
+
 export default async function SettingsPage() {
   const session = await auth.api.getSession({ headers: await headers() });
 
