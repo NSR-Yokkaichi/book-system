@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
+import { useState } from "react";
 import StudentCourseSelector from "../StudentCourseSelector";
 import { updateStudentInfo } from "./actions";
 
@@ -20,8 +21,9 @@ export default function StudentInitialize({
   open: boolean;
 }) {
   const { enqueueSnackbar } = useSnackbar();
+  const [updated, setUpdated] = useState(false);
   return (
-    <Dialog open={open}>
+    <Dialog open={open && !updated} disableEscapeKeyDown>
       <form
         action={async (formdata: FormData) => {
           const course = formdata.get("course") as string;
@@ -51,6 +53,7 @@ export default function StudentInitialize({
               expiresByGraduateAt: expNum,
             });
             enqueueSnackbar("学生情報を登録しました", { variant: "success" });
+            setUpdated(true);
           } catch (e) {
             console.log(e);
             enqueueSnackbar("学生情報の登録に失敗しました", {
