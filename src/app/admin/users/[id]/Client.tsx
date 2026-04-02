@@ -2,6 +2,9 @@
 
 import {
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
   Divider,
   InputLabel,
   MenuItem,
@@ -15,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import StudentCourseSelector from "@/components/StudentCourseSelector";
+import { deleteUser, editUser } from "./actions";
 
 export default function UserEditPage({
   user,
@@ -40,6 +44,7 @@ export default function UserEditPage({
   const [expAt, setExpAt] = useState(user.expiresByGraduateAt?.toString());
   const [isProgress, setIsProgress] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(true);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   return (
     <Stack
@@ -63,7 +68,7 @@ export default function UserEditPage({
             } else {
               setIsValidPassword(true);
             }
-            // await updateUser(formdata);
+            await editUser(formdata);
             enqueueSnackbar("ユーザーを編集しました", { variant: "success" });
             await new Promise((resolve) => setTimeout(resolve, 1000));
             router.push("/admin/users");
@@ -74,6 +79,7 @@ export default function UserEditPage({
           }
         }}
       >
+        <input type="hidden" name="id" value={user.id} />
         {user.role === "admin" && (
           <TextField
             label="ユーザー名"
@@ -159,6 +165,68 @@ export default function UserEditPage({
           編集
         </Button>
       </Stack>
+      <Divider />
+      <Stack spacing={2}>
+        <Typography variant="h5">ユーザー削除</Typography>
+        <Typography variant="body1" color={"error.main"}>
+          注意: この操作は取り消せません。
+        </Typography>
+        <input type="hidden" name="id" value={user.id} />
+        <Button
+          variant="contained"
+          color="error"
+          type="button"
+          disabled={isProgress || user.role === "admin"}
+          onClick={() => setIsDeleteDialogOpen(true)}
+        >
+          削除
+        </Button>
+      </Stack>
+      <Dialog open={isDeleteDialogOpen}>
+        <form
+          action={async (formdata: FormData) => {
+            const id = formdata.get("id") as string;
+            setIsProgress(true);
+            try {
+              await deleteUser(id);
+              enqueueSnackbar("ユーザーを削除しました", { variant: "success" });
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+              router.push("/admin/users");
+            } catch (e) {
+              enqueueSnackbar((e as Error).message, { variant: "error" });
+            } finally {
+              setIsProgress(false);
+              setIsDeleteDialogOpen(false);
+            }
+          }}
+        >
+          <DialogContent>
+            <input type="hidden" name="id" value={user.id} />
+            <Typography variant="h6">ユーザー削除</Typography>
+            <Typography variant="body1">
+              本当にユーザー「{user.name}」を削除しますか？
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              variant="outlined"
+              color="inherit"
+              onClick={() => setIsDeleteDialogOpen(false)}
+              disabled={isProgress}
+            >
+              キャンセル
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              type="submit"
+              disabled={isProgress}
+            >
+              削除
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </Stack>
   );
 }
