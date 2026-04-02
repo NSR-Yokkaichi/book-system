@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import AppThemeProvider from "@/components/AppThemeProvider";
@@ -41,13 +42,15 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AppThemeProvider>
-          <StudentInitializeGuard
-            uid={session.user.id}
-            open={!session.user.course || !session.user.expiresByGraduateAt}
-          />
-          <Sidebar user={session.user}>{children}</Sidebar>
-        </AppThemeProvider>
+        <AppRouterCacheProvider>
+          <AppThemeProvider>
+            <StudentInitializeGuard
+              uid={session.user.id}
+              open={!session.user.course || !session.user.expiresByGraduateAt}
+            />
+            <Sidebar user={session.user}>{children}</Sidebar>
+          </AppThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import SnackbarProviderWrapper from "./snackbarProviderWrapper";
 
 const geistSans = Geist({
@@ -28,7 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SnackbarProviderWrapper>{children}</SnackbarProviderWrapper>
+        <AppRouterCacheProvider>
+          <SnackbarProviderWrapper>{children}</SnackbarProviderWrapper>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
