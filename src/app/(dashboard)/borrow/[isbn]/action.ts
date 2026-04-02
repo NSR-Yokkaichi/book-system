@@ -8,6 +8,8 @@ import { auth } from "@/lib/auth";
 
 export const borrowAction = async (bookid: string) => {
   try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user) throw new Error("ユーザーが認証されていません");
     const book = await Book.findById(bookid);
     if (!book) {
       throw new Error("本が見つかりません");
@@ -15,8 +17,6 @@ export const borrowAction = async (bookid: string) => {
     if ((await book.getStatus()) !== BookStatus.Available) {
       throw new Error("この本は貸し出し中です");
     }
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) throw new Error("ユーザーが認証されていません");
     const rental = await book.rent(session.user.id);
     const expiresAt = rental.expiresAt.toLocaleString("sv-SE", {
       timeZone: "Asia/Tokyo",

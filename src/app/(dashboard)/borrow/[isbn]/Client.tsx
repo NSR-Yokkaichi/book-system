@@ -7,6 +7,7 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import { useSnackbar } from "notistack";
 import { BookStatus } from "@/class/types/Book";
 import { borrowAction } from "./action";
 
@@ -15,8 +16,15 @@ export default function BooksView({
 }: {
   books: { id: string; sticker_id?: string; status: BookStatus }[];
 }) {
+  const { enqueueSnackbar } = useSnackbar();
   const onClickHandler = async (bookid: string) => {
-    await borrowAction(bookid);
+    try {
+      await borrowAction(bookid);
+      enqueueSnackbar("本を借りました", { variant: "success" });
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar("本の貸出に失敗しました", { variant: "error" });
+    }
   };
   return (
     <>
