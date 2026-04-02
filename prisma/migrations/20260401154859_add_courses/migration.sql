@@ -6,7 +6,7 @@
 */
 -- AlterTable
 ALTER TABLE "user" ADD COLUMN     "course" TEXT NOT NULL,
-ADD COLUMN     "expiresByGraduateAt" INTEGER;
+ADD COLUMN     "expiresByGraduateAt" INTEGER NOT NULL;
 
 -- CreateIndex
 CREATE INDEX "user_course_idx" ON "user"("course");
