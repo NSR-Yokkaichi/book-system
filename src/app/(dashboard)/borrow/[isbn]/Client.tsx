@@ -8,9 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
+import { useState } from "react";
 import { BookStatus } from "@/class/types/Book";
 import { borrowAction } from "./action";
-import { useState } from "react";
 
 export default function BooksView({
   books,
