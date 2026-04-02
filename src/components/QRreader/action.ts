@@ -81,7 +81,7 @@ export const getBookInfoFromISBN = async (isbn: string) => {
     }
     const data: RakutenBookInfo = await response.json();
     if (data.Items.length === 0) {
-      throw new Error("書籍情報が見つかりません");
+      throw new Error("書籍情報が見つかりません", { cause: "NOT_FOUND" });
     }
     const res: ComvertedBookInfo = {
       title:

@@ -3,6 +3,7 @@
 import { Html5Qrcode } from "html5-qrcode";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./style.css";
+import { CircularProgress, Stack } from "@mui/material";
 import ISBN from "isbn3";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
@@ -238,30 +239,24 @@ export default function QrCameraScanner({
   }, []);
 
   useEffect(() => {
-    if (scanResult && mode === "borrow") {
-      if (submitting || lastSubmittedRef.current === scanResult) return;
-      lastSubmittedRef.current = scanResult;
+    if (submitting || lastSubmittedRef.current === scanResult) return;
+    if (ISBN.audit(scanResult).validIsbn === false) {
+      return;
+    } else {
       setSubmitting(true);
+    }
+    lastSubmittedRef.current = scanResult;
+    if (scanResult && mode === "borrow") {
       void borrowAction(scanResult).catch((e) => {
         setError(e.message || "貸し出し処理に失敗しました");
         setSubmitting(false);
       });
     } else if (scanResult && mode === "return") {
-      if (submitting || lastSubmittedRef.current === scanResult) return;
-      lastSubmittedRef.current = scanResult;
-      setSubmitting(true);
       void returnAction(scanResult).catch((e) => {
         setError(e.message || "返却処理に失敗しました");
         setSubmitting(false);
       });
     } else if (scanResult && mode === "register") {
-      if (submitting || lastSubmittedRef.current === scanResult) return;
-      lastSubmittedRef.current = scanResult;
-      setSubmitting(true);
-      console.log("Scanned ISBN:", scanResult);
-      if (ISBN.audit(scanResult).validIsbn === false) {
-        return;
-      }
       void getBookInfoFromISBN(scanResult)
         .then((bookInfo) => {
           enqueueSnackbar("書籍情報の取得に成功しました！", {
@@ -272,6 +267,16 @@ export default function QrCameraScanner({
           );
         })
         .catch((e) => {
+          if (e instanceof Error && e.cause === "NOT_FOUND") {
+            enqueueSnackbar(
+              "書籍情報が見つかりませんでした。詳細情報は手動で入力してください。",
+              {
+                variant: "warning",
+              },
+            );
+            router.push(`/admin/books/new?isbn=${scanResult}`);
+            return;
+          }
           console.log("Error fetching book info:", e);
           enqueueSnackbar("書籍情報の取得に失敗しました", {
             variant: "error",
@@ -312,7 +317,17 @@ export default function QrCameraScanner({
             カメラ再試行
           </button>
         )}
-
+        {submitting && (
+          <Stack
+            alignItems="center"
+            marginBottom={2}
+            position={"relative"}
+            zIndex={1}
+          >
+            <CircularProgress />
+            <span style={{ marginTop: "8px" }}>処理中...</span>
+          </Stack>
+        )}
         <div
           ref={readerElementRef}
           id="qr-reader"
