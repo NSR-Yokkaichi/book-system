@@ -17,7 +17,7 @@ export const createUser = async (formData: FormData) => {
   if (password !== passwordConfirm) {
     throw new Error("パスワードが一致しません");
   }
-  if (role !== "user" && role !== "admin") {
+  if (role !== "student" && role !== "admin") {
     throw new Error("無効なロールです");
   }
   const hrs = await headers();
