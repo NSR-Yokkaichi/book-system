@@ -22,6 +22,7 @@ export const auth = betterAuth({
       hd: "nnn.ed.jp",
       disableImplicitSignUp: true,
       disableSignUp: false,
+      overrideUserInfoOnSignIn: true,
     },
   },
   emailAndPassword: {
