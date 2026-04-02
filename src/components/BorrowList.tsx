@@ -52,6 +52,11 @@ export default function BorrowList({ rentList }: { rentList: Rental[] }) {
           </Card>
         );
       })}
+      {rentList.length === 0 && (
+        <Typography variant="body1" textAlign={"center"}>
+          貸出中の本はありません。
+        </Typography>
+      )}
     </Stack>
   );
 }
