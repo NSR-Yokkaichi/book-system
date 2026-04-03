@@ -73,9 +73,12 @@ export default function SettingsPageClient({
 
   async function subscribeToPush() {
     try {
+      console.log("Subscribing to push notifications...");
       const registration = await navigator.serviceWorker.ready;
+      console.log("Service Worker ready:", registration);
 
       const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
+      console.log("VAPID Key:", vapidKey);
       if (!vapidKey) return;
 
       const sub = await registration.pushManager.subscribe({
