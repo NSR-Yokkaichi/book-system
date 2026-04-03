@@ -16,5 +16,5 @@ RAKUTEN_APP_ID="your-rakuten-app-id"
 RAKUTEN_APP_KEY="your-rakuten-app-key"
 
 # web-push generate-vapid-keys で生成したキーを設定してください
-NEXT_PUBLIC_VAPID_PUBLIC_KEY="your-vapid-public-key"
+VAPID_PUBLIC_KEY="your-vapid-public-key"
 VAPID_PRIVATE_KEY="your-vapid-private-key"

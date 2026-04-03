@@ -21,5 +21,10 @@ export default async function SettingsPage() {
     redirect("/");
   }
 
-  return <SettingsPageClient user={session.user} />;
+  return (
+    <SettingsPageClient
+      user={session.user}
+      VAPID_PUBLIC_KEY={process.env.VAPID_PUBLIC_KEY!}
+    />
+  );
 }

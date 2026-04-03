@@ -14,8 +14,6 @@ import {
 } from "@/lib/pushNotification";
 import { updateUsername } from "./actions";
 
-export const dynamic = "force-dynamic";
-
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
@@ -26,6 +24,7 @@ function urlBase64ToUint8Array(base64String: string) {
 
 export default function SettingsPageClient({
   user,
+  VAPID_PUBLIC_KEY,
 }: {
   user: User & { role?: string | string[] | null } & {
     course?: string | null;
@@ -33,6 +32,7 @@ export default function SettingsPageClient({
   } & {
     displayUsername?: string | null;
   };
+  VAPID_PUBLIC_KEY: string;
 }) {
   const { enqueueSnackbar } = useSnackbar();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -79,9 +79,7 @@ export default function SettingsPageClient({
       const registration = await navigator.serviceWorker.ready;
       console.log("Service Worker ready:", registration);
 
-      const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
-      console.log("VAPID Key:", vapidKey);
-      if (!vapidKey) return;
+      const vapidKey = VAPID_PUBLIC_KEY;
 
       const sub = await registration.pushManager.subscribe({
         userVisibleOnly: true,
