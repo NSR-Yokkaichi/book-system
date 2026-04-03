@@ -7,6 +7,7 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { BookStatus } from "@/class/types/Book";
@@ -19,10 +20,12 @@ export default function BooksView({
 }) {
   const [inProgress, setInProgress] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
   const onClickHandler = async (bookid: string) => {
     setInProgress(true);
     try {
-      await borrowAction(bookid);
+      const expiresAt = await borrowAction(bookid);
+      router.push(`/borrow/success?expiresAt=${encodeURIComponent(expiresAt)}`);
       enqueueSnackbar("本を借りました", { variant: "success" });
     } catch (error) {
       console.error(error);

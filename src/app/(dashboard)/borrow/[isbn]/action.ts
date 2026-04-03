@@ -1,7 +1,6 @@
 "use server";
 
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { Book } from "@/class/Book";
 import { BookStatus } from "@/class/types/Book";
 import { auth } from "@/lib/auth";
@@ -25,7 +24,7 @@ export const borrowAction = async (bookid: string) => {
       month: "2-digit",
       day: "2-digit",
     });
-    redirect(`/borrow/success?expiresAt=${encodeURIComponent(expiresAt)}`);
+    return expiresAt;
   } catch (err) {
     throw err;
   }
