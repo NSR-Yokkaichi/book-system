@@ -51,6 +51,10 @@ export default function SettingsPageClient({
     if ("serviceWorker" in navigator && "PushManager" in window) {
       registerServiceWorker();
     }
+    console.log("support:", {
+      serviceWorker: "serviceWorker" in navigator,
+      PushManager: "PushManager" in window,
+    });
   }, []);
 
   async function registerServiceWorker() {
@@ -58,8 +62,9 @@ export default function SettingsPageClient({
       const registration = await navigator.serviceWorker.register("/sw.js");
       const sub = await registration.pushManager.getSubscription();
       setSubscription(sub);
+      console.log("Service Worker registered:", registration);
     } catch (e) {
-      console.error("Service Workerの登録に失敗:", e);
+      console.error("Failed to register Service Worker:", e);
       enqueueSnackbar("Service Workerの登録に失敗しました", {
         variant: "error",
       });
