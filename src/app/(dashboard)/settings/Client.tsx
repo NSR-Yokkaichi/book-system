@@ -54,9 +54,16 @@ export default function SettingsPageClient({
   }, []);
 
   async function registerServiceWorker() {
-    const registration = await navigator.serviceWorker.register("/sw.js");
-    const sub = await registration.pushManager.getSubscription();
-    setSubscription(sub);
+    try {
+      const registration = await navigator.serviceWorker.register("/sw.js");
+      const sub = await registration.pushManager.getSubscription();
+      setSubscription(sub);
+    } catch (e) {
+      console.error("Service Workerの登録に失敗:", e);
+      enqueueSnackbar("Service Workerの登録に失敗しました", {
+        variant: "error",
+      });
+    }
   }
 
   async function subscribeToPush() {
