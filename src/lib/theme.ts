@@ -1,5 +1,12 @@
 import { createTheme } from "@mui/material/styles";
 
+/**
+ * @summary テーマの定義
+ * @description 学生用のテーマを定義する。これらはMaterial-UIのcreateTheme関数を用いて作成され、色やコンポーネントのスタイルをカスタマイズしている。
+ * @type {Object}
+ * @author yuito-it <yuito@yuito-it.jp>
+ * @see https://mui.com/material-ui/customization/theming/
+ */
 export const studentsTheme = createTheme({
   palette: {
     mode: "light",
@@ -44,6 +51,13 @@ export const studentsTheme = createTheme({
   },
 });
 
+/**
+ * @summary テーマの定義
+ * @description 管理者用のテーマを定義する。これらはMaterial-UIのcreateTheme関数を用いて作成され、色やコンポーネントのスタイルをカスタマイズしている。
+ * @type {Object}
+ * @author yuito-it <yuito@yuito-it.jp>
+ * @see https://mui.com/material-ui/customization/theming/
+ */
 export const adminTheme = createTheme({
   palette: {
     mode: "light",

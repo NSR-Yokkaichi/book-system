@@ -1,5 +1,11 @@
 import prisma from "@/lib/prisma";
 
+/**
+ * @summary 管理者への昇格API
+ * @description 指定されたメールアドレスのユーザーを管理者に昇格させるAPI。最初の管理者が存在しない場合にのみ機能する。
+ * @type {Object}
+ * @returns {Response} APIのレスポンス
+ */
 export const POST = async (req: Request) => {
   const { email } = await req.json();
   if (!email) {

@@ -1,5 +1,10 @@
 import type { MetadataRoute } from "next";
 
+/**
+ * @summary Web App Manifestの定義
+ * @description Web App Manifestの定義を行う。これにより、PWAとして動作することができる。
+ * @type {Object}
+ */
 export default function manifest(): MetadataRoute.Manifest {
   return {
     theme_color: "#8c7851",

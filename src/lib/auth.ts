@@ -6,16 +6,25 @@ import {
   haveIBeenPwned,
   username,
 } from "better-auth/plugins";
-// If your Prisma file is located elsewhere, you can change the path
 import prisma from "@/lib/prisma";
 import { transporter } from "./email";
 import { admin, student } from "./permissions";
 
+/**
+ * @summary BetterAuthクラスのインスタンス
+ * @description BetterAuthクラスのインスタンスを作成する。サーバーコンポーネントやAPIルートでこれを用いることができる。
+ * @type {Object}
+ * @author yuito-it <yuito@yuito-it.jp>
+ * @see https://better-auth.com/docs/concepts/api
+ */
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: "postgresql", // or "mysql", "postgresql", ...etc
+    provider: "postgresql",
   }),
   socialProviders: {
+    // Google OAuth / OIDCの設定
+    // hdで、nnn.ed.jpに制限する
+    // 暗黙的なサインアップは位置情報を確認するため、無効にする
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
@@ -25,21 +34,25 @@ export const auth = betterAuth({
       overrideUserInfoOnSignIn: true,
     },
   },
+  // 管理者用にメールアドレスとパスワードでのサインインを有効にする
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
   },
   user: {
+    // メールアドレスの変更を有効にする
     changeEmail: {
       enabled: true,
     },
     additionalFields: {
+      // コースの選択肢を追加する
       course: {
         type: ["1days", "3days", "5days", "online"],
         required: false,
         input: true,
         index: true,
       },
+      // 卒業予定年月を追加する
       expiresByGraduateAt: {
         type: "number",
         required: false,
@@ -49,6 +62,7 @@ export const auth = betterAuth({
     },
   },
   emailVerification: {
+    // メール認証のメールを送信する関数を定義する
     sendVerificationEmail: async ({ user, url, token }, request) => {
       await transporter.sendMail({
         from: `四日市キャンパス 図書管理システム <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
@@ -72,7 +86,9 @@ export const auth = betterAuth({
     },
   },
   plugins: [
+    // ユーザー名とパスワードでのサインインを有効にする
     username(),
+    // 管理者プラグインを有効化し、ロールで権限を管理する
     adminPlugin({
       defaultRole: "student",
       roles: {
@@ -80,10 +96,12 @@ export const auth = betterAuth({
         student,
       },
     }),
+    // パスワードが過去に漏洩していないかを確認するプラグインを有効にする
     haveIBeenPwned({
       customPasswordCompromisedMessage:
         "パスワードが過去に漏洩している可能性があります。別のパスワードを選択してください。",
     }),
+    // パスキー認証を有効にする
     passkey(),
   ],
   experimental: { joins: true },
