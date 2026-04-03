@@ -4,8 +4,8 @@ import "../globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import AppThemeProvider from "@/components/AppThemeProvider";
-import StudentInitializeGuard from "@/components/StudentInitializeGuard";
+import StudentInitializeGuard from "@/components/Guards/StudentInitializeGuard";
+import AppThemeProvider from "@/components/Providers/AppThemeProvider";
 import Sidebar from "@/components/sidebar";
 import { auth } from "@/lib/auth";
 

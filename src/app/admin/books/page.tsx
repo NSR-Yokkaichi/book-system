@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from "@mui/material";
 import { Book } from "@/class/Book";
-import BookList from "@/components/BookList";
+import BookList from "@/components/Lists/BookList";
 
 export const metadata = {
   title: "図書管理",

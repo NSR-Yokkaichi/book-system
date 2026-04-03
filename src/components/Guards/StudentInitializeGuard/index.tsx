@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
-import StudentCourseSelector from "../StudentCourseSelector";
+import StudentCourseSelector from "@/components/StudentCourseSelector";
 import { updateStudentInfo } from "./actions";
 
 export default function StudentInitialize({

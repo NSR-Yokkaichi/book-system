@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from "@mui/material";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import UsersDataGrid from "@/components/UsersDataGrid";
+import UsersDataGrid from "@/components/Lists/UsersDataGrid";
 import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {

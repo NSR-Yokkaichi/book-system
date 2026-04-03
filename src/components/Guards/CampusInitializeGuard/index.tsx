@@ -1,3 +1,4 @@
+"use client";
 import {
   Button,
   Dialog,
@@ -6,12 +7,31 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useSnackbar } from "notistack";
+import { useState } from "react";
 import { initCampusAction } from "./action";
 
-export default async function CampusInitialize({ open }: { open: boolean }) {
+export default function CampusInitialize({ open }: { open: boolean }) {
+  const [openState, setOpen] = useState(open);
+  const { enqueueSnackbar } = useSnackbar();
   return (
-    <Dialog open={open}>
-      <form action={initCampusAction}>
+    <Dialog open={openState} disableEscapeKeyDown>
+      <form
+        action={async (formData: FormData) => {
+          try {
+            await initCampusAction(formData);
+            enqueueSnackbar("キャンパス情報を登録しました", {
+              variant: "success",
+            });
+            setOpen(false);
+          } catch (e) {
+            console.error(e);
+            enqueueSnackbar("キャンパスの初期化に失敗しました", {
+              variant: "error",
+            });
+          }
+        }}
+      >
         <DialogContent>
           <Typography variant="h6">キャンパス情報の登録</Typography>
           <Typography variant="body1">

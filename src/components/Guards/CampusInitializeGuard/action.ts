@@ -13,5 +13,5 @@ export const initCampusAction = async (formData: FormData) => {
       name: campusName,
     },
   });
-  redirect("/?ok=true", RedirectType.push);
+  redirect("/admin/?ok=true", RedirectType.push);
 };

@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from "@mui/material/styles";
 import type { ReactNode } from "react";
-import SnackbarProviderWrapper from "@/components/SnackbarProviderWrapper";
+import SnackbarProviderWrapper from "@/components/Providers/SnackbarProviderWrapper";
 import { adminTheme, studentsTheme } from "@/lib/theme";
 
 type Props = {

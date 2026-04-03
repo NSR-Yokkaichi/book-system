@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import { Rental } from "@/class/Rental";
-import BorrowList from "@/components/BorrowList";
+import BorrowList from "@/components/Lists/BorrowList";
 
 export const metadata = {
   title: "貸出者一覧",

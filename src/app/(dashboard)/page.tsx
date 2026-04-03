@@ -2,7 +2,7 @@ import { Alert, Stack, Typography } from "@mui/material";
 import { headers } from "next/headers";
 import { unauthorized } from "next/navigation";
 import { Rental } from "@/class/Rental";
-import RentalList from "@/components/RentalList";
+import RentalList from "@/components/Lists/RentalList";
 import { auth } from "@/lib/auth";
 
 export const metadata = {
