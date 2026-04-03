@@ -124,6 +124,50 @@ export function SignInWithPassword({
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const { enqueueSnackbar } = useSnackbar();
+  const handleSubmit = async () => {
+    // @を含むか
+    if (!isFirstAccount) {
+      if (username.includes("@")) {
+        const result = await authClient.signIn.email({
+          email: username,
+          password,
+        });
+        if (result.error) {
+          enqueueSnackbar(`サインインに失敗しました: ${result.error.message}`, {
+            variant: "error",
+          });
+          return;
+        }
+      } else {
+        const result = await authClient.signIn.username({
+          username: username,
+          password: password,
+        });
+        if (result.error) {
+          enqueueSnackbar(`サインインに失敗しました: ${result.error.message}`, {
+            variant: "error",
+          });
+          return;
+        }
+      }
+      redirect("/admin");
+    } else {
+      await authClient.signUp.email({
+        name: "Admin",
+        username: "admin",
+        email: username,
+        password,
+      });
+      await fetch("/api/promote-to-admin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: username }),
+        credentials: "include",
+      });
+    }
+  };
   return (
     <AppTheme>
       <CssBaseline enableColorScheme />
@@ -158,56 +202,8 @@ export function SignInWithPassword({
               fullWidth
               variant="outlined"
               disabled={!username || !password}
-              onClick={async () => {
-                // @を含むか
-                if (!isFirstAccount) {
-                  if (username.includes("@")) {
-                    const result = await authClient.signIn.email({
-                      email: username,
-                      password,
-                    });
-                    if (result.error) {
-                      enqueueSnackbar(
-                        `サインインに失敗しました: ${result.error.message}`,
-                        {
-                          variant: "error",
-                        },
-                      );
-                      return;
-                    }
-                  } else {
-                    const result = await authClient.signIn.username({
-                      username: username,
-                      password: password,
-                    });
-                    if (result.error) {
-                      enqueueSnackbar(
-                        `サインインに失敗しました: ${result.error.message}`,
-                        {
-                          variant: "error",
-                        },
-                      );
-                      return;
-                    }
-                  }
-                  redirect("/admin");
-                } else {
-                  await authClient.signUp.email({
-                    name: "Admin",
-                    username: "admin",
-                    email: username,
-                    password,
-                  });
-                  await fetch("/api/promote-to-admin", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email: username }),
-                    credentials: "include",
-                  });
-                }
-              }}
+              onClick={handleSubmit}
+              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             >
               管理者としてログイン
             </Button>
