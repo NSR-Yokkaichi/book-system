@@ -48,8 +48,6 @@ export default function BookList({
                   overflow: "hidden",
                   flexShrink: 0,
                   bgcolor: "background.default",
-                  mt: 3,
-                  ml: 2,
                 }}
               >
                 <Image
