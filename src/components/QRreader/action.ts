@@ -20,11 +20,11 @@ export const borrowAction = async (isbn: string) => {
     if (!book || book.length === 0) {
       throw new Error("本が見つかりません");
     }
-    redirect(`/borrow/${isbn}`);
   } catch (error) {
     console.error("Error borrowing book:", error);
     throw error;
   }
+  redirect(`/borrow/${isbn}`);
 };
 
 export const returnAction = async (isbn: string) => {
