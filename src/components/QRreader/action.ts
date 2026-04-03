@@ -63,16 +63,9 @@ export const getBookInfoFromISBN = async (isbn: string) => {
       accessKey: RAKUTEN_APP_KEY!,
       isbn,
     });
-    const headers = new Headers({
-      Referer: "https://book.unipro-n.com",
-      Origin: "https://book.unipro-n.com",
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0",
-    });
 
     const response = await fetch(
       `${RAKUTEN_BOOK_API_BASE}?${params.toString()}`,
-      { headers },
     );
     if (!response.ok) {
       throw new Error(
