@@ -14,6 +14,14 @@ export default async function proxy(request: NextRequest) {
     );
   }
 
+  // ユーザー(生徒)用のルートにアクセスしたとき、管理者は管理者用のルートにリダイレクトする
+  if (
+    session.user.role === "admin" &&
+    !request.nextUrl.pathname.startsWith("/admin")
+  ) {
+    return NextResponse.redirect(new URL("/admin", request.url));
+  }
+
   return NextResponse.next();
 }
 
