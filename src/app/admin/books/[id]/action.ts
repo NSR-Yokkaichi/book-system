@@ -1,15 +1,15 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { Book } from "@/class/Book";
-export const update = async (formData: FormData) => {
+
+export const updateBook = async (formData: FormData) => {
   const id = formData.get("id");
   if (typeof id !== "string") {
     throw new Error("Invalid form data");
   }
   const book = await Book.getById(id);
   if (!book) {
-    redirect("/admin/books");
+    throw new Error("Book not found");
   }
   const name = formData.get("name");
   const isbn = formData.get("isbn");
@@ -30,5 +30,16 @@ export const update = async (formData: FormData) => {
   book.publisher = toOptional(formData.get("publisher"));
   book.stickerId = toOptional(formData.get("sticker_id"));
   await book.save();
-  redirect(`/admin/books`);
+};
+
+export const deleteBook = async (formData: FormData) => {
+  const id = formData.get("id");
+  if (typeof id !== "string") {
+    throw new Error("Invalid form data");
+  }
+  const book = await Book.getById(id);
+  if (!book) {
+    throw new Error("Book not found");
+  }
+  await book.delete();
 };
