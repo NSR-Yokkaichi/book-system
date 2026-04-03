@@ -18,5 +18,7 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!signin|signup|_next|api|img|manifest.webmanifest).*)"], // Specify the routes the middleware applies to
+  matcher: [
+    "/((?!signin|signup|_next|api|img|manifest.webmanifest|apple-icon.png|icon.png).*)",
+  ], // Specify the routes the middleware applies to
 };
