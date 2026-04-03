@@ -9,6 +9,7 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { redirect } from "next/navigation";
+import { useSnackbar } from "notistack";
 import React from "react";
 import { authClient } from "@/lib/auth-client";
 import AppTheme from "../shared-theme/AppTheme";
@@ -112,6 +113,7 @@ export function SignInWithPassword({
 }) {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const { enqueueSnackbar } = useSnackbar();
   return (
     <AppTheme>
       <CssBaseline enableColorScheme />
@@ -150,15 +152,33 @@ export function SignInWithPassword({
                 // @を含むか
                 if (!isFirstAccount) {
                   if (username.includes("@")) {
-                    await authClient.signIn.email({
+                    const result = await authClient.signIn.email({
                       email: username,
                       password,
                     });
+                    if (result.error) {
+                      enqueueSnackbar(
+                        `サインインに失敗しました: ${result.error.message}`,
+                        {
+                          variant: "error",
+                        },
+                      );
+                      return;
+                    }
                   } else {
-                    await authClient.signIn.username({
+                    const result = await authClient.signIn.username({
                       username: username,
                       password: password,
                     });
+                    if (result.error) {
+                      enqueueSnackbar(
+                        `サインインに失敗しました: ${result.error.message}`,
+                        {
+                          variant: "error",
+                        },
+                      );
+                      return;
+                    }
                   }
                   redirect("/admin");
                 } else {
