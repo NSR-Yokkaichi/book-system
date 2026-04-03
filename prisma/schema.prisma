@@ -35,7 +35,8 @@ model User {
   course              String?
   expiresByGraduateAt Int?
 
-  passkeys Passkey[]
+  passkeys          Passkey[]
+  pushSubscriptions PushSubscription[]
 
   @@unique([email])
   @@unique([username])
@@ -152,4 +153,18 @@ model Passkey {
   @@index([userId])
   @@index([credentialID])
   @@map("passkey")
+}
+
+model PushSubscription {
+  id         String   @id @db.Uuid
+  userId     String
+  endpoint   String   @unique
+  p256dh     String
+  auth       String
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("push_subscription")
 }

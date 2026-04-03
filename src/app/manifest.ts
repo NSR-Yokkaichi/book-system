@@ -15,9 +15,9 @@ export default function manifest(): MetadataRoute.Manifest {
     lang: "ja",
     name: "四日市キャンパス 図書管理システム",
     short_name: "四日市CP図書管理アプリ",
-    start_url: "https://book.unipro-n.com/",
-    scope: "https://book.unipro-n.com/",
-    id: "https://book.unipro-n.com/",
+    start_url: process.env.BETTERAUTH_URL!,
+    scope: process.env.BETTERAUTH_URL!,
+    id: process.env.BETTERAUTH_URL!,
     icons: [
       {
         src: "/icon_192.png",
