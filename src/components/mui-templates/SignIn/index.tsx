@@ -94,11 +94,14 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           </Box>
           <Divider sx={{ my: 2 }}> もしくは </Divider>
           <Box width={"100%"}>
-            <Link href="/signin/admin">
-              <Button fullWidth variant="outlined" startIcon={<PasswordIcon />}>
-                管理者としてログイン
-              </Button>
-            </Link>
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<PasswordIcon />}
+              href="/signin/admin"
+            >
+              管理者としてログイン
+            </Button>
           </Box>
         </Card>
       </SignInContainer>
