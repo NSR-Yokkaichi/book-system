@@ -1,4 +1,12 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormHelperText,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import QrCameraScanner from "@/components/QRreader";
 import { regist } from "./action";
 
@@ -16,9 +24,11 @@ export default async function NewBookPage({
     title?: string;
     author?: string;
     publisher?: string;
+    rakutenLinked?: string;
   }>;
 }) {
-  const { auto, isbn, title, author, publisher } = await searchParams;
+  const { auto, isbn, title, author, publisher, rakutenLinked } =
+    await searchParams;
   return (
     <Stack>
       <Typography variant="h4" gutterBottom>
@@ -67,7 +77,20 @@ export default async function NewBookPage({
             fullWidth
             defaultValue={publisher}
           />
-          <TextField label="ステッカーID" name="sticker_id" fullWidth />
+          <TextField label="ステッカーID" name="stickerId" fullWidth />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="rakutenLinked"
+                defaultChecked={!!rakutenLinked}
+                disabled={false}
+              />
+            }
+            label="楽天ブックスに登録されています"
+          />
+          <FormHelperText>
+            楽天ブックスに登録されている本の場合、チェックボックスをオンにすると書影が登録できます。
+          </FormHelperText>
           <Button type="submit" variant="contained" color="primary">
             登録
           </Button>

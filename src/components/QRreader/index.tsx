@@ -7,7 +7,8 @@ import { CircularProgress, Stack } from "@mui/material";
 import ISBN from "isbn3";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
-import { borrowAction, getBookInfoFromISBN, returnAction } from "./action";
+import { getBookInfoFromISBN } from "@/lib/rakutenAPI";
+import { borrowAction, returnAction } from "./action";
 
 function getCameraErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : String(error ?? "");
@@ -263,7 +264,7 @@ export default function QrCameraScanner({
             variant: "success",
           });
           router.push(
-            `/admin/books/new?isbn=${scanResult}&title=${encodeURIComponent(bookInfo?.title ?? "")}&author=${encodeURIComponent(bookInfo?.author ?? "")}&publisher=${encodeURIComponent(bookInfo?.publisherName ?? "")}`,
+            `/admin/books/new?isbn=${scanResult}&title=${encodeURIComponent(bookInfo?.title ?? "")}&author=${encodeURIComponent(bookInfo?.author ?? "")}&publisher=${encodeURIComponent(bookInfo?.publisherName ?? "")}&rakutenLinked=on`,
           );
         })
         .catch((e) => {

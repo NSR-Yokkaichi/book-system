@@ -10,6 +10,8 @@ export class Book {
   author?: string;
   publisher?: string;
   stickerId?: string;
+  rakutenLinked?: boolean;
+  imageUrl?: string;
   createdAt: Date;
   updatedAt: Date;
 
@@ -30,7 +32,9 @@ export class Book {
     this.isbn = data.isbn;
     this.author = data.author || undefined;
     this.publisher = data.publisher || undefined;
-    this.stickerId = data.sticker_id || undefined;
+    this.stickerId = data.stickerId || undefined;
+    this.rakutenLinked = data.rakutenLinked || false;
+    this.imageUrl = data.imageUrl || undefined;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
   }
@@ -45,7 +49,9 @@ export class Book {
     isbn: string;
     author?: string;
     publisher?: string;
-    sticker_id?: string;
+    stickerId?: string;
+    rakutenLinked?: boolean;
+    imageUrl?: string;
   }): Promise<Book> {
     const created = await prisma.book.create({
       data: {
@@ -53,7 +59,9 @@ export class Book {
         isbn: data.isbn,
         author: data.author,
         publisher: data.publisher,
-        sticker_id: data.sticker_id,
+        stickerId: data.stickerId,
+        rakutenLinked: data.rakutenLinked,
+        imageUrl: data.imageUrl,
       },
     });
     return new Book(created);
@@ -71,7 +79,9 @@ export class Book {
         isbn: this.isbn,
         author: this.author,
         publisher: this.publisher,
-        sticker_id: this.stickerId,
+        stickerId: this.stickerId,
+        rakutenLinked: this.rakutenLinked,
+        imageUrl: this.imageUrl,
       },
     });
     // プロパティを最新化
@@ -168,11 +178,11 @@ export class Book {
 
   /**
    * シールに紐つく本の情報を取得する
-   * @param sticker_id シールの番号
+   * @param stickerId シールの番号
    * @returns 本の情報もしくはnull
    */
-  static async getByStickerId(sticker_id: string): Promise<Book | null> {
-    const found = await prisma.book.findFirst({ where: { sticker_id } });
+  static async getByStickerId(stickerId: string): Promise<Book | null> {
+    const found = await prisma.book.findFirst({ where: { stickerId } });
     return found ? new Book(found) : null;
   }
 

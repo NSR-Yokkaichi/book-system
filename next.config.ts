@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/a/**",
       },
+      {
+        protocol: "https",
+        hostname: "thumbnail.image.rakuten.co.jp",
+        port: "",
+      },
     ],
   },
   output: "standalone",
