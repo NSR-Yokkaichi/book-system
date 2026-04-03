@@ -74,7 +74,14 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           <Typography variant="body2" color="text.secondary">
             四日市キャンパス図書管理システムにログイン
           </Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", gap: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: { xs: 0, md: 2 },
+              mb: 2,
+            }}
+          >
             アカウントをお持ちではありませんか？{" "}
             <Link href="/signup" underline="hover">
               サインアップ
