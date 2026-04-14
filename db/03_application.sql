@@ -5,7 +5,7 @@
 CREATE TABLE `book` (
   `id` CHAR(26) NOT NULL PRIMARY KEY,
   `name` VARCHAR(255) NOT NULL,
-  `sticker_id` VARCHAR(255) UNIQUE,
+`stickerId` VARCHAR(255) UNIQUE,
   `isbn` VARCHAR(255) NOT NULL,
   `author` VARCHAR(255),
   `publisher` VARCHAR(255),
