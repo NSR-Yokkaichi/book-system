@@ -80,7 +80,12 @@ export default async function NewBookPage({
           <TextField label="ステッカーID" name="stickerId" fullWidth />
           <FormControlLabel
             control={
-              <Checkbox name="rakutenLinked" defaultChecked={!!rakutenLinked} />
+              <Checkbox
+                name="rakutenLinked"
+                defaultChecked={["1", "true", "on"].includes(
+                  rakutenLinked ?? "",
+                )}
+              />
             }
             label="楽天ブックスに登録されています"
           />
