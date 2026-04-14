@@ -8,7 +8,7 @@ import CampusInitialize from "@/components/Guards/CampusInitializeGuard";
 import AppThemeProvider from "@/components/Providers/AppThemeProvider";
 import Sidebar from "@/components/sidebarAdmin";
 import { auth } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+import { dbClient } from "@/lib/db";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +39,7 @@ export default async function RootLayout({
   if (!session) {
     redirect("/signin");
   }
-  const campus = await prisma.campus.findFirst(); // キャンパス情報が存在するか確認
+  const campus = await dbClient.campus.findFirst(); // キャンパス情報が存在するか確認
   return (
     <html lang="ja">
       <body

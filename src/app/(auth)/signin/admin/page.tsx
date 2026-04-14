@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SignInWithPassword } from "@/components/mui-templates/SignIn";
-import prisma from "@/lib/prisma";
+import { dbClient } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "管理者サインイン",
@@ -11,6 +11,6 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function SignInAdmin() {
-  const userCount = await prisma.user.count({ where: { role: "admin" } });
+  const userCount = await dbClient.user.count({ where: { role: "admin" } });
   return <SignInWithPassword isFirstAccount={userCount === 0} />;
 }
