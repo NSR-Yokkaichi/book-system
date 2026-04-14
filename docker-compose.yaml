@@ -5,6 +5,8 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: YourPassword
       MARIADB_DATABASE: book_system
+    volumes:
+      - db-volume:/var/lib/mysql
   php_crud_api:
     image: mevdschee/php-crud-api:latest
     environment:
@@ -17,7 +19,7 @@ services:
     ports:
       - 8080:8080
 volumes:
-  db_data:
+  db-volume:
 
 networks:
   booksystem:
