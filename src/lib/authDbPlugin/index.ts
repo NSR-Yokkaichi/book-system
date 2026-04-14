@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: このPHP CRUD APIは任意のテーブルのレコードを編集するため、型定義ができない */
 import {
   createAdapterFactory,
   type DBAdapterDebugLogOption,
