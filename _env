@@ -3,7 +3,6 @@ BETTER_AUTH_URL=http://localhost:3000
 
 PHP_CRUD_API_URL="https://hogehoge.com/crud.php"
 PHP_CRUD_API_APIKEY="if-basic-auth-enabled"
-DATABASE_URL=postgresql://bookuser:rootpassword@localhost:5432/booksystem
 GOOGLE_CLIENT_ID=xxxxxxx
 GOOGLE_CLIENT_SECRET=xxxxxxx
 
