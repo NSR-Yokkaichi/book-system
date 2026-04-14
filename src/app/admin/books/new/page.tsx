@@ -63,7 +63,7 @@ export default async function NewBookPage({
             variant="outlined"
             href={`/admin/books/new?auto=1${isbn ? `&isbn=${isbn}` : ""}`}
           >
-            QRコードで登録
+            ISBNバーコードで登録
           </Button>
           <TextField
             label="著者"
