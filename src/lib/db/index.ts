@@ -141,9 +141,10 @@ class ModelDelegate<T = any> {
       },
     });
     if (!res.ok) throw new Error(`Failed to update ${this.tableName}`);
-    if (Number.parseInt(await res.text(), 10) === 0)
+    const resText = await res.text();
+    if (Number.parseInt(resText, 10) === 0)
       throw new Error(`[404] Record Not Found`);
-    return (await this.findUnique({ where: { id: id } })) as T;
+    return (await this.findUnique({ where: { id } })) as T;
   }
 
   async delete(args: { where: Record<string, any> }): Promise<void> {
