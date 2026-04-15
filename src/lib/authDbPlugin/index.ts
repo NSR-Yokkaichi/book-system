@@ -80,8 +80,17 @@ export const phpCrudApiAdapter = (config: CustomAdapterConfig) =>
           });
 
           if (!response.ok) {
-            console.log(await response.json());
-            throw new Error(`Failed to create record in ${table}`);
+            switch (response.status) {
+              case 404:
+                throw new Error(`Table ${table} not found`);
+              case 409:
+                throw new Error(`Record already exist`);
+              default: {
+                const resJson = await response.json();
+                console.debug(resJson);
+                throw new Error(`Faild to create`);
+              }
+            }
           }
 
           const id = await response.json();
