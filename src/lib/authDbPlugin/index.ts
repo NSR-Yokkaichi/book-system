@@ -86,9 +86,15 @@ export const phpCrudApiAdapter = (config: CustomAdapterConfig) =>
               case 409:
                 throw new Error(`Record already exist`);
               default: {
-                const resJson = await response.json();
-                console.debug(resJson);
-                throw new Error(`Faild to create`);
+                if (config.debugLogs) {
+                  const resText = await response.text();
+                  console.error(
+                    `Failed to create record in ${table}: ${resText}`,
+                  );
+                }
+                throw new Error(
+                  `Failed to create record in ${table}: ${response.status}`,
+                );  
               }
             }
           }
