@@ -33,17 +33,52 @@ class ModelDelegate<T = any> {
     const params = new URLSearchParams();
 
     if (args?.where) {
+      // 値の形式をチェックして filter パラメータを追加するヘルパー関数
+      const appendFilter = (key: string, value: any, filterKey = "filter") => {
+        let operator = "eq";
+        let val = value;
+
+        // Prismaの { contains: "xxx" } のようなオブジェクト形式の場合
+        if (
+          typeof value === "object" &&
+          value !== null &&
+          !(value instanceof Date)
+        ) {
+          if ("contains" in value) {
+            operator = "cs"; // php-crud-api の contains 演算子
+            val = value.contains;
+            // mode: "insensitive" はMySQLの collation 側で吸収されるため無視でOK
+          }
+          // ※ 将来的に { gt: 10 } (より大きい) などに対応したい場合はここに条件を足せる
+        }
+
+        if (val instanceof Date) {
+          val = val.toISOString().slice(0, 19).replace("T", " ");
+        }
+
+        if (val !== undefined && val !== null) {
+          params.append(filterKey, `${key},${operator},${val}`);
+        }
+      };
+
+      // where句の解析
       for (const [key, value] of Object.entries(args.where)) {
-        if (value !== undefined) {
-          const val =
-            value instanceof Date
-              ? value.toISOString().slice(0, 19).replace("T", " ")
-              : value;
-          params.append("filter", `${key},eq,${val}`);
+        if (key === "OR" && Array.isArray(value)) {
+          // OR配列の処理
+          // php-crud-api は "filter1" のように同じ数字のついたパラメータを OR で結合する
+          value.forEach((condition) => {
+            for (const [orKey, orValue] of Object.entries(condition)) {
+              appendFilter(orKey, orValue, "filter1");
+            }
+          });
+        } else {
+          // 通常の処理 (AND結合される)
+          appendFilter(key, value, "filter");
         }
       }
     }
 
+    // JOIN (include) の処理
     if (args?.include) {
       for (const [key, value] of Object.entries(args.include)) {
         if (value) params.append("join", key);
