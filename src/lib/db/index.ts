@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: このファイルにはユーザー側が定義するデータのスキームを含むため、anyは用いられていて良いものとする */
-const BASE_URL =
-  `${process.env.PHP_CRUD_API_URL}/records` ||
-  "http://localhost/api.php/records";
+const BASE_URL = process.env.PHP_CRUD_API_URL
+  ? `${process.env.PHP_CRUD_API_URL}/records`
+  : "http://localhost/api.php/records";
 
 // ==========================================
 // ユーティリティ関数
