@@ -94,7 +94,7 @@ export const phpCrudApiAdapter = (config: CustomAdapterConfig) =>
                 }
                 throw new Error(
                   `Failed to create record in ${table}: ${response.status}`,
-                );  
+                );
               }
             }
           }
