@@ -177,8 +177,8 @@ class ModelDelegate<T = any> {
     const exist = await this.findUnique({ where: args.where });
 
     if (!exist) {
-      // 存在しない場合は throw
-      throw new Error(`[404] Record not found`);
+      // 存在しない場合は create
+      return await this.create({ data: args.create });
     } else {
       let id = args.where.id;
       if (!id) {
