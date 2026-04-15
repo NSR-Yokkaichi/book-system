@@ -124,7 +124,25 @@ export const phpCrudApiAdapter = (config: CustomAdapterConfig) =>
           const url = `${baseURL}/${table}${buildQuery(where)}`;
 
           const response = await fetch(url, { ...config.fetchOptions });
-          if (!response.ok) return [];
+          if (!response.ok) {
+            switch (response.status) {
+              case 404:
+                throw new Error(`Table ${table} not found`);
+              case 409:
+                throw new Error(`Record already exist`);
+              default: {
+                if (config.debugLogs) {
+                  const resText = await response.text();
+                  console.error(
+                    `Failed to create record in ${table}: ${resText}`,
+                  );
+                }
+                throw new Error(
+                  `Failed to create record in ${table}: ${response.status}`,
+                );
+              }
+            }
+          }
 
           const data = await response.json();
           return data.records || [];
