@@ -129,7 +129,10 @@ class ModelDelegate<T = any> {
         cache: "no-store",
         ...(this.fetchOptions || undefined),
       });
-      if (!res.ok) return null;
+      if (!res.ok) {
+        if (res.status === 404) return null;
+        throw new Error(`API Error: ${await res.text()}`);
+      }
       return await res.json();
     }
     return this.findFirst(args);
