@@ -251,7 +251,8 @@ class CrudClient {
 
   // スキーマにないテーブルにアクセスしたくなった時用
   model(tableName: string) {
-    return new ModelDelegate(tableName);
+    return new ModelDelegate(tableName, this.fetchOptions);
+  }
   }
 }
 
