@@ -253,7 +253,6 @@ class CrudClient {
   model(tableName: string) {
     return new ModelDelegate(tableName, this.fetchOptions);
   }
-  }
 }
 
 export const dbClient = new CrudClient({
