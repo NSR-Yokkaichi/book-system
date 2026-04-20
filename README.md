@@ -6,15 +6,19 @@
 2. `docker compose up -d`
 3. \_envファイルを.envにコピー
 4. 各環境変数を埋める
-   1. BETTERAUTH_SECRET - ランダムな英数字の羅列を挿入
-   2. GOOGLE_CLIENT_ID / SECRET - Google API PlatformのClient ID / Secretです。詳しくは後述します。
-   3. BETTER_AUTH_URL - 動かすURLを入力
-   4. DATABASE_URL - DBのURI。デフォルトでdocker-compose.yamlを動かした場合のものを入力済み
-   5. SMTP*HOST / SMT*... - メールの設定。パスワードリセットやメール認証で用いられます。
-   6. RAKUTEN_APP_ID / KEY - 楽天APIの設定です。これを設定することにより、ISBNコードの検索が容易になります。詳しくは後述します。
-5. `prisma generate`
-6. `prisma migrate dev`
-7. `bun dev`
+    1. BETTERAUTH_SECRET - ランダムな英数字の羅列を挿入
+    2. GOOGLE_CLIENT_ID / SECRET - Google API PlatformのClient ID / Secretです。詳しくは後述します。
+    3. BETTER_AUTH_URL - 動かすURLを入力
+    4. 各環境変数を埋める
+        1. BETTERAUTH_SECRET - ランダムな英数字の羅列を挿入
+        2. GOOGLE_CLIENT_ID / SECRET - Google API PlatformのClient ID / Secretです。詳しくは後述します。
+        3. BETTER_AUTH_URL - 動かすURLを入力
+        4. ~~DATABASE_URL - DBのURI。デフォルトでdocker-compose.yamlを動かした場合のものを入力済み~~ (廃止済み)
+        5. SMTP*HOST / SMT*... - メールの設定。パスワードリセットやメール認証で用いられます。
+        6. RAKUTEN_APP_ID / KEY - 楽天APIの設定です。これを設定することにより、ISBNコードの検索が容易になります。詳しくは後述します。
+        7. PHP_CRUD_API_URL / APIKEY - PHP CRUD APIの設定です。後述します。
+5. `db` ディレクトリ内の SQL を手動で適用
+6. `bun dev`
 
 ## PullRequestの送信について
 
@@ -75,3 +79,24 @@ IPアドレスの確認には、下記サイトを使いましょう。
 指定例: `2001:0db8:1234:5678::/64`
 
 となります。 **末尾に/64のみならず、:が2つあることを確認してください！**
+
+## PHP CRUD APIについて
+
+本プロジェクトでは、LolipopをDBとして用いるため、PHP CRUD APIというライブラリを用いています。
+phpディレクトリ内のprod.phpをlolipop上にデプロイし、ファイル最下部のDBの設定を変更してください。
+
+また、ローカルで開発する際は、docker-compose.yamlを用いてください。
+
+> [!IMPORTANT]
+> これは**DBマイグレーションを自動で行いません**。
+> そのため、dbディレクトリ内のSQLファイルを手動で適用する必要があります。
+
+詳しくは、こちらのリポジトリをご確認ください。
+
+[mevdschee/php-crud-api](https://github.com/mevdschee/php-crud-api)
+
+### 開発向けDBの提供について
+
+四日市キャンパス生のみ、開発用にDBを提供しています。
+
+あかつきゆいと宛にお問い合わせください。

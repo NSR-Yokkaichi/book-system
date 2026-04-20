@@ -63,7 +63,7 @@ export default async function NewBookPage({
             variant="outlined"
             href={`/admin/books/new?auto=1${isbn ? `&isbn=${isbn}` : ""}`}
           >
-            QRコードで登録
+            ISBNバーコードで登録
           </Button>
           <TextField
             label="著者"
@@ -82,8 +82,9 @@ export default async function NewBookPage({
             control={
               <Checkbox
                 name="rakutenLinked"
-                defaultChecked={!!rakutenLinked}
-                disabled={false}
+                defaultChecked={["1", "true", "on"].includes(
+                  rakutenLinked ?? "",
+                )}
               />
             }
             label="楽天ブックスに登録されています"

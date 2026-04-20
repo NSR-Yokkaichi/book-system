@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import { dbClient } from "@/lib/db";
 
 /**
  * @summary 管理者への昇格API
@@ -12,14 +12,15 @@ export const POST = async (req: Request) => {
     return new Response("Email is required", { status: 400 });
   }
   try {
-    const adminCount = await prisma.user.count({ where: { role: "admin" } });
+    const adminCount = await dbClient.user.count({ where: { role: "admin" } });
     if (adminCount !== 0) {
       return new Response("Admin already exists", { status: 400 });
     }
-    await prisma.user.update({
+    await dbClient.user.update({
       where: { email },
       data: { role: "admin" },
     });
+
     return new Response("User promoted to admin", { status: 200 });
   } catch (error) {
     console.error(error);

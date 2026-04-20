@@ -2,9 +2,10 @@
 
 import { headers } from "next/headers";
 import { forbidden, unauthorized } from "next/navigation";
+import { ulid } from "ulid";
 import webpush, { WebPushError } from "web-push";
 import { auth } from "./auth";
-import prisma from "./prisma";
+import { dbClient } from "./db";
 
 webpush.setVapidDetails(
   "mailto:webmaster@uniproject.jp",
@@ -27,7 +28,7 @@ export async function subscribeUser(sub: PushSubscriptionJSON) {
     throw new Error("Invalid subscription endpoint");
   }
 
-  await prisma.pushSubscription.upsert({
+  await dbClient.pushSubscription.upsert({
     where: {
       endpoint, // ←ユニーク扱いにする
     },
@@ -36,7 +37,7 @@ export async function subscribeUser(sub: PushSubscriptionJSON) {
       auth: authKey,
     },
     create: {
-      id: crypto.randomUUID(),
+      id: ulid(),
       userId,
       endpoint,
       p256dh: p256dhKey,
@@ -48,7 +49,7 @@ export async function subscribeUser(sub: PushSubscriptionJSON) {
 }
 
 export async function unsubscribeUser(endpoint: string) {
-  await prisma.pushSubscription.delete({
+  await dbClient.pushSubscription.delete({
     where: { endpoint },
   });
 
@@ -59,7 +60,7 @@ export async function sendEveryone(message: string) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) unauthorized();
   if (session.user.role !== "admin") forbidden();
-  const subs = await prisma.pushSubscription.findMany();
+  const subs = await dbClient.pushSubscription.findMany();
 
   for (const sub of subs) {
     const pushSub = {
@@ -85,7 +86,7 @@ export async function sendEveryone(message: string) {
         err instanceof WebPushError &&
         (err.statusCode === 410 || err.statusCode === 404)
       ) {
-        await prisma.pushSubscription.delete({
+        await dbClient.pushSubscription.delete({
           where: { id: sub.id },
         });
       }
@@ -100,7 +101,7 @@ export async function sendToUser(
   title: string,
   message: string,
 ) {
-  const subs = await prisma.pushSubscription.findMany({
+  const subs = await dbClient.pushSubscription.findMany({
     where: { userId },
   });
 
