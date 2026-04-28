@@ -9,14 +9,10 @@
     1. BETTERAUTH_SECRET - ランダムな英数字の羅列を挿入
     2. GOOGLE_CLIENT_ID / SECRET - Google API PlatformのClient ID / Secretです。詳しくは後述します。
     3. BETTER_AUTH_URL - 動かすURLを入力
-    4. 各環境変数を埋める
-        1. BETTERAUTH_SECRET - ランダムな英数字の羅列を挿入
-        2. GOOGLE_CLIENT_ID / SECRET - Google API PlatformのClient ID / Secretです。詳しくは後述します。
-        3. BETTER_AUTH_URL - 動かすURLを入力
-        4. ~~DATABASE_URL - DBのURI。デフォルトでdocker-compose.yamlを動かした場合のものを入力済み~~ (廃止済み)
-        5. SMTP*HOST / SMT*... - メールの設定。パスワードリセットやメール認証で用いられます。
-        6. RAKUTEN_APP_ID / KEY - 楽天APIの設定です。これを設定することにより、ISBNコードの検索が容易になります。詳しくは後述します。
-        7. PHP_CRUD_API_URL / APIKEY - PHP CRUD APIの設定です。後述します。
+    4. ~~DATABASE_URL - DBのURI。デフォルトでdocker-compose.yamlを動かした場合のものを入力済み~~ (廃止済み)
+    5. SMTP*HOST / SMT*... - メールの設定。パスワードリセットやメール認証で用いられます。
+    6. RAKUTEN_APP_ID / KEY - 楽天APIの設定です。これを設定することにより、ISBNコードの検索が容易になります。詳しくは後述します。
+    7. PHP_CRUD_API_URL / APIKEY - PHP CRUD APIの設定です。後述します。
 5. `db` ディレクトリ内の SQL を手動で適用
 6. `bun dev`
 
@@ -28,7 +24,7 @@
 
 Google Client ID等については下記記事を参考にしてください。
 
-https://zenn.dev/milky/articles/google-client-oauth
+<https://zenn.dev/milky/articles/google-client-oauth>
 
 ## Rakuten API について
 
