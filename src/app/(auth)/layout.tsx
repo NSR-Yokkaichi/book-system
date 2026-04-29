@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import SnackbarProviderWrapper from "@/components/Providers/SnackbarProviderWrapper";
+import { dbClient } from "@/lib/db";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,14 +15,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "四日市キャンパス 図書管理システム",
-    template: "%s | 四日市キャンパス 図書管理システム",
-  },
-  description:
-    "四日市キャンパス 図書管理システムのウェブアプリケーションです。図書の貸し出しや返却、図書の管理などを行うことができます。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: {
+      default: `${campus.name} 図書管理システム`,
+      template: `%s | ${campus.name} 図書管理システム`,
+    },
+    description: `${campus.name} 図書管理システムのウェブアプリケーションです。図書の貸し出しや返却、図書の管理などを行うことができます。`,
+  };
+  return metadata;
+}
 
 export default function RootLayout({
   children,

@@ -1,9 +1,15 @@
+import type { Metadata } from "next";
+import { dbClient } from "@/lib/db";
 import BorrowSuccessPageClient from "./Client";
 
-export const metadata = {
-  title: "貸し出し完了",
-  description: "四日市キャンパス 図書管理システムの貸し出し完了ページです。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: `本の貸し出し完了`,
+    description: `${campus.name}  図書管理システムのユーザー設定ページです。`,
+  };
+  return metadata;
+}
 
 export default async function BorrowSuccessPage({
   searchParams,

@@ -1,12 +1,18 @@
 import { Stack, Typography } from "@mui/material";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Book } from "@/class/Book";
+import { dbClient } from "@/lib/db";
 import Client from "./Client";
 
-export const metadata = {
-  title: "図書編集",
-  description: "四日市キャンパス 図書管理システムの図書編集ページです。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: `図書編集`,
+    description: `${campus.name}  図書管理システムの図書編集ページです。`,
+  };
+  return metadata;
+}
 
 export default async function BookEditPage({
   params,

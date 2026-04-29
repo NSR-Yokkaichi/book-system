@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "システム初期化",
-  description: "四日市キャンパス 図書管理システムのサインインページです。",
+  description: "図書管理システムのシステム初期化ページです。",
 };
 
 export default async function Home() {

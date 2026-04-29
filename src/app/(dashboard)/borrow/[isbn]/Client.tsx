@@ -16,7 +16,7 @@ import { borrowAction } from "./action";
 export default function BooksView({
   books,
 }: {
-  books: { id: string; sticker_id?: string; status: BookStatus }[];
+  books: { id: string; sticker_id?: string | null; status: BookStatus }[];
 }) {
   const [inProgress, setInProgress] = useState(false);
   const { enqueueSnackbar } = useSnackbar();

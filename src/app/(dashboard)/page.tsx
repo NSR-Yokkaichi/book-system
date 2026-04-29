@@ -1,14 +1,20 @@
 import { Alert, Stack, Typography } from "@mui/material";
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { unauthorized } from "next/navigation";
 import { Rental } from "@/class/Rental";
 import RentalList from "@/components/Lists/RentalList";
 import { auth } from "@/lib/auth";
+import { dbClient } from "@/lib/db";
 
-export const metadata = {
-  title: "ダッシュボード - 四日市キャンパス 図書管理システム",
-  description: "四日市キャンパス 図書管理システムのダッシュボードページです。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: `ダッシュボード | ${campus.name} 図書管理システム`,
+    description: `${campus.name}  図書管理システムのダッシュボードページです。`,
+  };
+  return metadata;
+}
 
 export default async function Home() {
   const session = await auth.api.getSession({ headers: await headers() });

@@ -1,13 +1,19 @@
 import { Stack, Typography } from "@mui/material";
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { dbClient } from "@/lib/db";
 import SettingsPageClient from "./Client";
 
-export const metadata = {
-  title: "ユーザー設定",
-  description: "四日市キャンパス 図書管理システムのユーザー設定ページです。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: `ユーザー設定`,
+    description: `${campus.name}  図書管理システムのユーザー設定ページです。`,
+  };
+  return metadata;
+}
 
 export default async function SettingsPage() {
   const session = await auth.api.getSession({

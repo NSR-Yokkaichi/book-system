@@ -3,11 +3,16 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import UsersDataGrid from "@/components/Lists/UsersDataGrid";
 import { auth } from "@/lib/auth";
+import { dbClient } from "@/lib/db";
 
-export const metadata: Metadata = {
-  title: "ユーザー管理",
-  description: "四日市キャンパス 図書管理システムのユーザー管理ページです。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: `ユーザー管理`,
+    description: `${campus.name}  図書管理システムのユーザー管理ページです。`,
+  };
+  return metadata;
+}
 
 export default async function UsersPage() {
   const users = await auth.api.listUsers({

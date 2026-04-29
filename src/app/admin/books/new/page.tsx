@@ -7,13 +7,19 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import type { Metadata } from "next";
 import QrCameraScanner from "@/components/QRreader";
+import { dbClient } from "@/lib/db";
 import { regist } from "./action";
 
-export const metadata = {
-  title: "新しい本を登録",
-  description: "四日市キャンパス 図書管理システムの新しい本を登録ページです。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: "新しい本を登録",
+    description: `${campus.name}  図書管理システムの新しい本を登録ページです。`,
+  };
+  return metadata;
+}
 
 export default async function NewBookPage({
   searchParams,

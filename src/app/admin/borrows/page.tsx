@@ -1,11 +1,17 @@
 import { Stack, Typography } from "@mui/material";
+import type { Metadata } from "next";
 import { Rental } from "@/class/Rental";
 import BorrowList from "@/components/Lists/BorrowList";
+import { dbClient } from "@/lib/db";
 
-export const metadata = {
-  title: "貸出者一覧",
-  description: "四日市キャンパス 図書管理システムの貸出者一覧ページです。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: `貸出者一覧`,
+    description: `${campus.name}  図書管理システムの貸出者一覧ページです。`,
+  };
+  return metadata;
+}
 
 export default async function BorrowPage() {
   const rentalList = await Rental.getAll();

@@ -116,11 +116,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   );
 }
 
-export function SignInWithPassword({
-  isFirstAccount,
-}: {
-  isFirstAccount?: boolean;
-}) {
+export function SignInWithPassword() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const { enqueueSnackbar } = useSnackbar();

@@ -20,13 +20,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "四日市キャンパス 図書管理システム - 管理者",
-    template: "%s - 四日市キャンパス 図書管理システム",
-  },
-  description: "四日市キャンパス 図書管理システムです。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: {
+      default: `${campus.name} 図書管理システム - 管理者`,
+      template: `%s - ${campus.name}  図書管理システム`,
+    },
+    description: `${campus.name}  図書管理システムです。`,
+  };
+  return metadata;
+}
 
 export default async function RootLayout({
   children,

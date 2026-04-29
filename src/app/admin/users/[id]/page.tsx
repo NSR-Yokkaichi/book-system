@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { dbClient } from "@/lib/db";
 import UserEditPage from "./Client";
 
-export const metadata: Metadata = {
-  title: "ユーザー編集",
-  description: "四日市キャンパス 図書管理システムのユーザー編集ページです。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: `ユーザー詳細`,
+    description: `${campus.name}  図書管理システムのユーザー管理ページです。`,
+  };
+  return metadata;
+}
 
 export default async function UserDetail({
   params,

@@ -6,15 +6,21 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Book } from "@/class/Book";
+import { dbClient } from "@/lib/db";
 import BooksView from "./Client";
 
-export const metadata = {
-  title: "本の貸し出し",
-  description: "四日市キャンパス 図書管理システムの本の貸し出しページです。",
-};
+export async function generateMetadata() {
+  const campus = await dbClient.campus.findFirst();
+  const metadata: Metadata = {
+    title: `本の貸し出し`,
+    description: `${campus.name}  図書管理システムの本の貸し出しページです。`,
+  };
+  return metadata;
+}
 
 export default async function BorrowISBNPage({
   params,
