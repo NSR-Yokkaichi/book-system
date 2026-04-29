@@ -150,8 +150,9 @@ class ModelDelegate<T = any> {
         ...this.fetchOptions?.headers,
       },
     });
-    if (!res.ok)
+    if (!res.ok) {
       throw new Error(`Failed to create ${this.tableName}, ${res.status}`);
+    }
     const id = await res.json();
     return (await this.findUnique({ where: { id } })) as T;
   }
