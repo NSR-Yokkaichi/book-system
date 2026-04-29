@@ -29,7 +29,7 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      hd: process.env.GOOGLE_HD,
+      hd: process.env.NEXT_PUBLIC_GOOGLE_HD,
       disableImplicitSignUp: true,
       disableSignUp: false,
       overrideUserInfoOnSignIn: true,
