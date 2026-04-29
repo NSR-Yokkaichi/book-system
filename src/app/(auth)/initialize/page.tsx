@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const campusCount = await dbClient.campus.count();
+  const campusCount = await dbClient.campus_config.count();
   if (campusCount > 0) redirect("/");
   return <Initialize />;
 }

@@ -1,6 +1,6 @@
 import { ulid } from "ulid";
 import { dbClient } from "@/lib/db";
-import { Campus } from "./Campus";
+import { CampusConfig } from "./Campus";
 import { Rental } from "./Rental";
 import { BookStatus } from "./types/Book";
 
@@ -111,8 +111,16 @@ export class Book {
    * @returns 貸出情報
    */
   async rent(userId: string): Promise<Rental> {
-    const campus = await Campus.getFirst();
-    if (!campus) {
+    const campusName = await CampusConfig.getByKey("name");
+    const rentalDeadlineRaw = await CampusConfig.getByKey("rentalDeadline");
+    let rentalDeadline = 14;
+    if (
+      rentalDeadlineRaw?.value &&
+      Number.isSafeInteger(rentalDeadlineRaw?.value)
+    ) {
+      rentalDeadline = Number.parseInt(rentalDeadlineRaw?.value, 10);
+    }
+    if (!campusName) {
       throw new Error("Campus not found");
     }
     const user = await dbClient.user.findUnique({ where: { id: userId } });
@@ -127,9 +135,7 @@ export class Book {
         id: ulid(),
         bookId: this.id,
         userId,
-        expiresAt: new Date(
-          Date.now() + campus.rentalDeadline * 24 * 60 * 60 * 1000,
-        ),
+        expiresAt: new Date(Date.now() + rentalDeadline * 24 * 60 * 60 * 1000),
       },
     });
     return new Rental(

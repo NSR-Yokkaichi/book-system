@@ -15,7 +15,7 @@ import { dbClient } from "./lib/db";
  */
 export default async function proxy(request: NextRequest) {
   // そもそも初期化されているのかどうかをチェック
-  const campusCount = await dbClient.campus.count();
+  const campusCount = await dbClient.campus_config.count();
   if (campusCount === 0)
     return NextResponse.redirect(new URL("/initialize", request.url));
 

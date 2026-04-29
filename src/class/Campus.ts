@@ -1,105 +1,81 @@
-import { ulid } from "ulid";
 import { dbClient } from "@/lib/db";
 
-export class Campus {
-  id: string;
-  name: string;
-  rentalDeadline: number;
+export class CampusConfig {
+  key: string;
+  value: string;
   createdAt: Date;
   updatedAt: Date;
 
   constructor(data: {
-    id: string;
-    name: string;
-    rentalDeadline: number;
+    key: string;
+    value: string;
     createdAt: Date;
     updatedAt: Date;
   }) {
-    this.id = data.id;
-    this.name = data.name;
-    this.rentalDeadline = data.rentalDeadline;
+    this.key = data.key;
+    this.value = data.value;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
   }
 
   /**
-   * キャンパスを作成する
+   * データを作成する
    * @param data キャンパスのデータ
    * @returns キャンパスのデータ
    */
   static async create(data: {
-    name: string;
-    rentalDeadline?: number;
-  }): Promise<Campus> {
-    const created = await dbClient.campus.create({
+    key: string;
+    value: string;
+  }): Promise<CampusConfig> {
+    const created = await dbClient.campus_config.create({
       data: {
-        id: ulid(),
-        name: data.name,
-        rentalDeadline: data.rentalDeadline,
+        key: data.key,
+        value: data.value,
       },
     });
-    return new Campus(created);
+    return new CampusConfig(created);
   }
 
   /**
-   * キャンパスをIDで検索する
-   * @param id キャンパスのID
-   * @returns キャンパスのデータ
+   * データをキーで取得
+   * @param key 検索対象のデータのキー
+   * @returns データ
    */
-  static async getById(id: string): Promise<Campus | null> {
-    const campus = await dbClient.campus.findUnique({
-      where: { id },
+  static async getByKey(key: string): Promise<CampusConfig | null> {
+    const campus = await dbClient.campus_config.findUnique({
+      where: { key },
     });
-    return campus ? new Campus(campus) : null;
+    return campus ? new CampusConfig(campus) : null;
   }
 
   /**
-   * キャンパスを1つだけ取得する
-   * @returns キャンパスのデータ
+   * 設定をすべて取得
+   * @returns 設定データの配列
    */
-  static async getFirst(): Promise<Campus | null> {
-    const campus = await dbClient.campus.findFirst();
-    return campus ? new Campus(campus) : null;
-  }
-
-  /**
-   * キャンパスを全て取得する
-   * @returns キャンパスのデータの配列
-   */
-  static async getAll(): Promise<Campus[]> {
-    const campuses = await dbClient.campus.findMany();
-    return campuses.map((campus) => new Campus(campus));
-  }
-
-  /**
-   * キャンパスを名前で検索する
-   * @param name キャンパスの名前
-   * @returns キャンパスのデータの配列
-   */
-  static async searchByName(name: string): Promise<Campus[]> {
-    const campuses = await dbClient.campus.findMany({
-      where: {
-        name: {
-          contains: name,
-          mode: "insensitive",
-        },
-      },
-    });
-    return campuses.map((campus) => new Campus(campus));
+  static async getAll(): Promise<CampusConfig[]> {
+    const configs = await dbClient.campus_config.findMany();
+    return configs.map((config) => new CampusConfig(config));
   }
 
   /**
    * キャンパスを更新する
    * @returns 更新されたキャンパスのデータ
    */
-  async save(): Promise<Campus> {
-    const updated = await dbClient.campus.update({
-      where: { id: this.id },
+  async save(): Promise<CampusConfig> {
+    const updated = await dbClient.campus_config.update({
+      where: { key: this.key },
       data: {
-        name: this.name,
-        rentalDeadline: this.rentalDeadline,
+        value: this.value,
       },
     });
-    return new Campus(updated);
+    return new CampusConfig(updated);
+  }
+
+  async delete() {
+    await dbClient.campus_config.delete({
+      where: {
+        key: this.key,
+      },
+    });
   }
 }

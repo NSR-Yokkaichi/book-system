@@ -9,7 +9,7 @@ export const initCampusAction = async (formData: FormData) => {
   if (typeof campusName !== "string") {
     throw new Error("Invalid form data");
   }
-  await dbClient.campus.create({
+  await dbClient.campus_config.create({
     data: {
       id: ulid(),
       name: campusName,

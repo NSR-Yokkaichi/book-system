@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
-import { Campus } from "@/class/Campus";
+import { CampusConfig } from "@/class/Campus";
 import SnackbarProviderWrapper from "@/components/Providers/SnackbarProviderWrapper";
 
 const geistSans = Geist({
@@ -16,13 +16,13 @@ const geistMono = Geist_Mono({
 });
 
 export async function generateMetadata() {
-  const campus = await Campus.getFirst();
+  const campusName = await CampusConfig.getByKey("name");
   const metadata: Metadata = {
     title: {
-      default: `${campus?.name} 図書管理システム`,
-      template: `%s | ${campus?.name} 図書管理システム`,
+      default: `${campusName?.value} 図書管理システム`,
+      template: `%s | ${campusName?.value} 図書管理システム`,
     },
-    description: `${campus?.name} 図書管理システムのウェブアプリケーションです。図書の貸し出しや返却、図書の管理などを行うことができます。`,
+    description: `${campusName?.value} 図書管理システムのウェブアプリケーションです。図書の貸し出しや返却、図書の管理などを行うことができます。`,
   };
   return metadata;
 }

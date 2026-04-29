@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Campus } from "@/class/Campus";
+import { CampusConfig } from "@/class/Campus";
 import UserCreatePageClient from "./Client";
 
 export async function generateMetadata() {
-  const campus = await Campus.getFirst();
+  const campusName = await CampusConfig.getByKey("name");
   const metadata: Metadata = {
     title: `ユーザー追加`,
-    description: `${campus?.name}  図書管理システムのユーザー追加ページです。`,
+    description: `${campusName?.value} 図書管理システムのユーザー追加ページです。`,
   };
   return metadata;
 }

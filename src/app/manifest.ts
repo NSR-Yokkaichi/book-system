@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { Campus } from "@/class/Campus";
+import { CampusConfig } from "@/class/Campus";
 
 /**
  * @summary Web App Manifestの定義
@@ -7,7 +7,7 @@ import { Campus } from "@/class/Campus";
  * @type {Object}
  */
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
-  const campus = await Campus.getFirst();
+  const campusName = await CampusConfig.getByKey("name");
   return {
     theme_color: "#8c7851",
     background_color: "#f9f9ef",
@@ -15,8 +15,8 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
     display: "standalone",
     dir: "auto",
     lang: "ja",
-    name: `${campus?.name} 図書管理システム`,
-    short_name: `${campus?.name}図書管理アプリ`,
+    name: `${campusName?.value} 図書管理システム`,
+    short_name: `${campusName?.value}図書管理アプリ`,
     start_url: process.env.BETTERAUTH_URL!,
     scope: process.env.BETTERAUTH_URL!,
     id: process.env.BETTERAUTH_URL!,

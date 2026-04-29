@@ -4,7 +4,7 @@ import "../globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Campus } from "@/class/Campus";
+import { CampusConfig } from "@/class/Campus";
 import CampusInitialize from "@/components/Guards/CampusInitializeGuard";
 import AppThemeProvider from "@/components/Providers/AppThemeProvider";
 import Sidebar from "@/components/sidebarAdmin";
@@ -21,13 +21,13 @@ const geistMono = Geist_Mono({
 });
 
 export async function generateMetadata() {
-  const campus = await Campus.getFirst();
+  const campusName = await CampusConfig.getByKey("name");
   const metadata: Metadata = {
     title: {
-      default: `${campus?.name} 図書管理システム - 管理者`,
-      template: `%s - ${campus?.name}  図書管理システム`,
+      default: `${campusName?.value} 図書管理システム - 管理者`,
+      template: `%s - ${campusName?.value} 図書管理システム`,
     },
-    description: `${campus?.name}  図書管理システムです。`,
+    description: `${campusName?.value} 図書管理システムです。`,
   };
   return metadata;
 }
@@ -43,7 +43,7 @@ export default async function RootLayout({
   if (!session) {
     redirect("/signin");
   }
-  const campus = await Campus.getFirst(); // キャンパス情報が存在するか確認
+  const campusName = await CampusConfig.getByKey("name");
   return (
     <html lang="ja">
       <body
@@ -52,7 +52,7 @@ export default async function RootLayout({
         <AppRouterCacheProvider>
           <AppThemeProvider isAdmin>
             <Sidebar user={session.user}>{children}</Sidebar>
-            <CampusInitialize open={!campus} />
+            <CampusInitialize open={!campusName} />
           </AppThemeProvider>
         </AppRouterCacheProvider>
       </body>

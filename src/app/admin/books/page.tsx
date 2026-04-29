@@ -1,14 +1,14 @@
 import { Button, Stack, Typography } from "@mui/material";
 import type { Metadata } from "next";
 import { Book } from "@/class/Book";
-import { Campus } from "@/class/Campus";
+import { CampusConfig } from "@/class/Campus";
 import BookList from "@/components/Lists/BookList";
 
 export async function generateMetadata() {
-  const campus = await Campus.getFirst();
+  const campusName = await CampusConfig.getByKey("name");
   const metadata: Metadata = {
     title: `図書管理`,
-    description: `${campus?.name}  図書管理システムの図書管理ページです。`,
+    description: `${campusName?.value} 図書管理システムの図書管理ページです。`,
   };
   return metadata;
 }

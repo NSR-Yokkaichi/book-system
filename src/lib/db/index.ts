@@ -246,7 +246,7 @@ class CrudClient {
   verification = new ModelDelegate("verification", this.fetchOptions);
   book = new ModelDelegate("book", this.fetchOptions);
   rental = new ModelDelegate("rental", this.fetchOptions);
-  campus = new ModelDelegate("campus", this.fetchOptions);
+  campus_config = new ModelDelegate("campus_config", this.fetchOptions);
   passkey = new ModelDelegate("passkey", this.fetchOptions);
   pushSubscription = new ModelDelegate("push_subscription", this.fetchOptions);
 

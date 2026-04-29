@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Campus } from "@/class/Campus";
+import { CampusConfig } from "@/class/Campus";
 import BorrowSuccessPageClient from "./Client";
 
 export async function generateMetadata() {
-  const campus = await Campus.getFirst();
+  const campusName = await CampusConfig.getByKey("name");
   const metadata: Metadata = {
     title: `本の貸し出し完了`,
-    description: `${campus?.name}  図書管理システムのユーザー設定ページです。`,
+    description: `${campusName?.value} 図書管理システムのユーザー設定ページです。`,
   };
   return metadata;
 }
