@@ -38,7 +38,7 @@ export const phpCrudApiAdapter = (config: CustomAdapterConfig) =>
       supportsNumericIds: true,
     },
     adapter: (_adapterOptions) => {
-      const baseURL = `${config.baseURL}/records`;
+      const baseURL = config.baseURL.replace(/\/$/, "");
       const getTableName = (model: string) => {
         return config.usePlural ? `${model}s` : model;
       };
