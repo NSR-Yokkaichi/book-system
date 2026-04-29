@@ -32,11 +32,6 @@ COPY --from=dependencies /app/node_modules ./node_modules
 # Copy application source code
 COPY . .
 
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
-
-# Generate Prisma client
-RUN bun x prisma generate
-
 ENV NODE_ENV=production
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -82,12 +77,6 @@ COPY --from=builder --chown=bun:bun /app/.next/static ./.next/static
 # cached responses are available immediately on startup, uncomment this line:
 # COPY --from=builder --chown=bun:bun /app/.next/cache ./.next/cache
 
-# Copy the Prisma schema to migrate
-COPY --from=builder --chown=bun:bun /app/prisma ./prisma
-COPY --from=builder --chown=bun:bun /app/prisma.config.ts ./prisma.config.ts
-RUN bun add prisma
-RUN chmod -R 777 /app/node_modules
-
 # Switch to non-root user for security best practices
 USER 1000
 
@@ -95,7 +84,7 @@ USER 1000
 EXPOSE 3000
 
 # Start Next.js standalone server with Bun
-CMD ["sh", "-c", "bun x prisma migrate deploy && bun server.js"]
+CMD ["sh", "-c", "bun server.js"]
 
 # See https://github.com/opencontainers/image-spec/blob/master/annotations.md#pre-defined-annotation-keys
 LABEL org.opencontainers.image.created="" \

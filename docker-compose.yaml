@@ -1,24 +1,25 @@
 name: book-system
 services:
   db:
-    image: postgres:18
+    image: mariadb:lts
     environment:
-      POSTGRES_PASSWORD: rootpassword
-      POSTGRES_DB: booksystem
-      POSTGRES_USER: bookuser
-      TZ: "Asia/Tokyo"
+      MARIADB_ROOT_PASSWORD: YourPassword
+      MARIADB_DATABASE: book_system
     volumes:
-      - db_data:/var/lib/postgresql
-    ports:
-      - "5432:5432"
-  adminer:
-    image: adminer
+      - db-volume:/var/lib/mysql
+  php_crud_api:
+    image: mevdschee/php-crud-api:latest
+    environment:
+      PHP_CRUD_API_DRIVER: mysql
+      PHP_CRUD_API_ADDRESS: db
+      PHP_CRUD_API_PORT: 3306
+      PHP_CRUD_API_DATABASE: book_system
+      PHP_CRUD_API_USERNAME: root
+      PHP_CRUD_API_PASSWORD: YourPassword
     ports:
       - 8080:8080
-    depends_on:
-      - db
 volumes:
-  db_data:
+  db-volume:
 
 networks:
   booksystem:

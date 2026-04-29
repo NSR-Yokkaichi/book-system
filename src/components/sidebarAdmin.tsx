@@ -2,6 +2,7 @@
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ClassIcon from "@mui/icons-material/Class";
 import HomeIcon from "@mui/icons-material/Home";
 import Logout from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -282,9 +283,18 @@ export default function Sidebar({ children, user }: Props) {
           <ListItem key={"mypage"} disablePadding>
             <ListItemButton href="/admin/borrows">
               <ListItemIcon>
-                <PersonIcon />
+                <ClassIcon />
               </ListItemIcon>
               <ListItemText primary={"貸出一覧"} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem key={"users"} disablePadding>
+            <ListItemButton href="/admin/users">
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary={"ユーザー管理"} />
             </ListItemButton>
           </ListItem>
           {/*

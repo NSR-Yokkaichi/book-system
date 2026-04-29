@@ -1,5 +1,5 @@
-import prisma from "@/lib/prisma";
-import type { Book as PrismaBook } from "../generated/prisma/client";
+import { ulid } from "ulid";
+import { dbClient } from "@/lib/db";
 import { Rental } from "./Rental";
 import { BookStatus } from "./types/Book";
 
@@ -7,11 +7,11 @@ export class Book {
   id: string;
   name: string;
   isbn: string;
-  author?: string;
-  publisher?: string;
-  stickerId?: string;
-  rakutenLinked?: boolean;
-  imageUrl?: string;
+  author?: string | null;
+  publisher?: string | null;
+  stickerId?: string | null;
+  rakutenLinked?: boolean | null;
+  imageUrl?: string | null;
   createdAt: Date;
   updatedAt: Date;
 
@@ -20,13 +20,18 @@ export class Book {
    * @returns 本のステータス
    */
   async getStatus(): Promise<BookStatus> {
-    const rental = await prisma.rental.findFirst({
+    const rental = await dbClient.rental.findFirst({
       where: { bookId: this.id },
     });
     return rental ? BookStatus.Rented : BookStatus.Available;
   }
 
-  constructor(data: PrismaBook) {
+  constructor(
+    data: Omit<
+      Book,
+      "getStatus" | "create" | "save" | "delete" | "rent" | "return" | "getById"
+    >,
+  ) {
     this.id = data.id;
     this.name = data.name;
     this.isbn = data.isbn;
@@ -53,8 +58,9 @@ export class Book {
     rakutenLinked?: boolean;
     imageUrl?: string;
   }): Promise<Book> {
-    const created = await prisma.book.create({
+    const created = await dbClient.book.create({
       data: {
+        id: ulid(),
         name: data.name,
         isbn: data.isbn,
         author: data.author,
@@ -72,7 +78,7 @@ export class Book {
    * @returns 更新後のBookインスタンス
    */
   async save(): Promise<Book> {
-    const updated = await prisma.book.update({
+    const updated = await dbClient.book.update({
       where: { id: this.id },
       data: {
         name: this.name,
@@ -94,8 +100,8 @@ export class Book {
    * @returns 削除された本の情報
    */
   async delete(): Promise<Book> {
-    const deleted = await prisma.book.delete({ where: { id: this.id } });
-    return new Book(deleted);
+    await dbClient.book.delete({ where: { id: this.id } });
+    return this;
   }
 
   /**
@@ -104,19 +110,20 @@ export class Book {
    * @returns 貸出情報
    */
   async rent(userId: string): Promise<Rental> {
-    const campus = await prisma.campus.findFirst();
+    const campus = await dbClient.campus.findFirst();
     if (!campus) {
       throw new Error("Campus not found");
     }
-    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const user = await dbClient.user.findUnique({ where: { id: userId } });
     if (!user) {
       throw new Error("User not found");
     }
     if (user.role !== "student") {
       throw new Error("Only students can rent books");
     }
-    const rental = await prisma.rental.create({
+    const rental = await dbClient.rental.create({
       data: {
+        id: ulid(),
         bookId: this.id,
         userId,
         expiresAt: new Date(
@@ -138,13 +145,13 @@ export class Book {
    * 本を返却する
    */
   async return() {
-    const rental = await prisma.rental.findFirst({
+    const rental = await dbClient.rental.findFirst({
       where: { bookId: this.id },
     });
     if (!rental) {
       throw new Error("This book is not currently rented");
     }
-    await prisma.rental.delete({ where: { id: rental.id } });
+    await dbClient.rental.delete({ where: { id: rental.id } });
   }
 
   /**
@@ -153,7 +160,7 @@ export class Book {
    * @returns 本の情報
    */
   static async getById(id: string): Promise<Book | null> {
-    const found = await prisma.book.findUnique({ where: { id } });
+    const found = await dbClient.book.findUnique({ where: { id } });
     return found ? new Book(found) : null;
   }
 
@@ -162,7 +169,7 @@ export class Book {
    * @returns 本の情報の配列
    */
   static async getAll(): Promise<Book[]> {
-    const books = await prisma.book.findMany();
+    const books = await dbClient.book.findMany();
     return books.map((b) => new Book(b));
   }
 
@@ -172,7 +179,7 @@ export class Book {
    * @returns 本の情報の配列
    */
   static async getByISBN(isbn: string): Promise<Book[]> {
-    const books = await prisma.book.findMany({ where: { isbn } });
+    const books = await dbClient.book.findMany({ where: { isbn } });
     return books.map((b) => new Book(b));
   }
 
@@ -182,7 +189,7 @@ export class Book {
    * @returns 本の情報もしくはnull
    */
   static async getByStickerId(stickerId: string): Promise<Book | null> {
-    const found = await prisma.book.findFirst({ where: { stickerId } });
+    const found = await dbClient.book.findFirst({ where: { stickerId } });
     return found ? new Book(found) : null;
   }
 
@@ -216,7 +223,7 @@ export class Book {
         Object.entries(query).filter(([_, value]) => value !== undefined),
       );
     }
-    const books = await prisma.book.findMany({ where });
+    const books = await dbClient.book.findMany({ where });
     return books.map((b) => new Book(b));
   }
 }

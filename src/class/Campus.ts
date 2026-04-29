@@ -1,4 +1,5 @@
-import prisma from "@/lib/prisma";
+import { ulid } from "ulid";
+import { dbClient } from "@/lib/db";
 
 export class Campus {
   id: string;
@@ -30,8 +31,9 @@ export class Campus {
     name: string;
     rentalDeadline?: number;
   }): Promise<Campus> {
-    const created = await prisma.campus.create({
+    const created = await dbClient.campus.create({
       data: {
+        id: ulid(),
         name: data.name,
         rentalDeadline: data.rentalDeadline,
       },
@@ -45,7 +47,7 @@ export class Campus {
    * @returns キャンパスのデータ
    */
   static async getById(id: string): Promise<Campus | null> {
-    const campus = await prisma.campus.findUnique({
+    const campus = await dbClient.campus.findUnique({
       where: { id },
     });
     return campus ? new Campus(campus) : null;
@@ -56,7 +58,7 @@ export class Campus {
    * @returns キャンパスのデータの配列
    */
   static async getAll(): Promise<Campus[]> {
-    const campuses = await prisma.campus.findMany();
+    const campuses = await dbClient.campus.findMany();
     return campuses.map((campus) => new Campus(campus));
   }
 
@@ -66,7 +68,7 @@ export class Campus {
    * @returns キャンパスのデータの配列
    */
   static async searchByName(name: string): Promise<Campus[]> {
-    const campuses = await prisma.campus.findMany({
+    const campuses = await dbClient.campus.findMany({
       where: {
         name: {
           contains: name,
@@ -82,7 +84,7 @@ export class Campus {
    * @returns 更新されたキャンパスのデータ
    */
   async save(): Promise<Campus> {
-    const updated = await prisma.campus.update({
+    const updated = await dbClient.campus.update({
       where: { id: this.id },
       data: {
         name: this.name,

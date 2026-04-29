@@ -1,4 +1,5 @@
-import prisma from "@/lib/prisma";
+import { ulid } from "ulid";
+import { dbClient } from "@/lib/db";
 import { Book } from "./Book";
 
 export class Rental {
@@ -30,8 +31,9 @@ export class Rental {
     bookId: string;
     expiresAt: Date;
   }): Promise<Rental> {
-    const created = await prisma.rental.create({
+    const created = await dbClient.rental.create({
       data: {
+        id: ulid(),
         userId: data.userId,
         bookId: data.bookId,
         expiresAt: data.expiresAt,
@@ -51,7 +53,7 @@ export class Rental {
     userId: string,
     isbn: string,
   ): Promise<Rental | null> {
-    const rental = await prisma.rental.findFirst({
+    const rental = await dbClient.rental.findFirst({
       where: {
         userId,
         book: {
@@ -73,7 +75,7 @@ export class Rental {
   }
 
   static async getByUserId(userId: string): Promise<Rental[]> {
-    const rentals = await prisma.rental.findMany({
+    const rentals = await dbClient.rental.findMany({
       where: { userId },
     });
     return rentals.map(
@@ -90,7 +92,7 @@ export class Rental {
   }
 
   static async getAll(): Promise<Rental[]> {
-    const rentals = await prisma.rental.findMany();
+    const rentals = await dbClient.rental.findMany();
     return rentals.map(
       (rental) =>
         new Rental(
@@ -105,7 +107,7 @@ export class Rental {
   }
 
   async getBook(): Promise<Book> {
-    const book = await prisma.book.findUnique({
+    const book = await dbClient.book.findUnique({
       where: { id: this.bookId },
     });
     if (!book) {
@@ -115,7 +117,7 @@ export class Rental {
   }
 
   async getStudent() {
-    const student = await prisma.user.findUnique({
+    const student = await dbClient.user.findUnique({
       where: { id: this.userId },
     });
     if (!student) {
@@ -125,7 +127,7 @@ export class Rental {
   }
 
   async save(): Promise<void> {
-    await prisma.rental.update({
+    await dbClient.rental.update({
       where: { id: this.id },
       data: {
         userId: this.userId,
@@ -136,7 +138,7 @@ export class Rental {
   }
 
   async delete(): Promise<void> {
-    await prisma.rental.delete({
+    await dbClient.rental.delete({
       where: { id: this.id },
     });
   }
