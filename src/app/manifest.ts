@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next";
+import { Campus } from "@/class/Campus";
 
 /**
  * @summary Web App Manifestの定義
  * @description Web App Manifestの定義を行う。これにより、PWAとして動作することができる。
  * @type {Object}
  */
-export default function manifest(): MetadataRoute.Manifest {
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
+  const campus = await Campus.getFirst();
   return {
     theme_color: "#8c7851",
     background_color: "#f9f9ef",
@@ -13,8 +15,8 @@ export default function manifest(): MetadataRoute.Manifest {
     display: "standalone",
     dir: "auto",
     lang: "ja",
-    name: "四日市キャンパス 図書管理システム",
-    short_name: "四日市CP図書管理アプリ",
+    name: `${campus?.name} 図書管理システム`,
+    short_name: `${campus?.name}図書管理アプリ`,
     start_url: process.env.BETTERAUTH_URL!,
     scope: process.env.BETTERAUTH_URL!,
     id: process.env.BETTERAUTH_URL!,
