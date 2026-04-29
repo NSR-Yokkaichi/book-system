@@ -1,5 +1,4 @@
 "use client";
-import { TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MuiCard from "@mui/material/Card";
@@ -7,10 +6,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import { redirect } from "next/navigation";
 import { useSnackbar } from "notistack";
-import React from "react";
-import { campasPositionCodes } from "@/config";
+import { getPosCodes } from "@/config";
 import { authClient } from "@/lib/auth-client";
 import AppTheme from "../shared-theme/AppTheme";
 import { GoogleIcon, SitemarkIcon } from "./components/CustomIcons";
@@ -99,15 +96,17 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
                   },
                 );
                 const { latitude, longitude } = position.coords;
+                const campasPosCodes = await getPosCodes();
                 if (
-                  (latitude < campasPositionCodes.minLatitude ||
-                    latitude > campasPositionCodes.maxLatitude ||
-                    longitude < campasPositionCodes.minLongitude ||
-                    longitude > campasPositionCodes.maxLongitude) &&
+                  campasPosCodes &&
+                  (latitude < campasPosCodes.minLatitude ||
+                    latitude > campasPosCodes.maxLatitude ||
+                    longitude < campasPosCodes.minLongitude ||
+                    longitude > campasPosCodes.maxLongitude) &&
                   process.env.NODE_ENV === "production"
                 ) {
                   enqueueSnackbar(
-                    "四日市キャンパス周辺からのみサインアップできます。現在地の位置情報を確認してください。",
+                    "所定の場所の周辺からのみサインアップできます。現在地の位置情報を確認してください。",
                     { variant: "error" },
                   );
                   return;
