@@ -58,7 +58,7 @@ export class Campus {
    * @returns キャンパスのデータ
    */
   static async getFirst(): Promise<Campus | null> {
-    const campus = await Campus.getFirst();
+    const campus = await dbClient.campus.findFirst();
     return campus ? new Campus(campus) : null;
   }
 
