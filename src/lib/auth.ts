@@ -5,14 +5,16 @@ import {
   haveIBeenPwned,
   username,
 } from "better-auth/plugins";
-import { phpCrudApiAdapter } from "./authDbPlugin"; // ← 先ほど作成したアダプター
+import { phpCrudApiAdapter } from "./authDbPlugin";
 import { transporter } from "./email";
 import { admin, student } from "./permissions";
 
 export const auth = betterAuth({
-  // 1. Prismaの代わりに php-crud-api アダプターを指定
+  // Prismaの代わりに php-crud-api アダプターを指定
   database: phpCrudApiAdapter({
-    baseURL: process.env.PHP_CRUD_API_URL || "http://localhost/api.php/records",
+    baseURL: process.env.PHP_CRUD_API_URL
+      ? `${process.env.PHP_CRUD_API_URL}/records`
+      : "http://localhost/api.php/records",
     fetchOptions: process.env.PHP_CRUD_API_APIKEY
       ? {
           headers: {
@@ -21,9 +23,8 @@ export const auth = betterAuth({
         }
       : undefined,
     usePlural: false, // テーブル名が複数形なら true に変更
+    debugLogs: process.env.NODE_ENV === "development",
   }),
-
-  // 以下、元の設定をそのまま引き継ぎ
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
