@@ -1,5 +1,6 @@
 import { ulid } from "ulid";
 import { dbClient } from "@/lib/db";
+import { Campus } from "./Campus";
 import { Rental } from "./Rental";
 import { BookStatus } from "./types/Book";
 
@@ -110,7 +111,7 @@ export class Book {
    * @returns 貸出情報
    */
   async rent(userId: string): Promise<Rental> {
-    const campus = await dbClient.campus.findFirst();
+    const campus = await Campus.getFirst();
     if (!campus) {
       throw new Error("Campus not found");
     }

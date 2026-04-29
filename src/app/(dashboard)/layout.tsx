@@ -4,11 +4,11 @@ import "../globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Campus } from "@/class/Campus";
 import StudentInitializeGuard from "@/components/Guards/StudentInitializeGuard";
 import AppThemeProvider from "@/components/Providers/AppThemeProvider";
 import Sidebar from "@/components/sidebar";
 import { auth } from "@/lib/auth";
-import { dbClient } from "@/lib/db";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,13 +21,13 @@ const geistMono = Geist_Mono({
 });
 
 export async function generateMetadata() {
-  const campus = await dbClient.campus.findFirst();
+  const campus = await Campus.getFirst();
   const metadata: Metadata = {
     title: {
-      default: `${campus.name} 図書管理システム`,
-      template: `$s | ${campus.name} 図書管理システム`,
+      default: `${campus?.name} 図書管理システム`,
+      template: `$s | ${campus?.name} 図書管理システム`,
     },
-    description: `${campus.name}  図書管理システムです。`,
+    description: `${campus?.name}  図書管理システムです。`,
   };
   return metadata;
 }

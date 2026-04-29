@@ -2,16 +2,16 @@ import { Alert, Stack, Typography } from "@mui/material";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { unauthorized } from "next/navigation";
+import { Campus } from "@/class/Campus";
 import { Rental } from "@/class/Rental";
 import RentalList from "@/components/Lists/RentalList";
 import { auth } from "@/lib/auth";
-import { dbClient } from "@/lib/db";
 
 export async function generateMetadata() {
-  const campus = await dbClient.campus.findFirst();
+  const campus = await Campus.getFirst();
   const metadata: Metadata = {
-    title: `ダッシュボード | ${campus.name} 図書管理システム`,
-    description: `${campus.name}  図書管理システムのダッシュボードページです。`,
+    title: `ダッシュボード | ${campus?.name} 図書管理システム`,
+    description: `${campus?.name}  図書管理システムのダッシュボードページです。`,
   };
   return metadata;
 }

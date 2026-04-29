@@ -1,13 +1,13 @@
 import { Stack, Typography } from "@mui/material";
 import type { Metadata } from "next";
+import { Campus } from "@/class/Campus";
 import QrCameraScanner from "@/components/QRreader";
-import { dbClient } from "@/lib/db";
 
 export async function generateMetadata() {
-  const campus = await dbClient.campus.findFirst();
+  const campus = await Campus.getFirst();
   const metadata: Metadata = {
     title: `本の返却`,
-    description: `${campus.name}  図書管理システムの本の返却ページです。`,
+    description: `${campus?.name}  図書管理システムの本の返却ページです。`,
   };
   return metadata;
 }

@@ -1,14 +1,14 @@
 import { Stack, Typography } from "@mui/material";
 import type { Metadata } from "next";
+import { Campus } from "@/class/Campus";
 import { Rental } from "@/class/Rental";
 import BorrowList from "@/components/Lists/BorrowList";
-import { dbClient } from "@/lib/db";
 
 export async function generateMetadata() {
-  const campus = await dbClient.campus.findFirst();
+  const campus = await Campus.getFirst();
   const metadata: Metadata = {
     title: `貸出者一覧`,
-    description: `${campus.name}  図書管理システムの貸出者一覧ページです。`,
+    description: `${campus?.name}  図書管理システムの貸出者一覧ページです。`,
   };
   return metadata;
 }

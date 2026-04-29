@@ -3,16 +3,16 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound, unauthorized } from "next/navigation";
 import { Book } from "@/class/Book";
+import { Campus } from "@/class/Campus";
 import { Rental } from "@/class/Rental";
 import { auth } from "@/lib/auth";
-import { dbClient } from "@/lib/db";
 import BooksReturn from "./Client";
 
 export async function generateMetadata() {
-  const campus = await dbClient.campus.findFirst();
+  const campus = await Campus.getFirst();
   const metadata: Metadata = {
     title: `本の返却`,
-    description: `${campus.name}  図書管理システムの本の返却ページです。`,
+    description: `${campus?.name}  図書管理システムの本の返却ページです。`,
   };
   return metadata;
 }

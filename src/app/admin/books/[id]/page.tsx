@@ -2,14 +2,14 @@ import { Stack, Typography } from "@mui/material";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Book } from "@/class/Book";
-import { dbClient } from "@/lib/db";
+import { Campus } from "@/class/Campus";
 import Client from "./Client";
 
 export async function generateMetadata() {
-  const campus = await dbClient.campus.findFirst();
+  const campus = await Campus.getFirst();
   const metadata: Metadata = {
     title: `図書編集`,
-    description: `${campus.name}  図書管理システムの図書編集ページです。`,
+    description: `${campus?.name}  図書管理システムの図書編集ページです。`,
   };
   return metadata;
 }

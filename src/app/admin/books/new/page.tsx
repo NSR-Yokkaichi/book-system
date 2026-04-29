@@ -8,15 +8,15 @@ import {
   Typography,
 } from "@mui/material";
 import type { Metadata } from "next";
+import { Campus } from "@/class/Campus";
 import QrCameraScanner from "@/components/QRreader";
-import { dbClient } from "@/lib/db";
 import { regist } from "./action";
 
 export async function generateMetadata() {
-  const campus = await dbClient.campus.findFirst();
+  const campus = await Campus.getFirst();
   const metadata: Metadata = {
     title: "新しい本を登録",
-    description: `${campus.name}  図書管理システムの新しい本を登録ページです。`,
+    description: `${campus?.name}  図書管理システムの新しい本を登録ページです。`,
   };
   return metadata;
 }

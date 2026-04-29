@@ -1,6 +1,7 @@
 "use server";
 import { headers } from "next/headers";
 import { ulid } from "ulid";
+import { Campus } from "@/class/Campus";
 import { auth } from "@/lib/auth";
 import { dbClient } from "@/lib/db";
 
@@ -33,11 +34,5 @@ export const createCampus = async (
   rentalDeadline: number,
 ) => {
   const newId = ulid();
-  await dbClient.campus.create({
-    data: {
-      id: newId,
-      name: campusName,
-      rentalDeadline,
-    },
-  });
+  await Campus.create({ name: campusName, rentalDeadline });
 };

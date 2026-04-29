@@ -10,14 +10,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Book } from "@/class/Book";
-import { dbClient } from "@/lib/db";
+import { Campus } from "@/class/Campus";
 import BooksView from "./Client";
 
 export async function generateMetadata() {
-  const campus = await dbClient.campus.findFirst();
+  const campus = await Campus.getFirst();
   const metadata: Metadata = {
     title: `本の貸し出し`,
-    description: `${campus.name}  図書管理システムの本の貸し出しページです。`,
+    description: `${campus?.name}  図書管理システムの本の貸し出しページです。`,
   };
   return metadata;
 }

@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Campus } from "@/class/Campus";
 import { auth } from "@/lib/auth";
-import { dbClient } from "@/lib/db";
 import SettingsPageClient from "./Client";
 
 export async function generateMetadata() {
-  const campus = await dbClient.campus.findFirst();
+  const campus = await Campus.getFirst();
   const metadata: Metadata = {
     title: `ユーザー設定`,
-    description: `${campus.name}  図書管理システムのユーザー設定ページです。`,
+    description: `${campus?.name}  図書管理システムのユーザー設定ページです。`,
   };
   return metadata;
 }

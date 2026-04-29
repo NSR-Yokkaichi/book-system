@@ -54,6 +54,15 @@ export class Campus {
   }
 
   /**
+   * キャンパスを1つだけ取得する
+   * @returns キャンパスのデータ
+   */
+  static async getFirst(): Promise<Campus | null> {
+    const campus = await Campus.getFirst();
+    return campus ? new Campus(campus) : null;
+  }
+
+  /**
    * キャンパスを全て取得する
    * @returns キャンパスのデータの配列
    */

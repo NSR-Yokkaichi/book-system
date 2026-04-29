@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
+import { Campus } from "@/class/Campus";
 import SignIn from "@/components/mui-templates/SignIn";
-import { dbClient } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
-  const campus = await dbClient.campus.findFirst();
+  const campus = await Campus.getFirst();
   const metadata: Metadata = {
     title: "サインイン",
-    description: `${campus.name} 図書管理システムのサインインページです。`,
+    description: `${campus?.name} 図書管理システムのサインインページです。`,
   };
   return metadata;
 }
