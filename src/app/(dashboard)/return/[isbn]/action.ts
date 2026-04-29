@@ -17,7 +17,7 @@ export const returnAction = async (isbn: string) => {
       notFound();
     }
 
-    await rental.delete();
+    await rental.applyReturn();
 
     redirect("/return/success");
   } catch (err) {

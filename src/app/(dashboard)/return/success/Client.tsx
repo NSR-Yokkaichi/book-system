@@ -48,11 +48,11 @@ export default function ReturnSuccessPageClient() {
             gutterBottom
             sx={{ fontWeight: 600 }}
           >
-            返却が完了しました
+            返却申請を送信しました
           </Typography>
 
           <Typography variant="body2" color="textSecondary" sx={{ my: 2 }}>
-            本の返却が正常に完了しました。ご利用ありがとうございました。
+            本の返却を申請しました。管理者による確認の後、返却が完了します。ご利用ありがとうございました。
           </Typography>
 
           <Stack direction="row" spacing={2} sx={{ mt: 4 }}>

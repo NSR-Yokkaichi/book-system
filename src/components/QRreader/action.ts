@@ -37,7 +37,11 @@ export const returnAction = async (isbn: string) => {
       unauthorized();
     }
     const rental = await Rental.getByUserAndISBN(session.user.id, isbn);
-    if (!rental) {
+    if (
+      !rental ||
+      rental.returnedAt === undefined ||
+      rental.returnedAt === null
+    ) {
       throw new Error("貸し出し情報が見つかりません");
     }
     redirect(`/return/${isbn}`);

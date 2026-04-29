@@ -22,7 +22,7 @@ export class Book {
    */
   async getStatus(): Promise<BookStatus> {
     const rental = await dbClient.rental.findFirst({
-      where: { bookId: this.id },
+      where: { bookId: this.id, returnedAt: null },
     });
     return rental ? BookStatus.Rented : BookStatus.Available;
   }
@@ -143,6 +143,7 @@ export class Book {
       rental.userId,
       rental.bookId,
       rental.expiresAt,
+      rental.returnedAt,
       rental.createdAt,
       rental.updatedAt,
     );
@@ -152,13 +153,14 @@ export class Book {
    * 本を返却する
    */
   async return() {
-    const rental = await dbClient.rental.findFirst({
-      where: { bookId: this.id },
-    });
+    const rentalList = await Rental.getByBookId(this.id);
+    const rental = rentalList.find(
+      (rental) => rental.returnedAt === null || rental.returnedAt === undefined,
+    );
     if (!rental) {
       throw new Error("This book is not currently rented");
     }
-    await dbClient.rental.delete({ where: { id: rental.id } });
+    await rental.applyReturn();
   }
 
   /**

@@ -7,6 +7,7 @@ export class Rental {
   userId: string;
   bookId: string;
   expiresAt: Date;
+  returnedAt: Date | undefined | null;
   createdAt: Date;
   updatedAt: Date;
 
@@ -15,6 +16,7 @@ export class Rental {
     userId: string,
     bookId: string,
     expiresAt: Date,
+    returnedAt: Date | undefined | null,
     createdAt: Date,
     updatedAt: Date,
   ) {
@@ -22,6 +24,7 @@ export class Rental {
     this.userId = userId;
     this.bookId = bookId;
     this.expiresAt = expiresAt;
+    this.returnedAt = returnedAt;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -44,8 +47,29 @@ export class Rental {
       created.userId,
       created.bookId,
       created.expiresAt,
+      created.returnedAt,
       created.createdAt,
       created.updatedAt,
+    );
+  }
+
+  static async getById(id: string): Promise<Rental | null> {
+    const rental = await dbClient.rental.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!rental) {
+      return null;
+    }
+    return new Rental(
+      rental.id,
+      rental.userId,
+      rental.bookId,
+      rental.expiresAt,
+      rental.returnedAt,
+      rental.createdAt,
+      rental.updatedAt,
     );
   }
 
@@ -69,6 +93,7 @@ export class Rental {
       rental.userId,
       rental.bookId,
       rental.expiresAt,
+      rental.returnedAt,
       rental.createdAt,
       rental.updatedAt,
     );
@@ -85,6 +110,25 @@ export class Rental {
           rental.userId,
           rental.bookId,
           rental.expiresAt,
+          rental.returnedAt,
+          rental.createdAt,
+          rental.updatedAt,
+        ),
+    );
+  }
+
+  static async getByBookId(bookId: string): Promise<Rental[]> {
+    const rentals = await dbClient.rental.findMany({
+      where: { bookId },
+    });
+    return rentals.map(
+      (rental) =>
+        new Rental(
+          rental.id,
+          rental.userId,
+          rental.bookId,
+          rental.expiresAt,
+          rental.returnedAt,
           rental.createdAt,
           rental.updatedAt,
         ),
@@ -100,6 +144,7 @@ export class Rental {
           rental.userId,
           rental.bookId,
           rental.expiresAt,
+          rental.returnedAt,
           rental.createdAt,
           rental.updatedAt,
         ),
@@ -135,6 +180,12 @@ export class Rental {
         expiresAt: this.expiresAt,
       },
     });
+  }
+
+  async applyReturn(): Promise<Rental> {
+    this.returnedAt = new Date();
+    await this.save();
+    return this;
   }
 
   async delete(): Promise<void> {

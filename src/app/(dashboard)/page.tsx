@@ -45,6 +45,9 @@ export default async function Home() {
                 return {
                   ...book,
                   expiresAt: rental.expiresAt,
+                  inProgressReturn:
+                    rental.returnedAt !== null &&
+                    rental.returnedAt !== undefined,
                 };
               }),
             )

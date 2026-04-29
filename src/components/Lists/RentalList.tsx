@@ -3,13 +3,14 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Chip,
   Stack,
   Typography,
 } from "@mui/material";
 import Image from "next/image";
 import type { Book } from "@/class/Book";
 
-export default function BookList({
+export default function RentalList({
   booksWithExpires,
 }: {
   booksWithExpires: (Omit<
@@ -17,6 +18,7 @@ export default function BookList({
     "getStatus" | "delete" | "save" | "rent" | "return"
   > & {
     expiresAt: Date;
+    inProgressReturn: boolean;
   })[];
   isAdmin?: boolean;
 }) {
@@ -76,6 +78,24 @@ export default function BookList({
           >
             <Typography variant="h6">{book.name}</Typography>
             <Stack direction="column">
+              <Chip
+                size={"small"}
+                variant={"outlined"}
+                color={
+                  book.inProgressReturn
+                    ? "warning"
+                    : book.expiresAt < new Date()
+                      ? "error"
+                      : "info"
+                }
+                label={
+                  book.inProgressReturn
+                    ? "返却申請中"
+                    : book.expiresAt < new Date()
+                      ? "延滞中"
+                      : "貸し出し中"
+                }
+              />
               <Typography variant="subtitle1">
                 返却期限: {book.expiresAt.toLocaleDateString()}
               </Typography>
