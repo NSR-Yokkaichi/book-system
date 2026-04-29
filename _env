@@ -5,6 +5,7 @@ PHP_CRUD_API_URL="http://localhost:8080/api.php"
 PHP_CRUD_API_APIKEY="if-basic-auth-enabled"
 GOOGLE_CLIENT_ID=xxxxxxx
 GOOGLE_CLIENT_SECRET=xxxxxxx
+GOOGLE_HD="nnn.ed.jp"
 
 SMTP_HOST="smtp.example.com"
 SMTP_PORT=465
