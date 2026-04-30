@@ -119,7 +119,10 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
               }}
               startIcon={<GoogleIcon />}
             >
-              {process.env.NEXT_PUBLIC_GOOGLE_HD ?? "Google"}でサインアップ
+              {process.env.NEXT_PUBLIC_GOOGLE_HD
+                ? process.env.NEXT_PUBLIC_GOOGLE_HD
+                : "Google"}
+              でサインアップ
             </Button>
           </Box>
         </Card>

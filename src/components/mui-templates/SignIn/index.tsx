@@ -96,7 +96,10 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
               }}
               startIcon={<GoogleIcon />}
             >
-              {process.env.NEXT_PUBLIC_GOOGLE_HD ?? "Google"}でログイン
+              {process.env.NEXT_PUBLIC_GOOGLE_HD
+                ? process.env.NEXT_PUBLIC_GOOGLE_HD
+                : "Google"}
+              でログイン
             </Button>
           </Box>
           <Divider sx={{ my: 2 }}> もしくは </Divider>

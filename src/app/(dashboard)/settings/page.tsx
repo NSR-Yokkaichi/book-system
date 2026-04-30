@@ -21,16 +21,22 @@ export default async function SettingsPage() {
   if (!session) {
     redirect("/signin");
   }
+  const isNNN = (await CampusConfig.getByKey("isNNN"))?.value === "true";
 
   // 学生情報がない場合はリダイレクト
-  if (!session.user.course || session.user.expiresByGraduateAt === null) {
+  if (
+    (!session.user.course || session.user.expiresByGraduateAt === null) &&
+    isNNN
+  ) {
     redirect("/");
   }
+
 
   return (
     <SettingsPageClient
       user={session.user}
       VAPID_PUBLIC_KEY={process.env.VAPID_PUBLIC_KEY!}
+      isNNN={isNNN}
     />
   );
 }

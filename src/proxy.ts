@@ -40,7 +40,12 @@ export default async function proxy(request: NextRequest) {
   }
 
   // ユーザー(生徒)用のルートにアクセスしたとき、管理者は管理者用のルートにリダイレクトする
+  // ただし、管理者も貸出可能な設定の場合はこの限りではない
+  const adminCanRental = await dbClient.campus_config.findUnique({
+    where: { key: "adminCanRental" },
+  });
   if (
+    !(adminCanRental && adminCanRental.value === "true") &&
     session.user.role === "admin" &&
     !request.nextUrl.pathname.startsWith("/admin")
   ) {

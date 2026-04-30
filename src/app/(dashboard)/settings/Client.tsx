@@ -12,7 +12,7 @@ import {
   subscribeUser,
   unsubscribeUser,
 } from "@/lib/pushNotification";
-import { updateUsername } from "./actions";
+import { updateUserdata } from "./actions";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -25,6 +25,7 @@ function urlBase64ToUint8Array(base64String: string) {
 export default function SettingsPageClient({
   user,
   VAPID_PUBLIC_KEY,
+  isNNN,
 }: {
   user: User & { role?: string | string[] | null } & {
     course?: string | null;
@@ -33,6 +34,7 @@ export default function SettingsPageClient({
     displayUsername?: string | null;
   };
   VAPID_PUBLIC_KEY: string;
+  isNNN?: boolean;
 }) {
   const { enqueueSnackbar } = useSnackbar();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -147,7 +149,7 @@ export default function SettingsPageClient({
         action={async (formdata: FormData) => {
           setIsUpdating(true);
           try {
-            await updateUsername(formdata);
+            await updateUserdata(formdata);
             enqueueSnackbar("ユーザー情報を更新しました", {
               variant: "success",
             });
@@ -175,17 +177,24 @@ export default function SettingsPageClient({
           fullWidth
           required
         />
-        <StudentCourseSelector defaultValue={user.course || "1days"} />
-        <TextField
-          id="expiresByGraduateAt"
-          name="expiresByGraduateAt"
-          label="卒業予定年"
-          type="number"
-          value={expiresByGraduateAt}
-          onChange={(e) => setExpiresByGraduateAt(e.target.value)}
-          fullWidth
-          required
-        />
+
+        <input hidden name="isNNN" value={"false"} />
+
+        {isNNN && (
+          <>
+            <StudentCourseSelector defaultValue={user.course || "1days"} />
+            <TextField
+              id="expiresByGraduateAt"
+              name="expiresByGraduateAt"
+              label="卒業予定年"
+              type="number"
+              value={expiresByGraduateAt}
+              onChange={(e) => setExpiresByGraduateAt(e.target.value)}
+              fullWidth
+              required
+            />
+          </>
+        )}
 
         <Button
           type="submit"

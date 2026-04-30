@@ -5,7 +5,6 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { CampusConfig } from "@/class/Campus";
-import CampusInitialize from "@/components/Guards/CampusInitializeGuard";
 import AppThemeProvider from "@/components/Providers/AppThemeProvider";
 import Sidebar from "@/components/sidebarAdmin";
 import { auth } from "@/lib/auth";
@@ -43,7 +42,6 @@ export default async function RootLayout({
   if (!session) {
     redirect("/signin");
   }
-  const campusName = await CampusConfig.getByKey("name");
   return (
     <html lang="ja">
       <body
@@ -52,7 +50,6 @@ export default async function RootLayout({
         <AppRouterCacheProvider>
           <AppThemeProvider isAdmin>
             <Sidebar user={session.user}>{children}</Sidebar>
-            <CampusInitialize open={!campusName} />
           </AppThemeProvider>
         </AppRouterCacheProvider>
       </body>

@@ -108,3 +108,4 @@ phpディレクトリ内のprod.phpをlolipop上にデプロイし、ファイ�
 | rentalDeadline                                          | 14             | Yes      | 返却期限(日)                 |
 | adminCanRental                                          | false          | Yes      | 管理者は貸し出し可能か       |
 | minLatitude / maxLatitude / minLongitude / maxLongitude | (undefined)    | Yes      | サインアップできる場所の指定 |
+| isNNN                                                   | true           | Yes      | N高グループか                |

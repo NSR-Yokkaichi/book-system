@@ -45,6 +45,8 @@ export default async function RootLayout({
     redirect("/signin");
   }
 
+  const isNNN = (await CampusConfig.getByKey("isNNN"))?.value === "true";
+
   return (
     <html lang="ja">
       <body
@@ -54,7 +56,10 @@ export default async function RootLayout({
           <AppThemeProvider>
             <StudentInitializeGuard
               uid={session.user.id}
-              open={!session.user.course || !session.user.expiresByGraduateAt}
+              open={
+                (!session.user.course || !session.user.expiresByGraduateAt) &&
+                isNNN
+              }
             />
             <Sidebar user={session.user}>{children}</Sidebar>
           </AppThemeProvider>

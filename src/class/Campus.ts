@@ -1,5 +1,13 @@
 import { dbClient } from "@/lib/db";
 
+// CampusConfigの型だけ定義（クラスではなくプレーンなオブジェクトの型として扱う）
+export interface CampusConfigPlain {
+  key: string;
+  value: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+}
+
 export class CampusConfig {
   key: string;
   value: string;
@@ -77,5 +85,14 @@ export class CampusConfig {
         key: this.key,
       },
     });
+  }
+
+  toPlain(): CampusConfigPlain {
+    return {
+      key: this.key,
+      value: this.value,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
   }
 }
