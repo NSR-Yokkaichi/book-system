@@ -1,8 +1,8 @@
 import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { dbClient } from "./lib/db";
 import { CampusConfig } from "./class/Campus";
+import { dbClient } from "./lib/db";
 
 /**
  * @summary Next.jsのミドルウェア機能を使用して、ユーザーのアクセスを制御するためのコード
