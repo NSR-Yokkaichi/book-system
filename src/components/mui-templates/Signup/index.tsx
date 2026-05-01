@@ -54,7 +54,10 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignUp(props: { disableCustomTheme?: boolean }) {
+export default function SignUp(props: {
+  disableCustomTheme?: boolean;
+  googleHD?: string;
+}) {
   const { enqueueSnackbar } = useSnackbar();
   return (
     <AppTheme {...props}>
@@ -119,9 +122,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
               }}
               startIcon={<GoogleIcon />}
             >
-              {process.env.NEXT_PUBLIC_GOOGLE_HD
-                ? process.env.NEXT_PUBLIC_GOOGLE_HD
-                : "Google"}
+              {props.googleHD ? props.googleHD : "Google"}
               でサインアップ
             </Button>
           </Box>

@@ -122,6 +122,16 @@ export default function CampusPageClient({
         label="N高グループモード"
       />
 
+      <TextField
+        name="authGoogleHD"
+        label="Googleアカウントのドメイン"
+        value={getCurrentValue("authGoogleHD")}
+        onChange={(e) => onChangeValue("authGoogleHD", e.target.value)}
+        helperText={
+          "このドメインのみサインアップ等ができるように強制できます。"
+        }
+      />
+
       <Divider />
 
       <Typography variant="h6">キャンパスの位置</Typography>

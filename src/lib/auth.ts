@@ -5,6 +5,7 @@ import {
   haveIBeenPwned,
   username,
 } from "better-auth/plugins";
+import { CampusConfig } from "@/class/Campus";
 import { phpCrudApiAdapter } from "./authDbPlugin";
 import { transporter } from "./email";
 import { admin, student } from "./permissions";
@@ -29,7 +30,9 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      hd: process.env.NEXT_PUBLIC_GOOGLE_HD,
+      hd: (await CampusConfig.getByKey("authGoogleHD"))?.value as
+        | string
+        | undefined,
       disableImplicitSignUp: true,
       disableSignUp: false,
       overrideUserInfoOnSignIn: true,

@@ -57,7 +57,10 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function SignIn(props: { disableCustomTheme?: boolean }) {
+export default function SignIn(props: {
+  disableCustomTheme?: boolean;
+  googleHD?: string;
+}) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
@@ -96,9 +99,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
               }}
               startIcon={<GoogleIcon />}
             >
-              {process.env.NEXT_PUBLIC_GOOGLE_HD
-                ? process.env.NEXT_PUBLIC_GOOGLE_HD
-                : "Google"}
+              {props.googleHD ? props.googleHD : "Google"}
               でログイン
             </Button>
           </Box>

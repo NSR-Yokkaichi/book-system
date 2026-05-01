@@ -14,5 +14,6 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-  return <SignIn />;
+  const googleHdConfig = (await CampusConfig.getByKey("authGoogleHD"))?.value;
+  return <SignIn googleHD={googleHdConfig} />;
 }
