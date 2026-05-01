@@ -32,10 +32,11 @@ async function RentalCard({ rental, now }: { rental: Rental; now: Date }) {
     <Card
       variant="outlined"
       sx={{
-        display: "flex",
-        flexDirection: { xs: "column", sm: "row" },
         gap: 2,
         p: 2,
+        display: "flex",
+        flexDirection: { xs: "column", sm: "row" },
+        maxWidth: "480px",
       }}
     >
       <Box
@@ -70,60 +71,57 @@ async function RentalCard({ rental, now }: { rental: Rental; now: Date }) {
           </Box>
         )}
       </Box>
-
-      <CardContent
-        sx={{
-          flex: 1,
-          p: "0 !important",
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-        }}
-      >
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="flex-start"
+      <div>
+        <CardContent
+          sx={{
+            flex: 1,
+            p: "0 !important",
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
         >
-          <Typography variant="h6">{book?.name ?? "(不明な書籍)"}</Typography>
-          <Chip
-            size="small"
-            label={isOverdue ? "延滞" : isReturning ? "返却処理中" : "貸出中"}
-            color={isOverdue ? "error" : isReturning ? "warning" : "info"}
-          />
-        </Box>
-
-        <Stack spacing={0.5}>
-          <Box display="flex" alignItems="center" gap={1}>
-            <Typography variant="body2" color="text.secondary">
-              貸出者:
-            </Typography>
-            <Avatar
-              src={student?.image || undefined}
-              sx={{ width: 24, height: 24 }}
+          <Box display="flex" alignItems="flex-start">
+            <Typography variant="h6">{book?.name ?? "(不明な書籍)"}</Typography>
+            <Chip
+              size="small"
+              label={isOverdue ? "延滞" : isReturning ? "返却処理中" : "貸出中"}
+              color={isOverdue ? "error" : isReturning ? "warning" : "info"}
             />
-            <Typography variant="body2">
-              {student?.displayUsername || student?.name || "不明"}
-              {student?.course && ` (${student.course})`}
-            </Typography>
           </Box>
 
-          <Typography
-            variant="body2"
-            color={isOverdue ? "error.main" : "text.secondary"}
-          >
-            返却期限: {rental.expiresAt.toLocaleDateString()}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            著者: {book?.author}
-          </Typography>
-          <Typography variant="caption" color="text.disabled">
-            ISBN: {book?.isbn} / シール: {book?.stickerId || "未登録"}
-          </Typography>
-        </Stack>
-      </CardContent>
+          <Stack spacing={0.5}>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Typography variant="body2" color="text.secondary">
+                貸出者:
+              </Typography>
+              <Avatar
+                src={student?.image || undefined}
+                sx={{ width: 24, height: 24 }}
+              />
+              <Typography variant="body2">
+                {student?.displayUsername || student?.name || "不明"}
+                {student?.course && ` (${student.course})`}
+              </Typography>
+            </Box>
 
-      <BorrowListCardActions id={rental.id} inProgressReturn={isReturning} />
+            <Typography
+              variant="body2"
+              color={isOverdue ? "error.main" : "text.secondary"}
+            >
+              返却期限: {rental.expiresAt.toLocaleDateString()}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              著者: {book?.author}
+            </Typography>
+            <Typography variant="caption" color="text.disabled">
+              ISBN: {book?.isbn} / シール: {book?.stickerId || "未登録"}
+            </Typography>
+          </Stack>
+        </CardContent>
+
+        <BorrowListCardActions id={rental.id} inProgressReturn={isReturning} />
+      </div>
     </Card>
   );
 }
