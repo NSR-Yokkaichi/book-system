@@ -56,7 +56,8 @@ export interface RakutenBookItem {
     booksGenreId: string;
   };
 }
-/*
+/* TODO: これを"use server";でexportしてはならない。
+async以外のobjectと判定されてエラーが発生する
  const RakutenBooksGenreIds = {
    "001004008": "日本の小説",
    "001004009": "外国の小説",
