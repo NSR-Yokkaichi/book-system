@@ -77,7 +77,6 @@ export default function QrCameraScanner({
   const [scanResult, setScanResult] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
   const lastSubmittedRef = useRef<string>("");
-  const [error, setError] = useState<string>("");
   const qrRef = useRef<Html5Qrcode | null>(null);
   const readerElementRef = useRef<HTMLDivElement | null>(null);
   const isStartingRef = useRef(false);
@@ -95,13 +94,14 @@ export default function QrCameraScanner({
     isStartingRef.current = true;
     const attemptId = ++startAttemptIdRef.current;
     setIsScannerReady(false);
-    setError("");
     setDebugMessage("");
 
     try {
       const readerElement = readerElementRef.current;
       if (!readerElement) {
-        setError("カメラ表示領域の初期化に失敗しました");
+        enqueueSnackbar("カメラ表示領域の初期化に失敗しました", {
+          variant: "error",
+        });
         setDebugMessage("reader element ref is null: qr-reader");
         return;
       }
@@ -168,11 +168,13 @@ export default function QrCameraScanner({
       setIsScannerReady(true);
     } catch (e) {
       if (isRetryableScannerStateError(e)) {
-        setError("カメラ初期化が競合したため再試行します...");
+        enqueueSnackbar("カメラ初期化が競合したため再試行します...", {
+          variant: "warning",
+        });
         setDebugMessage(e instanceof Error ? e.message : String(e));
         shouldRetry = true;
       } else {
-        setError(getCameraErrorMessage(e));
+        enqueueSnackbar(getCameraErrorMessage(e), { variant: "error" });
         setDebugMessage(e instanceof Error ? e.message : String(e));
       }
 
@@ -202,7 +204,7 @@ export default function QrCameraScanner({
         }, 250);
       }
     }
-  }, []);
+  }, [enqueueSnackbar]);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -256,12 +258,16 @@ export default function QrCameraScanner({
     lastSubmittedRef.current = scanResult;
     if (scanResult && mode === "borrow") {
       void borrowAction(scanResult).catch((e) => {
-        setError(e.message || "貸し出し処理に失敗しました");
+        enqueueSnackbar(e.message || "貸し出し処理に失敗しました", {
+          variant: "error",
+        });
         setSubmitting(false);
       });
     } else if (scanResult && mode === "return") {
       void returnAction(scanResult).catch((e) => {
-        setError(e.message || "返却処理に失敗しました");
+        enqueueSnackbar(e.message || "返却処理に失敗しました", {
+          variant: "error",
+        });
         setSubmitting(false);
       });
     } else if (scanResult && mode === "register") {
@@ -324,7 +330,6 @@ export default function QrCameraScanner({
       <div className="sparkles"></div>
 
       <div className="qr-content">
-        {error && <p className="error-message">{error}</p>}
         {debugMessage && (
           <p className="error-message" style={{ fontSize: "12px" }}>
             {debugMessage}
