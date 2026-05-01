@@ -9,6 +9,12 @@ const RAKUTEN_BOOK_API_BASE =
 const RAKUTEN_APP_ID = process.env.RAKUTEN_APP_ID;
 const RAKUTEN_APP_KEY = process.env.RAKUTEN_APP_KEY;
 
+/**
+ * @summary RakutenBooks APIから返ってくるデータの型
+ * @interface RakutenBookInfo
+ * @see https://webservice.rakuten.co.jp/documentation/books-total-search
+ * @author yuito-it<yuito@yuito-it.jp>
+ */
 export interface RakutenBookInfo {
   count: number;
   page: number;
@@ -21,6 +27,12 @@ export interface RakutenBookInfo {
   GenreInformation: [];
 }
 
+/**
+ * @summary RakutenBooks APIから返ってくるデータの型
+ * @interface RakutenBookItem
+ * @see https://webservice.rakuten.co.jp/documentation/books-total-search
+ * @author yuito-it<yuito@yuito-it.jp>
+ */
 export interface RakutenBookItem {
   Item: {
     title: string;
@@ -119,7 +131,13 @@ async以外のobjectと判定されてエラーが発生する
    "001010015": "その他",
  };
 */
-export interface ComvertedBookInfo {
+
+/**
+ * @summary RakutenBooks APIから返ってくるデータを加工した型
+ * @interface ConvertedBookInfo
+ * @author yuito-it<yuito@yuito-it.jp>
+ */
+export interface ConvertedBookInfo {
   title: string;
   author: string;
   publisherName: string;
@@ -135,14 +153,17 @@ export interface ComvertedBookInfo {
 }
 
 /**
+ * @summary Rakuten Books APIからISBNもしくはJANで書籍データを取得する関数
+ * @async
  * @function getBookInfoFromISBNorJAN
  * @returns 書籍情報
  * @param isbnjan ISBNもしくはJANコード
+ * @see https://webservice.rakuten.co.jp/documentation/books-total-search
  * @author yuito-it<yuito@yuito-it.jp>
  */
 export const getBookInfoFromISBNorJAN = async (
   isbnjan: string,
-): Promise<ComvertedBookInfo> => {
+): Promise<ConvertedBookInfo> => {
   if (
     ISBN.audit(isbnjan).validIsbn === false &&
     validateBookOrMagazineJanCode(isbnjan) === false
@@ -165,7 +186,7 @@ export const getBookInfoFromISBNorJAN = async (
   if (data.Items.length === 0) {
     throw new Error("Book not found", { cause: "NOT_FOUND" });
   }
-  const res: ComvertedBookInfo = {
+  const res: ConvertedBookInfo = {
     title: `${data.Items[0].Item.title} ${data.Items[0].Item.subTitle}`.trim(),
     author: data.Items[0].Item.author,
     publisherName: data.Items[0].Item.publisherName,

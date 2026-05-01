@@ -1,4 +1,5 @@
 /**
+ * @summary 正しい書籍もしくは定期刊行物JANコードかをチェックする
  * @function validateBookOrMagazineJanCode
  * @returns 正しい書籍もしくは定期刊行物JANコードか
  * @param barcode バーコードの文字列

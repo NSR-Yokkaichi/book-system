@@ -1,4 +1,6 @@
+import { headers } from "next/headers";
 import { ulid } from "ulid";
+import { auth } from "@/lib/auth";
 import { validateBookOrMagazineJanCode } from "@/lib/barcode";
 import { dbClient } from "@/lib/db";
 import { CampusConfig } from "./Campus";
@@ -20,8 +22,11 @@ export class Book {
   updatedAt: Date;
 
   /**
-   * 本のステータスを確認する
+   * @summary 本のステータスを確認する
+   * @function getStatus
+   * @async
    * @returns 本のステータス
+   * @author yuito-it<yuito@yuito-it.jp>
    */
   async getStatus(): Promise<BookStatus> {
     const rental = await dbClient.rental.findFirst({
@@ -51,9 +56,12 @@ export class Book {
   }
 
   /**
-   * 本を登録する
+   * @summary 本を登録する
+   * @function create
+   * @async
    * @param data 作成する本のデータ
    * @returns 作成された本のインスタンス
+   * @author yuito-it<yuito@yuito-it.jp>
    */
   static async create(data: {
     name: string;
@@ -84,8 +92,11 @@ export class Book {
   }
 
   /**
-   * クラス(インスタンス)の内容をデータベースに上書きする
+   * @summary クラス(インスタンス)の内容をデータベースに上書きする
+   * @function save
+   * @async
    * @returns 更新後のBookインスタンス
+   * @author yuito-it<yuito@yuito-it.jp>
    */
   async save(): Promise<Book> {
     const updated = await dbClient.book.update({
@@ -113,8 +124,11 @@ export class Book {
   }
 
   /**
-   * 本の登録を削除する
+   * @summary 本の登録を削除する
+   * @function delete
+   * @async
    * @returns 削除された本の情報
+   * @author yuito-it<yuito@yuito-it.jp>
    */
   async delete(): Promise<Book> {
     await dbClient.book.delete({ where: { id: this.id } });
@@ -122,9 +136,12 @@ export class Book {
   }
 
   /**
-   * 本を貸し出す
+   * @summary 本を貸し出す
+   * @function rent
+   * @async
    * @param userId 借りる人(学生のID)
    * @returns 貸出情報
+   * @author yuito-it<yuito@yuito-it.jp>
    */
   async rent(userId: string): Promise<Rental> {
     const campusName = await CampusConfig.getByKey("name");
@@ -168,23 +185,38 @@ export class Book {
   }
 
   /**
-   * 本を返却する
+   * @summary 本の返却申請もしくは強制返却を行う
+   * @function return
+   * @async
+   * @param [force=false] 強制的に返却するか
+   * @author yuito-it<yuito@yuito-it.jp>
    */
-  async return() {
+  async return(force: boolean = false) {
     const rentalList = await Rental.getByBookId(this.id);
     const rental = rentalList.find(
-      (rental) => rental.returnedAt === null || rental.returnedAt === undefined,
+      (rental) =>
+        rental.returnedAt === null || rental.returnedAt === undefined || force,
     );
     if (!rental) {
       throw new Error("This book is not currently rented");
     }
-    await rental.applyReturn();
+    if (!force) await rental.applyReturn();
+    else {
+      const session = await auth.api.getSession({ headers: await headers() });
+      const user = session?.user;
+      if (user?.role === "admin") rental.delete();
+      else throw new Error("Only admin can force return");
+    }
   }
 
   /**
-   * IDを指定して本の情報を取得する
+   * @summary IDを指定して本の情報を取得する
+   * @function getById
+   * @async
+   * @static
    * @param id 本のid
    * @returns 本の情報
+   * @author yuito-it<yuito@yuito-it.jp>
    */
   static async getById(id: string): Promise<Book | null> {
     const found = await dbClient.book.findUnique({ where: { id } });
@@ -192,8 +224,12 @@ export class Book {
   }
 
   /**
-   * 本の一覧を取得する
+   * @summary 本の一覧を取得する
+   * @async
+   * @static
+   * @function getAll
    * @returns 本の情報の配列
+   * @author yuito-it<yuito@yuito-it.jp>
    */
   static async getAll(): Promise<Book[]> {
     const books = await dbClient.book.findMany();
@@ -201,9 +237,13 @@ export class Book {
   }
 
   /**
-   * ISBNコードを指定して本の情報を取得する
+   * @summary ISBNコードを指定して本の情報を取得する
+   * @function getByISBNorJAN
+   * @async
+   * @static
    * @param isbnjan ISBNコード
    * @returns 本の情報の配列
+   * @author yuito-it<yuito@yuito-it.jp>
    */
   static async getByISBNorJAN(isbnjan: string): Promise<Book[]> {
     const isJAN = validateBookOrMagazineJanCode(isbnjan);
@@ -217,9 +257,13 @@ export class Book {
   }
 
   /**
-   * シールに紐つく本の情報を取得する
+   * @summary シールに紐つく本の情報を取得する
+   * @function getByStickerId
+   * @async
+   * @static
    * @param stickerId シールの番号
    * @returns 本の情報もしくはnull
+   * @author yuito-it<yuito@yuito-it.jp>
    */
   static async getByStickerId(stickerId: string): Promise<Book | null> {
     const found = await dbClient.book.findFirst({ where: { stickerId } });
@@ -227,9 +271,13 @@ export class Book {
   }
 
   /**
-   * 本を検索する
+   * @summary 本を検索する
+   * @function search
+   * @async
+   * @static
    * @param query 検索データ(詳細検索もしくは簡易検索)
    * @returns 検索結果の本の配列
+   * @author yuito-it<yuito@yuito-it.jp>
    */
   static async search(
     query:

@@ -8,6 +8,12 @@ export interface CampusConfigPlain {
   updatedAt?: Date | string;
 }
 
+/**
+ * @summary キャンパスの各種情報や設定を司るクラス
+ * @description key-value形式で保存されている。詳しくはReadmeを参照
+ * @class
+ * @author yuito-it<yuito@yuito-it.jp>
+ */
 export class CampusConfig {
   key: string;
   value: string;

@@ -13,6 +13,14 @@ webpush.setVapidDetails(
   process.env.VAPID_PRIVATE_KEY!,
 );
 
+/**
+ * @summary 通知を受け取る端末を追加する
+ * @async
+ * @function subscribeUser
+ * @param sub ブラウザから出てくるPushSubscriptionJSON
+ * @returns 成功可否
+ * @author yuito-it<yuito@yuito-it.jp>
+ */
 export async function subscribeUser(sub: PushSubscriptionJSON) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) unauthorized();
@@ -48,6 +56,14 @@ export async function subscribeUser(sub: PushSubscriptionJSON) {
   return { success: true };
 }
 
+/**
+ * @summary 通知の購読を解除する
+ * @param endpoint VAPエンドポイント
+ * @returns 成功可否
+ * @function unsubscribeUser
+ * @async
+ * @author yuito-it<yuito@yuito-it.jp>
+ */
 export async function unsubscribeUser(endpoint: string) {
   await dbClient.pushSubscription.delete({
     where: { endpoint },
@@ -56,6 +72,14 @@ export async function unsubscribeUser(endpoint: string) {
   return { success: true };
 }
 
+/**
+ * @summary 通知を全員に対して送信する
+ * @param message メッセージ
+ * @returns 成功可否
+ * @function sendEveryone
+ * @async
+ * @author yuito-it<yuito@yuito-it.jp>
+ */
 export async function sendEveryone(message: string) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) unauthorized();
@@ -96,6 +120,15 @@ export async function sendEveryone(message: string) {
   return { success: true };
 }
 
+/**
+ * @summary 一人のユーザーに通知を送る
+ * @param userId 送信先のユーザーID
+ * @param title タイトル
+ * @param message メッセージ
+ * @async
+ * @function sendToUser
+ * @author yuito-it<yuito@yuito-it.jp>
+ */
 export async function sendToUser(
   userId: string,
   title: string,
