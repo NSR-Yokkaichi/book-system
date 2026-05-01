@@ -7,9 +7,9 @@ import { CircularProgress, Stack } from "@mui/material";
 import ISBN from "isbn3";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
+import { validateBookOrMagazineJanCode } from "@/lib/barcode";
 import { getBookInfoFromISBNorJAN } from "@/lib/rakutenAPI";
 import { borrowAction, returnAction } from "./action";
-import { validateBookOrMagazineJanCode } from "@/lib/barcode";
 
 function getCameraErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : String(error ?? "");

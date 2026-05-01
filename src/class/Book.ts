@@ -1,9 +1,9 @@
 import { ulid } from "ulid";
+import { validateBookOrMagazineJanCode } from "@/lib/barcode";
 import { dbClient } from "@/lib/db";
 import { CampusConfig } from "./Campus";
 import { Rental } from "./Rental";
 import { BookStatus } from "./types/Book";
-import { validateBookOrMagazineJanCode } from "@/lib/barcode";
 
 export class Book {
   id: string;

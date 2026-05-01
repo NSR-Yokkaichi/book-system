@@ -1,7 +1,7 @@
 import { ulid } from "ulid";
+import { validateBookOrMagazineJanCode } from "@/lib/barcode";
 import { dbClient } from "@/lib/db";
 import { Book } from "./Book";
-import { validateBookOrMagazineJanCode } from "@/lib/barcode";
 
 export class Rental {
   id: string;
