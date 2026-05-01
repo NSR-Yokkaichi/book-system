@@ -3,32 +3,35 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ClassIcon from "@mui/icons-material/Class";
+import CorporateFareIcon from "@mui/icons-material/CorporateFare";
 import HomeIcon from "@mui/icons-material/Home";
 import Logout from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import Settings from "@mui/icons-material/Settings";
-import { Typography } from "@mui/material";
+// アカウントメニュー用の追加インポート
+import {
+  Avatar,
+  Box,
+  CssBaseline,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import MuiAppBar, {
   type AppBarProps as MuiAppBarProps,
 } from "@mui/material/AppBar";
-// アカウントメニュー用の追加インポート
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import { styled, useTheme } from "@mui/material/styles";
-import Toolbar from "@mui/material/Toolbar";
-import Tooltip from "@mui/material/Tooltip";
 import type { User } from "better-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -295,6 +298,14 @@ export default function Sidebar({ children, user }: Props) {
                 <PersonIcon />
               </ListItemIcon>
               <ListItemText primary={"ユーザー管理"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem key={"campus"} disablePadding>
+            <ListItemButton href="/admin/campus">
+              <ListItemIcon>
+                <CorporateFareIcon />
+              </ListItemIcon>
+              <ListItemText primary={"施設設定"} />
             </ListItemButton>
           </ListItem>
           {/*
