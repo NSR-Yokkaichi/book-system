@@ -1,0 +1,41 @@
+name: book-system
+services:
+  db:
+    image: mariadb:lts
+    environment:
+      MARIADB_ROOT_PASSWORD: YourPassword
+      MARIADB_DATABASE: book_system
+    volumes:
+      - db-volume:/var/lib/mysql
+  php_crud_api:
+    image: mevdschee/php-crud-api:latest
+    environment:
+      PHP_CRUD_API_DRIVER: mysql
+      PHP_CRUD_API_ADDRESS: db
+      PHP_CRUD_API_PORT: 3306
+      PHP_CRUD_API_DATABASE: book_system
+      PHP_CRUD_API_USERNAME: root
+      PHP_CRUD_API_PASSWORD: YourPassword
+    ports:
+      - 8080:80
+  phpmyadmin:
+    image: phpmyadmin:latest
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: YourPassword
+    ports:
+      - "3001:80"
+  app:
+    build:
+      context: .
+    env_file: ./.env
+    ports:
+      - 3000:3000
+volumes:
+  db-volume:
+
+networks:
+  booksystem:
+    driver: bridge

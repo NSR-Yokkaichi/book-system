@@ -43,3 +43,6 @@ next-env.d.ts
 /src/generated/prisma
 
 certificates
+
+# deploy
+docker-compose.yaml
