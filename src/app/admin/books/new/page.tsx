@@ -1,17 +1,10 @@
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  FormHelperText,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import type { Metadata } from "next";
 import { CampusConfig } from "@/class/Campus";
 import QrCameraScanner from "@/components/QRreader";
-import { regist } from "./action";
 import NewBookClient from "./Client";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const campusName = await CampusConfig.getByKey("name");

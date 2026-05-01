@@ -5,6 +5,8 @@ import { CampusConfig } from "@/class/Campus";
 import { auth } from "@/lib/auth";
 import SettingsPageClient from "./Client";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata() {
   const campusName = await CampusConfig.getByKey("name");
   const metadata: Metadata = {

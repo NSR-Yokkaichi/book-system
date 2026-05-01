@@ -4,6 +4,8 @@ import { CampusConfig } from "@/class/Campus";
 import { Rental } from "@/class/Rental";
 import BorrowList from "@/components/Lists/BorrowList";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata() {
   const campusName = await CampusConfig.getByKey("name");
   const metadata: Metadata = {

@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { CampusConfig } from "@/class/Campus";
 import QrCameraScanner from "@/components/QRreader";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata() {
   const campusName = await CampusConfig.getByKey("name");
   const metadata: Metadata = {
