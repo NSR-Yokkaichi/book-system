@@ -79,13 +79,11 @@ export class Rental {
     isbnjan: string,
   ): Promise<Rental | null> {
     const isJAN = validateBookOrMagazineJanCode(isbnjan);
-    const rental = await dbClient.rental.findFirst({
+    const rental = await dbClient.vRentalBookFull.findFirst({
       where: {
         userId,
-        book: {
-          isbn: isJAN ? undefined : isbnjan,
-          jan: isJAN ? isbnjan : undefined,
-        },
+        isbn: isJAN ? undefined : isbnjan,
+        jan: isJAN ? isbnjan : undefined,
       },
     });
     if (!rental) {

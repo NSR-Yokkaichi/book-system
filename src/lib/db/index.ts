@@ -265,6 +265,7 @@ class CrudClient {
   campus_config = new ModelDelegate("campus_config", this.fetchOptions);
   passkey = new ModelDelegate("passkey", this.fetchOptions);
   pushSubscription = new ModelDelegate("push_subscription", this.fetchOptions);
+  vRentalBookFull = new ModelDelegate("v_rental_book_full", this.fetchOptions);
 
   // スキーマにないテーブルにアクセスしたくなった時用
   model(tableName: string) {
