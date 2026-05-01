@@ -257,19 +257,27 @@ export default function QrCameraScanner({
     }
     lastSubmittedRef.current = scanResult;
     if (scanResult && mode === "borrow") {
-      void borrowAction(scanResult).catch((e) => {
-        enqueueSnackbar(e.message || "貸し出し処理に失敗しました", {
-          variant: "error",
+      void borrowAction(scanResult)
+        .then(() => {
+          router.push(`/borrow/${scanResult}`);
+        })
+        .catch((e) => {
+          enqueueSnackbar(e.message || "貸し出し処理に失敗しました", {
+            variant: "error",
+          });
+          setSubmitting(false);
         });
-        setSubmitting(false);
-      });
     } else if (scanResult && mode === "return") {
-      void returnAction(scanResult).catch((e) => {
-        enqueueSnackbar(e.message || "返却処理に失敗しました", {
-          variant: "error",
+      void returnAction(scanResult)
+        .then(() => {
+          router.push(`/return/${scanResult}`);
+        })
+        .catch((e) => {
+          enqueueSnackbar(e.message || "返却処理に失敗しました", {
+            variant: "error",
+          });
+          setSubmitting(false);
         });
-        setSubmitting(false);
-      });
     } else if (scanResult && mode === "register") {
       void getBookInfoFromISBNorJAN(scanResult)
         .then((bookInfo) => {

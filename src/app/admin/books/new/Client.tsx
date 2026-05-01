@@ -183,7 +183,7 @@ export default function NewBookClient({
       </Button>
       <Dialog open={warning !== null} onClose={() => setWarning(null)}>
         <DialogContent>
-          <Alert variant={"filled"} severity={warning!.severity}>
+          <Alert variant={"filled"} severity={warning?.severity || "info"}>
             {warning?.message}
           </Alert>
         </DialogContent>

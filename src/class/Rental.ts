@@ -90,7 +90,7 @@ export class Rental {
       return null;
     }
     return new Rental(
-      rental.id,
+      rental.rental_id,
       rental.userId,
       rental.bookId,
       new Date(rental.expiresAt),

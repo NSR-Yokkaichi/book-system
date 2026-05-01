@@ -45,7 +45,7 @@ export const regist = async (formData: FormData) => {
 
   // 登録
   await Book.create({
-    name: getRequired("name", formData),
+    name: getRequired("title", formData),
     isbn: getOptional("isbn", formData),
     jan: getOptional("jan", formData),
     author: getOptional("author", formData),
@@ -83,7 +83,7 @@ export const isNeedWarn = async (
       };
   } else if (!stickerId) {
     const existingBook = await Book.getByISBNorJAN((isbn || jan)!);
-    if (existingBook)
+    if (existingBook.length > 0)
       return {
         message:
           "すでに同じ本が登録されています。ステッカーIDを入力し区別することを強く推奨します。\nそれでも登録しますか？",
