@@ -4,7 +4,7 @@
 ALTER TABLE `book` CHANGE `isbn` `isbn` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
 ALTER TABLE `book`
 ADD `publishedAt` DATE NULL DEFAULT NULL
-AFTER `publisher` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+AFTER `publisher`;
 ALTER TABLE `book`
 ADD INDEX `author_idx` (`author`);
 ALTER TABLE `book`
