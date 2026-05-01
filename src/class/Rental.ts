@@ -46,10 +46,10 @@ export class Rental {
       created.id,
       created.userId,
       created.bookId,
-      created.expiresAt,
-      created.returnedAt,
-      created.createdAt,
-      created.updatedAt,
+      new Date(created.expiresAt),
+      created.returnedAt ? new Date(created.returnedAt) : null,
+      new Date(created.createdAt),
+      new Date(created.updatedAt),
     );
   }
 
@@ -66,10 +66,10 @@ export class Rental {
       rental.id,
       rental.userId,
       rental.bookId,
-      rental.expiresAt,
-      rental.returnedAt,
-      rental.createdAt,
-      rental.updatedAt,
+      new Date(rental.expiresAt),
+      rental.returnedAt ? new Date(rental.returnedAt) : null,
+      new Date(rental.createdAt),
+      new Date(rental.updatedAt),
     );
   }
 
@@ -92,10 +92,10 @@ export class Rental {
       rental.id,
       rental.userId,
       rental.bookId,
-      rental.expiresAt,
-      rental.returnedAt,
-      rental.createdAt,
-      rental.updatedAt,
+      new Date(rental.expiresAt),
+      rental.returnedAt ? new Date(rental.returnedAt) : null,
+      new Date(rental.createdAt),
+      new Date(rental.updatedAt),
     );
   }
 
@@ -109,10 +109,10 @@ export class Rental {
           rental.id,
           rental.userId,
           rental.bookId,
-          rental.expiresAt,
-          rental.returnedAt,
-          rental.createdAt,
-          rental.updatedAt,
+          new Date(rental.expiresAt),
+          rental.returnedAt ? new Date(rental.returnedAt) : null,
+          new Date(rental.createdAt),
+          new Date(rental.updatedAt),
         ),
     );
   }
@@ -127,10 +127,10 @@ export class Rental {
           rental.id,
           rental.userId,
           rental.bookId,
-          rental.expiresAt,
-          rental.returnedAt,
-          rental.createdAt,
-          rental.updatedAt,
+          new Date(rental.expiresAt),
+          rental.returnedAt ? new Date(rental.returnedAt) : null,
+          new Date(rental.createdAt),
+          new Date(rental.updatedAt),
         ),
     );
   }
@@ -143,10 +143,10 @@ export class Rental {
           rental.id,
           rental.userId,
           rental.bookId,
-          rental.expiresAt,
-          rental.returnedAt,
-          rental.createdAt,
-          rental.updatedAt,
+          new Date(rental.expiresAt),
+          rental.returnedAt ? new Date(rental.returnedAt) : null,
+          new Date(rental.createdAt),
+          new Date(rental.updatedAt),
         ),
     );
   }
@@ -161,7 +161,7 @@ export class Rental {
     return new Book(book);
   }
 
-  async getStudent() {
+  async getUser() {
     const student = await dbClient.user.findUnique({
       where: { id: this.userId },
     });

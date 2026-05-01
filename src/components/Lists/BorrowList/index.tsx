@@ -20,7 +20,7 @@ async function RentalCard({ rental, now }: { rental: Rental; now: Date }) {
   // ここで非同期データを解決
   const [book, student] = await Promise.all([
     rental.getBook(),
-    rental.getStudent(),
+    rental.getUser(),
   ]);
 
   const isOverdue = !rental.returnedAt && rental.expiresAt < now;
