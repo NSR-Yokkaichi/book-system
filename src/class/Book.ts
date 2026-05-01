@@ -3,13 +3,16 @@ import { dbClient } from "@/lib/db";
 import { CampusConfig } from "./Campus";
 import { Rental } from "./Rental";
 import { BookStatus } from "./types/Book";
+import { validateBookOrMagazineJanCode } from "@/lib/barcode";
 
 export class Book {
   id: string;
   name: string;
-  isbn: string;
+  isbn?: string;
+  jan?: string;
   author?: string | null;
   publisher?: string | null;
+  publishedAt?: Date;
   stickerId?: string | null;
   rakutenLinked?: boolean | null;
   imageUrl?: string | null;
@@ -35,9 +38,11 @@ export class Book {
   ) {
     this.id = data.id;
     this.name = data.name;
-    this.isbn = data.isbn;
+    this.isbn = data.isbn || undefined;
+    this.jan = data.jan || undefined;
     this.author = data.author || undefined;
     this.publisher = data.publisher || undefined;
+    this.publishedAt = data.publishedAt || undefined;
     this.stickerId = data.stickerId || undefined;
     this.rakutenLinked = data.rakutenLinked || false;
     this.imageUrl = data.imageUrl || undefined;
@@ -52,9 +57,11 @@ export class Book {
    */
   static async create(data: {
     name: string;
-    isbn: string;
+    isbn?: string;
+    jan?: string;
     author?: string;
     publisher?: string;
+    publishedAt?: Date;
     stickerId?: string;
     rakutenLinked?: boolean;
     imageUrl?: string;
@@ -64,8 +71,10 @@ export class Book {
         id: ulid(),
         name: data.name,
         isbn: data.isbn,
+        jan: data.jan,
         author: data.author,
         publisher: data.publisher,
+        publishedAt: data.publishedAt,
         stickerId: data.stickerId,
         rakutenLinked: data.rakutenLinked,
         imageUrl: data.imageUrl,
@@ -84,15 +93,22 @@ export class Book {
       data: {
         name: this.name,
         isbn: this.isbn,
+        jan: this.jan,
         author: this.author,
         publisher: this.publisher,
+        publishedAt: this.publishedAt,
         stickerId: this.stickerId,
         rakutenLinked: this.rakutenLinked,
         imageUrl: this.imageUrl,
       },
     });
     // プロパティを最新化
-    Object.assign(this, updated);
+    Object.assign(this, {
+      ...updated,
+      publshedAt: new Date(updated.publishedAt),
+      createdAt: new Date(updated.createdAt),
+      updatedAt: new Date(updated.updatedAt),
+    });
     return this;
   }
 
@@ -186,11 +202,17 @@ export class Book {
 
   /**
    * ISBNコードを指定して本の情報を取得する
-   * @param isbn ISBNコード
+   * @param isbnjan ISBNコード
    * @returns 本の情報の配列
    */
-  static async getByISBN(isbn: string): Promise<Book[]> {
-    const books = await dbClient.book.findMany({ where: { isbn } });
+  static async getByISBNorJAN(isbnjan: string): Promise<Book[]> {
+    const isJAN = validateBookOrMagazineJanCode(isbnjan);
+    const books = await dbClient.book.findMany({
+      where: {
+        isbn: isJAN ? undefined : isbnjan,
+        jan: isJAN ? isbnjan : undefined,
+      },
+    });
     return books.map((b) => new Book(b));
   }
 
@@ -214,6 +236,7 @@ export class Book {
       | {
           name?: string;
           isbn?: string;
+          jan?: string;
           author?: string;
           publisher?: string;
         }
@@ -225,6 +248,7 @@ export class Book {
         OR: [
           { name: { contains: query, mode: "insensitive" } },
           { isbn: { contains: query, mode: "insensitive" } },
+          { jan: { contains: query, mode: "insensitive" } },
           { author: { contains: query, mode: "insensitive" } },
           { publisher: { contains: query, mode: "insensitive" } },
         ],

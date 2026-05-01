@@ -1,6 +1,7 @@
 import { ulid } from "ulid";
 import { dbClient } from "@/lib/db";
 import { Book } from "./Book";
+import { validateBookOrMagazineJanCode } from "@/lib/barcode";
 
 export class Rental {
   id: string;
@@ -73,15 +74,17 @@ export class Rental {
     );
   }
 
-  static async getByUserAndISBN(
+  static async getByUserAndISBNorJAN(
     userId: string,
-    isbn: string,
+    isbnjan: string,
   ): Promise<Rental | null> {
+    const isJAN = validateBookOrMagazineJanCode(isbnjan);
     const rental = await dbClient.rental.findFirst({
       where: {
         userId,
         book: {
-          isbn,
+          isbn: isJAN ? undefined : isbnjan,
+          jan: isJAN ? isbnjan : undefined,
         },
       },
     });

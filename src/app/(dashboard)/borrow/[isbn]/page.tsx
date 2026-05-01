@@ -31,7 +31,7 @@ export default async function BorrowISBNPage({
 }) {
   const { isbn } = await params;
 
-  const books = await Book.getByISBN(isbn);
+  const books = await Book.getByISBNorJAN(isbn);
   if (books.length === 0) {
     notFound();
   }
@@ -108,6 +108,9 @@ export default async function BorrowISBNPage({
             </Typography>
             <Typography variant="body1" component="p">
               ISBN: {books[0].isbn}
+            </Typography>
+            <Typography variant="body1" component="p">
+              書籍・定期刊行物JAN: {books[0].jan}
             </Typography>
             <Typography variant="body1" component="p">
               シール番号: {books[0].stickerId ?? "未登録"}

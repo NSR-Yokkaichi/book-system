@@ -1,8 +1,13 @@
 "use client";
 
 import {
+  Alert,
+  type AlertColor,
   Button,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
   FormControlLabel,
   FormHelperText,
   Stack,
@@ -10,23 +15,62 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { regist } from "./action";
+import { isNeedWarn, regist } from "./action";
 
 export default function NewBookClient({
-  title,
-  isbn,
-  author,
-  publisher,
-  rakutenLinked,
+  title: initialTitle = "",
+  isbn: initialIsbn = "",
+  jan: initialJan = "",
+  author: initialAuthor = "",
+  publisher: initialPublisher = "",
+  publishedAt,
+  rakutenLinked: initialRakutenLinked,
 }: {
   title?: string;
   isbn?: string;
+  jan?: string;
   author?: string;
   publisher?: string;
+  publishedAt?: Date;
   rakutenLinked?: string;
 }) {
   const [inProgress, setInProgress] = useState(false);
+  const [resolvedWarning, setResolvedWarning] = useState(false);
+  const [warning, setWarning] = useState<{
+    message: string;
+    severity: AlertColor;
+  } | null>(null);
   const router = useRouter();
+
+  // --- 入力状態を管理 ---
+  const [values, setValues] = useState({
+    title: initialTitle,
+    isbn: initialIsbn,
+    jan: initialJan,
+    author: initialAuthor,
+    publisher: initialPublisher,
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // --- 動的にURLを生成する関数 ---
+  const getAutoFillUrl = (autoType: number) => {
+    const params = new URLSearchParams();
+    params.append("auto", autoType.toString());
+
+    // 現在の状態（values）からパラメータを構築
+    if (values.title) params.append("title", values.title);
+    if (values.isbn) params.append("isbn", values.isbn);
+    if (values.jan) params.append("jan", values.jan);
+    if (values.author) params.append("author", values.author);
+    if (values.publisher) params.append("publisher", values.publisher);
+
+    return `/admin/books/new?${params.toString()}`;
+  };
+
   return (
     <Stack
       component="form"
@@ -35,44 +79,93 @@ export default function NewBookClient({
       maxWidth="400px"
       action={async (formdata: FormData) => {
         setInProgress(true);
+        if (!resolvedWarning) {
+          const warning = await isNeedWarn(formdata);
+          if (warning) {
+            setWarning(warning);
+            setInProgress(false);
+            return;
+          }
+        }
         await regist(formdata);
         setInProgress(false);
         router.push("/admin/books");
       }}
     >
+      <Button variant="outlined" href={getAutoFillUrl(2)}>
+        ISBN/書籍・定期刊行物JANバーコードで自動入力
+      </Button>
+
       <TextField
         label="本の名前"
-        name="name"
+        name="title" // name属性をstateのキーと合わせる
         required
         fullWidth
-        defaultValue={title}
+        value={values.title}
+        onChange={handleChange}
       />
+
       <TextField
         label="ISBN"
         name="isbn"
-        required
         fullWidth
-        defaultValue={isbn}
+        value={values.isbn}
+        onChange={handleChange}
       />
-      <Button
-        variant="outlined"
-        href={`/admin/books/new?auto=1${isbn ? `&isbn=${isbn}` : ""}`}
-      >
-        ISBNバーコードで登録
+
+      <Button variant="outlined" href={getAutoFillUrl(3)}>
+        ISBNバーコードを読み取り
       </Button>
-      <TextField label="著者" name="author" fullWidth defaultValue={author} />
+
+      <TextField
+        label="書籍・定期刊行物 JAN"
+        name="jan"
+        fullWidth
+        value={values.jan}
+        onChange={handleChange}
+      />
+
+      <Button variant="outlined" href={getAutoFillUrl(1)}>
+        書籍・定期刊行バーコードを読み取り
+      </Button>
+
+      <TextField
+        label="著者"
+        name="author"
+        fullWidth
+        value={values.author}
+        onChange={handleChange}
+      />
+
       <TextField
         label="出版社"
         name="publisher"
         fullWidth
-        defaultValue={publisher}
+        value={values.publisher}
+        onChange={handleChange}
       />
-      <TextField label="ステッカーID" name="stickerId" fullWidth />
+
+      {/* 以下、残りのフィールド... */}
+      <TextField
+        label="出版年月日"
+        name="publishedAt"
+        fullWidth
+        defaultValue={publishedAt}
+        type={"date"}
+      />
+      <TextField
+        label="ステッカーID"
+        name="stickerId"
+        fullWidth
+        helperText={"本に対する一意の番号です"}
+      />
       <FormControlLabel
         control={
           <Checkbox
             name="rakutenLinked"
-            defaultChecked={["1", "true", "on"].includes(rakutenLinked ?? "")}
+            defaultChecked={["1", "true", "on"].includes(
+              initialRakutenLinked ?? "",
+            )}
           />
         }
         label="楽天ブックスに登録されています"
@@ -81,13 +174,26 @@ export default function NewBookClient({
         楽天ブックスに登録されている本の場合、チェックボックスをオンにすると書影が登録できます。
       </FormHelperText>
       <Button
-        type="submit"
-        variant="contained"
+        type={"submit"}
+        variant={"contained"}
         color="primary"
         disabled={inProgress}
       >
         登録
       </Button>
+      <Dialog open={warning !== null} onClose={() => setWarning(null)}>
+        <DialogContent>
+          <Alert variant={"filled"} severity={warning!.severity}>
+            {warning?.message}
+          </Alert>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setWarning(null)}>キャンセル</Button>
+          <Button onClick={() => setResolvedWarning(true)} type={"submit"}>
+            登録する
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Stack>
   );
 }

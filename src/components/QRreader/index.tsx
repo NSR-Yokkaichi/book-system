@@ -7,8 +7,9 @@ import { CircularProgress, Stack } from "@mui/material";
 import ISBN from "isbn3";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
-import { getBookInfoFromISBN } from "@/lib/rakutenAPI";
+import { getBookInfoFromISBNorJAN } from "@/lib/rakutenAPI";
 import { borrowAction, returnAction } from "./action";
+import { validateBookOrMagazineJanCode } from "@/lib/barcode";
 
 function getCameraErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : String(error ?? "");
@@ -68,8 +69,10 @@ async function safeStopAndClearScanner(scanner: Html5Qrcode) {
 
 export default function QrCameraScanner({
   mode,
+  searchParams,
 }: {
-  mode: "borrow" | "return" | "register";
+  mode: "borrow" | "return" | "register" | "registJAN" | "registISBN";
+  searchParams?: URLSearchParams;
 }) {
   const [scanResult, setScanResult] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
@@ -241,7 +244,11 @@ export default function QrCameraScanner({
 
   useEffect(() => {
     if (submitting || lastSubmittedRef.current === scanResult) return;
-    if (ISBN.audit(scanResult).validIsbn === false) {
+    if (
+      ISBN.audit(scanResult).validIsbn === false &&
+      validateBookOrMagazineJanCode(scanResult) === false
+    ) {
+      setSubmitting(false);
       return;
     } else {
       setSubmitting(true);
@@ -258,16 +265,30 @@ export default function QrCameraScanner({
         setSubmitting(false);
       });
     } else if (scanResult && mode === "register") {
-      void getBookInfoFromISBN(scanResult)
+      void getBookInfoFromISBNorJAN(scanResult)
         .then((bookInfo) => {
           enqueueSnackbar("書籍情報の取得に成功しました！", {
             variant: "success",
           });
-          router.push(
-            `/admin/books/new?isbn=${scanResult}&title=${encodeURIComponent(bookInfo?.title ?? "")}&author=${encodeURIComponent(bookInfo?.author ?? "")}&publisher=${encodeURIComponent(bookInfo?.publisherName ?? "")}&rakutenLinked=on`,
-          );
+          const params = new URLSearchParams({
+            isbn: scanResult,
+            title: bookInfo.title,
+            jan: bookInfo.jan,
+            author: bookInfo.author,
+            publisher: bookInfo.publisherName,
+            publishedAt: bookInfo.publishedAt,
+            rakutenLinked: "on",
+          });
+          router.push(`/admin/books/new?${params.toString()}`);
+          setSubmitting(false);
         })
-        .catch(() => {
+        .catch((e) => {
+          if (e instanceof Error && e.cause === "INVALID_BARCODE") {
+            enqueueSnackbar("バーコードが正しくありません", {
+              variant: "error",
+            });
+            setSubmitting(false);
+          }
           enqueueSnackbar(
             "書籍情報が取得できませんでした。詳細情報は手動で入力してください。",
             {
@@ -277,8 +298,26 @@ export default function QrCameraScanner({
           router.push(`/admin/books/new?isbn=${scanResult}`);
           setSubmitting(false);
         });
+    } else if (scanResult && mode === "registJAN") {
+      if (validateBookOrMagazineJanCode(scanResult) === false) {
+        setSubmitting(false);
+        return;
+      }
+      const params = searchParams ?? new URLSearchParams();
+      params.append("jan", scanResult);
+      router.push(`/admin/books/new?${params.toString()}`);
+      setSubmitting(false);
+    } else if (scanResult && mode === "registISBN") {
+      if (ISBN.audit(scanResult).validIsbn === false) {
+        setSubmitting(false);
+        return;
+      }
+      const params = searchParams ?? new URLSearchParams();
+      params.append("isbn", scanResult);
+      router.push(`/admin/books/new?${params.toString()}`);
+      setSubmitting(false);
     }
-  }, [scanResult, mode, submitting, router, enqueueSnackbar]);
+  }, [scanResult, mode, submitting, router, enqueueSnackbar, searchParams]);
 
   return (
     <div className="qr-uploader">

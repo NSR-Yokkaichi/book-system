@@ -13,10 +13,16 @@ import { returnAction } from "./action";
 export default function BooksReturn({
   book,
 }: {
-  book: { id: string; stickerId?: string; isbn: string; status: BookStatus };
+  book: {
+    id: string;
+    stickerId?: string;
+    isbn?: string;
+    jan?: string;
+    status: BookStatus;
+  };
 }) {
-  const onClickHandler = async (isbn: string) => {
-    await returnAction(isbn);
+  const onClickHandler = async (isbn?: string, jan?: string) => {
+    await returnAction(isbn, jan);
   };
   return (
     <Card>
@@ -34,7 +40,7 @@ export default function BooksReturn({
           size="small"
           variant="contained"
           color="primary"
-          onClick={() => onClickHandler(book.isbn)}
+          onClick={() => onClickHandler(book.isbn, book.jan)}
           disabled={book.status !== BookStatus.Rented}
         >
           返却

@@ -31,7 +31,7 @@ export default async function BorrowISBNPage({
     unauthorized();
   }
 
-  const rental = await Rental.getByUserAndISBN(session.user.id, isbn);
+  const rental = await Rental.getByUserAndISBNorJAN(session.user.id, isbn);
 
   if (!rental) {
     notFound();
@@ -45,6 +45,7 @@ export default async function BorrowISBNPage({
   const bookWithStatus = {
     id: book.id,
     isbn: book.isbn,
+    jan: book.jan,
     stickerId: book.stickerId || undefined,
     status: await book.getStatus(),
   };

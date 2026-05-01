@@ -21,14 +21,24 @@ export default async function NewBookPage({
   searchParams: Promise<{
     auto?: string;
     isbn?: string;
+    jan?: string;
     title?: string;
     author?: string;
     publisher?: string;
+    publishedAt?: string;
     rakutenLinked?: string;
   }>;
 }) {
-  const { auto, isbn, title, author, publisher, rakutenLinked } =
-    await searchParams;
+  const {
+    auto,
+    isbn,
+    jan,
+    title,
+    author,
+    publisher,
+    publishedAt,
+    rakutenLinked,
+  } = await searchParams;
   return (
     <Stack>
       <Typography variant="h4" gutterBottom>
@@ -42,12 +52,24 @@ export default async function NewBookPage({
           title={title}
           author={author}
           isbn={isbn}
+          jan={jan}
           publisher={publisher}
+          publishedAt={publishedAt ? new Date(publishedAt) : undefined}
           rakutenLinked={rakutenLinked}
         />
       ) : (
         <Stack mt={4} spacing={2}>
-          <QrCameraScanner mode="register" />
+          <QrCameraScanner
+            mode={
+              auto === "1"
+                ? "register"
+                : auto === "2"
+                  ? "registISBN"
+                  : auto === "3"
+                    ? "registJAN"
+                    : "register"
+            }
+          />
           <Button variant="outlined" href={"/admin/books/new"}>
             フォームで登録
           </Button>
