@@ -127,7 +127,9 @@ export class Book {
     if (!user) {
       throw new Error("User not found");
     }
-    if (user.role !== "student") {
+    const adminCanRent =
+      (await CampusConfig.getByKey("adminCanRental"))?.value === "true";
+    if (user.role !== "student" && adminCanRent) {
       throw new Error("Only students can rent books");
     }
     const rental = await dbClient.rental.create({

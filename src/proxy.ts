@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { dbClient } from "./lib/db";
+import { CampusConfig } from "./class/Campus";
 
 /**
  * @summary Next.jsのミドルウェア機能を使用して、ユーザーのアクセスを制御するためのコード
@@ -41,11 +42,10 @@ export default async function proxy(request: NextRequest) {
 
   // ユーザー(生徒)用のルートにアクセスしたとき、管理者は管理者用のルートにリダイレクトする
   // ただし、管理者も貸出可能な設定の場合はこの限りではない
-  const adminCanRental = await dbClient.campus_config.findUnique({
-    where: { key: "adminCanRental" },
-  });
+  const adminCanRent =
+    (await CampusConfig.getByKey("adminCanRental"))?.value === "true";
   if (
-    !(adminCanRental && adminCanRental.value === "true") &&
+    !adminCanRent &&
     session.user.role === "admin" &&
     !request.nextUrl.pathname.startsWith("/admin")
   ) {
