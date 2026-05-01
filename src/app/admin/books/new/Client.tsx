@@ -23,7 +23,7 @@ export default function NewBookClient({
   jan: initialJan = "",
   author: initialAuthor = "",
   publisher: initialPublisher = "",
-  publishedAt,
+  publishedAt: initialPublishedAt,
   rakutenLinked: initialRakutenLinked,
 }: {
   title?: string;
@@ -42,6 +42,13 @@ export default function NewBookClient({
   } | null>(null);
   const router = useRouter();
 
+  const formatDate = (date: Date, sep = "") =>
+    date.getFullYear() +
+    sep +
+    `00${date.getMonth() + 1}`.slice(-2) +
+    sep +
+    `00${date.getDate()}`.slice(-2);
+
   // --- 入力状態を管理 ---
   const [values, setValues] = useState({
     title: initialTitle,
@@ -49,6 +56,10 @@ export default function NewBookClient({
     jan: initialJan,
     author: initialAuthor,
     publisher: initialPublisher,
+    publishedAt: initialPublishedAt
+      ? formatDate(initialPublishedAt, "-")
+      : undefined,
+    rakutenLinked: initialRakutenLinked,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,6 +78,9 @@ export default function NewBookClient({
     if (values.jan) params.append("jan", values.jan);
     if (values.author) params.append("author", values.author);
     if (values.publisher) params.append("publisher", values.publisher);
+    if (values.publishedAt) params.append("publishedAt", values.publishedAt);
+    if (values.rakutenLinked)
+      params.append("rakutenLinked", values.rakutenLinked);
 
     return `/admin/books/new?${params.toString()}`;
   };
@@ -92,13 +106,13 @@ export default function NewBookClient({
         router.push("/admin/books");
       }}
     >
-      <Button variant="outlined" href={getAutoFillUrl(2)}>
+      <Button variant="outlined" href={getAutoFillUrl(1)}>
         ISBN/書籍・定期刊行物JANバーコードで自動入力
       </Button>
 
       <TextField
         label="本の名前"
-        name="title" // name属性をstateのキーと合わせる
+        name="title"
         required
         fullWidth
         value={values.title}
@@ -113,7 +127,7 @@ export default function NewBookClient({
         onChange={handleChange}
       />
 
-      <Button variant="outlined" href={getAutoFillUrl(3)}>
+      <Button variant="outlined" href={getAutoFillUrl(2)}>
         ISBNバーコードを読み取り
       </Button>
 
@@ -125,7 +139,7 @@ export default function NewBookClient({
         onChange={handleChange}
       />
 
-      <Button variant="outlined" href={getAutoFillUrl(1)}>
+      <Button variant="outlined" href={getAutoFillUrl(3)}>
         書籍・定期刊行バーコードを読み取り
       </Button>
 
@@ -145,14 +159,15 @@ export default function NewBookClient({
         onChange={handleChange}
       />
 
-      {/* 以下、残りのフィールド... */}
       <TextField
         label="出版年月日"
         name="publishedAt"
         fullWidth
-        defaultValue={publishedAt}
+        value={values.publishedAt}
         type={"date"}
+        onChange={handleChange}
       />
+
       <TextField
         label="ステッカーID"
         name="stickerId"

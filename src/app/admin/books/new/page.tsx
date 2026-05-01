@@ -39,6 +39,9 @@ export default async function NewBookPage({
     publishedAt,
     rakutenLinked,
   } = await searchParams;
+  const params = await searchParams;
+  const formURLparams = new URLSearchParams(params);
+  formURLparams.delete("auto");
   return (
     <Stack>
       <Typography variant="h4" gutterBottom>
@@ -69,8 +72,12 @@ export default async function NewBookPage({
                     ? "registJAN"
                     : "register"
             }
+            searchParams={params}
           />
-          <Button variant="outlined" href={"/admin/books/new"}>
+          <Button
+            variant="outlined"
+            href={`/admin/books/new?${formURLparams.toString()}`}
+          >
             フォームで登録
           </Button>
         </Stack>

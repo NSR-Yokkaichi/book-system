@@ -72,7 +72,7 @@ export default function QrCameraScanner({
   searchParams,
 }: {
   mode: "borrow" | "return" | "register" | "registJAN" | "registISBN";
-  searchParams?: URLSearchParams;
+  searchParams?: string[][] | Record<string, string> | string | URLSearchParams;
 }) {
   const [scanResult, setScanResult] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
@@ -317,8 +317,9 @@ export default function QrCameraScanner({
         setSubmitting(false);
         return;
       }
-      const params = searchParams ?? new URLSearchParams();
-      params.append("jan", scanResult);
+      const params = new URLSearchParams(searchParams);
+      params.set("jan", scanResult);
+      params.delete("auto");
       router.push(`/admin/books/new?${params.toString()}`);
       setSubmitting(false);
     } else if (scanResult && mode === "registISBN") {
@@ -326,8 +327,9 @@ export default function QrCameraScanner({
         setSubmitting(false);
         return;
       }
-      const params = searchParams ?? new URLSearchParams();
-      params.append("isbn", scanResult);
+      const params = new URLSearchParams(searchParams);
+      params.set("isbn", scanResult);
+      params.delete("auto");
       router.push(`/admin/books/new?${params.toString()}`);
       setSubmitting(false);
     }

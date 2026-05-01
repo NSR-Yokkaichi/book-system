@@ -177,6 +177,7 @@ export const getBookInfoFromISBNorJAN = async (
   });
 
   const response = await fetch(`${RAKUTEN_BOOK_API_BASE}?${params.toString()}`);
+  console.log(`${RAKUTEN_BOOK_API_BASE}?${params.toString()}`);
   if (!response.ok) {
     throw new Error(
       `Rakuten API Error: ${response.status} ${response.statusText}`,
@@ -187,13 +188,20 @@ export const getBookInfoFromISBNorJAN = async (
     throw new Error("Book not found", { cause: "NOT_FOUND" });
   }
   const res: ConvertedBookInfo = {
-    title: `${data.Items[0].Item.title} ${data.Items[0].Item.subTitle}`.trim(),
+    title:
+      `${data.Items[0].Item.title}${data.Items[0].Item.subTitle ? ` ${data.Items[0].Item.subTitle}` : ""}`.trim(),
     author: data.Items[0].Item.author,
     publisherName: data.Items[0].Item.publisherName,
     isbn: data.Items[0].Item.isbn,
     jan: data.Items[0].Item.jan,
     itemUrl: data.Items[0].Item.itemUrl,
-    publishedAt: new Date(data.Items[0].Item.salesDate).toDateString(),
+    publishedAt: new Date(
+      data.Items[0].Item.salesDate
+        .replaceAll("頃", "")
+        .replace("年", "/")
+        .replace("月", "/")
+        .replace("日", "/"),
+    ).toLocaleDateString(),
     itemImage: {
       small: data.Items[0].Item.smallImageUrl,
       medium: data.Items[0].Item.mediumImageUrl,

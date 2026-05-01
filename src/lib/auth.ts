@@ -24,7 +24,7 @@ export const auth = betterAuth({
         }
       : undefined,
     usePlural: false, // テーブル名が複数形なら true に変更
-    debugLogs: process.env.NODE_ENV === "development",
+    //debugLogs: process.env.NODE_ENV === "development",
   }),
   socialProviders: {
     google: {
