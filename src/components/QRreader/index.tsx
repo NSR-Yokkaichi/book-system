@@ -267,21 +267,14 @@ export default function QrCameraScanner({
             `/admin/books/new?isbn=${scanResult}&title=${encodeURIComponent(bookInfo?.title ?? "")}&author=${encodeURIComponent(bookInfo?.author ?? "")}&publisher=${encodeURIComponent(bookInfo?.publisherName ?? "")}&rakutenLinked=on`,
           );
         })
-        .catch((e) => {
-          if (e instanceof Error && e.cause === "NOT_FOUND") {
-            enqueueSnackbar(
-              "書籍情報が見つかりませんでした。詳細情報は手動で入力してください。",
-              {
-                variant: "warning",
-              },
-            );
-            router.push(`/admin/books/new?isbn=${scanResult}`);
-            return;
-          }
-          console.log("Error fetching book info:", e);
-          enqueueSnackbar("書籍情報の取得に失敗しました", {
-            variant: "error",
-          });
+        .catch(() => {
+          enqueueSnackbar(
+            "書籍情報が取得できませんでした。詳細情報は手動で入力してください。",
+            {
+              variant: "warning",
+            },
+          );
+          router.push(`/admin/books/new?isbn=${scanResult}`);
           setSubmitting(false);
         });
     }

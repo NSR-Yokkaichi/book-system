@@ -11,6 +11,7 @@ import type { Metadata } from "next";
 import { CampusConfig } from "@/class/Campus";
 import QrCameraScanner from "@/components/QRreader";
 import { regist } from "./action";
+import NewBookClient from "./Client";
 
 export async function generateMetadata() {
   const campusName = await CampusConfig.getByKey("name");
@@ -44,64 +45,13 @@ export default async function NewBookPage({
         こちらのフォームから新しい本を登録できます。
       </Typography>
       {!auto ? (
-        <Stack
-          component="form"
-          spacing={2}
-          mt={4}
-          maxWidth="400px"
-          action={regist}
-        >
-          <TextField
-            label="本の名前"
-            name="name"
-            required
-            fullWidth
-            defaultValue={title}
-          />
-          <TextField
-            label="ISBN"
-            name="isbn"
-            required
-            fullWidth
-            defaultValue={isbn}
-          />
-          <Button
-            variant="outlined"
-            href={`/admin/books/new?auto=1${isbn ? `&isbn=${isbn}` : ""}`}
-          >
-            ISBNバーコードで登録
-          </Button>
-          <TextField
-            label="著者"
-            name="author"
-            fullWidth
-            defaultValue={author}
-          />
-          <TextField
-            label="出版社"
-            name="publisher"
-            fullWidth
-            defaultValue={publisher}
-          />
-          <TextField label="ステッカーID" name="stickerId" fullWidth />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="rakutenLinked"
-                defaultChecked={["1", "true", "on"].includes(
-                  rakutenLinked ?? "",
-                )}
-              />
-            }
-            label="楽天ブックスに登録されています"
-          />
-          <FormHelperText>
-            楽天ブックスに登録されている本の場合、チェックボックスをオンにすると書影が登録できます。
-          </FormHelperText>
-          <Button type="submit" variant="contained" color="primary">
-            登録
-          </Button>
-        </Stack>
+        <NewBookClient
+          title={title}
+          author={author}
+          isbn={isbn}
+          publisher={publisher}
+          rakutenLinked={rakutenLinked}
+        />
       ) : (
         <Stack mt={4} spacing={2}>
           <QrCameraScanner mode="register" />

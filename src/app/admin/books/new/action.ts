@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { Book } from "@/class/Book";
 import { getBookInfoFromISBN } from "@/lib/rakutenAPI";
 
@@ -33,5 +32,4 @@ export const regist = async (formData: FormData) => {
     rakutenLinked,
     imageUrl,
   });
-  redirect("/admin/books");
 };
