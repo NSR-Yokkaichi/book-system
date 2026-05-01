@@ -4,6 +4,7 @@ SELECT -- rentalテーブルの全カラム
   r.userId,
   r.bookId,
   r.expiresAt,
+r.returnedAt,
   r.createdAt AS rental_createdAt,
   r.updatedAt AS rental_updated_at,
   -- bookテーブルの全カラム

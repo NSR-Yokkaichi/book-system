@@ -26,6 +26,8 @@ async function RentalCard({ rental, now }: { rental: Rental; now: Date }) {
   const isOverdue = !rental.returnedAt && rental.expiresAt < now;
   const isReturning = !!rental.returnedAt;
 
+  console.log(rental.returnedAt);
+
   return (
     <Card
       variant="outlined"
