@@ -93,6 +93,10 @@ class ModelDelegate<T = any> {
     where?: Record<string, any>;
     include?: Record<string, boolean>;
   }): Promise<T[]> {
+    if (process.env.NEXT_PHASE === "phase-production-build") {
+      console.warn(`Skipping fetch for ${this.tableName} during build phase.`);
+      return [];
+    }
     const res = await fetch(
       `${BASE_URL}/${this.tableName}${this.buildQuery(args)}`,
       { cache: "no-store", ...(this.fetchOptions || undefined) },
@@ -108,6 +112,10 @@ class ModelDelegate<T = any> {
     where?: Record<string, any>;
     include?: Record<string, boolean>;
   }): Promise<T | null> {
+    if (process.env.NEXT_PHASE === "phase-production-build") {
+      console.warn(`Skipping fetch for ${this.tableName} during build phase.`);
+      return null;
+    }
     const records = await this.findMany(args);
     return records.length > 0 ? records[0] : null;
   }
@@ -116,6 +124,10 @@ class ModelDelegate<T = any> {
     where: Record<string, any>;
     include?: Record<string, boolean>;
   }): Promise<T | null> {
+    if (process.env.NEXT_PHASE === "phase-production-build") {
+      console.warn(`Skipping fetch for ${this.tableName} during build phase.`);
+      return null;
+    }
     if (args.where.id) {
       let url = `${BASE_URL}/${this.tableName}/${args.where.id}`;
       if (args.include) {
@@ -203,6 +215,10 @@ class ModelDelegate<T = any> {
   }
 
   async count(args?: { where?: Record<string, any> }): Promise<number> {
+    if (process.env.NEXT_PHASE === "phase-production-build") {
+      console.warn(`Skipping fetch for ${this.tableName} during build phase.`);
+      return 0;
+    }
     const res = await this.findMany(args);
     return res.length;
   }
