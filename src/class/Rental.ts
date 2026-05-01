@@ -179,6 +179,7 @@ export class Rental {
         userId: this.userId,
         bookId: this.bookId,
         expiresAt: this.expiresAt,
+        returnedAt: this.returnedAt,
       },
     });
   }
