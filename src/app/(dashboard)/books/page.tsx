@@ -4,6 +4,8 @@ import { Book } from "@/class/Book";
 import { CampusConfig } from "@/class/Campus";
 import BookList from "@/components/Lists/BookList";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata() {
   const campusName = await CampusConfig.getByKey("name");
   const metadata: Metadata = {
