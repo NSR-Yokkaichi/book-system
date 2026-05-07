@@ -1,3 +1,6 @@
+ALTER TABLE `rental`
+ADD `returnedAt` DATETIME NULL DEFAULT NULL
+AFTER `expiresAt`;
 CREATE VIEW v_rental_book_full AS
 SELECT -- rentalテーブルの全カラム
   r.id AS rental_id,
