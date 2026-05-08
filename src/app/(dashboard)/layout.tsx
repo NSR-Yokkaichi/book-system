@@ -25,7 +25,7 @@ export async function generateMetadata() {
   const metadata: Metadata = {
     title: {
       default: `${campusName?.value} 図書管理システム`,
-      template: `$s | ${campusName?.value} 図書管理システム`,
+      template: `%s | ${campusName?.value} 図書管理システム`,
     },
     description: `${campusName?.value} 図書管理システムです。`,
   };
