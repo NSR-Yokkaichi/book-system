@@ -11,6 +11,12 @@ import { transporter } from "./email";
 import { admin, student } from "./permissions";
 
 export const auth = betterAuth({
+  account: {
+    accountLinking: {
+      enabled: false,
+      disableImplicitLinking: false,
+    },
+  },
   // Prismaの代わりに php-crud-api アダプターを指定
   database: phpCrudApiAdapter({
     baseURL: process.env.PHP_CRUD_API_URL
