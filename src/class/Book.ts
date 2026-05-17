@@ -30,8 +30,9 @@ export class Book {
    */
   async getStatus(): Promise<BookStatus> {
     const rental = await dbClient.rental.findFirst({
-      where: { bookId: this.id, returnedAt: null },
+      where: { bookId: this.id },
     });
+    if (rental?.returnedAt) return BookStatus.Available;
     return rental ? BookStatus.Rented : BookStatus.Available;
   }
 
