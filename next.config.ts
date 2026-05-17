@@ -39,8 +39,8 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value:
               process.env.NODE_ENV === "production"
-                ? "default-src 'self'; img-src 'self' https://*.googleusercontent.com https://thumbnail.image.rakuten.co.jp; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
-                : "default-src 'self'; img-src 'self' https://*.googleusercontent.com https://thumbnail.image.rakuten.co.jp; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'",
+                ? "default-src 'self'; img-src 'self' https://lh3.googleusercontent.com  https://thumbnail.image.rakuten.co.jp; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
+                : "default-src 'self'; img-src 'self' https://lh3.googleusercontent.com  https://thumbnail.image.rakuten.co.jp; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'",
           },
         ],
       },
