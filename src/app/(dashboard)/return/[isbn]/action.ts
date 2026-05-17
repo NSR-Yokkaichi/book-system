@@ -14,6 +14,7 @@ export const returnAction = async (isbn?: string, jan?: string) => {
 
   const rental = await Rental.getByUserAndISBNorJAN(
     session.user.id,
+    // biome-ignore lint/style/noNonNullAssertion: どちらかの値は必ず挿入されている
     (isbn || jan)!,
   );
   if (!rental) {

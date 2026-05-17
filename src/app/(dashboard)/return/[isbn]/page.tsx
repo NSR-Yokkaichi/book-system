@@ -5,6 +5,8 @@ import { notFound, unauthorized } from "next/navigation";
 import { Book } from "@/class/Book";
 import { CampusConfig } from "@/class/Campus";
 import { Rental } from "@/class/Rental";
+import SchoolPosGuard from "@/components/Guards/SchoolPosGuard";
+import { getPosCodes } from "@/config";
 import { auth } from "@/lib/auth";
 import BooksReturn from "./Client";
 
@@ -24,14 +26,32 @@ export default async function BorrowISBNPage({
 }: {
   params: Promise<{ isbn: string }>;
 }) {
-  const { isbn } = await params;
-
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) {
     unauthorized();
   }
+  const { isbn } = await params;
+  const pos = await getPosCodes();
+  return (
+    <Stack spacing={2}>
+      <Typography variant="h4" component="h1">
+        本の返却
+      </Typography>
+      <SchoolPosGuard pos={pos}>
+        <ReturnChildren isbn={isbn} userId={session.user.id} />
+      </SchoolPosGuard>
+    </Stack>
+  );
+}
 
-  const rental = await Rental.getByUserAndISBNorJAN(session.user.id, isbn);
+const ReturnChildren = async ({
+  isbn,
+  userId,
+}: {
+  isbn: string;
+  userId: string;
+}) => {
+  const rental = await Rental.getByUserAndISBNorJAN(userId, isbn);
 
   if (!rental) {
     notFound();
@@ -50,16 +70,13 @@ export default async function BorrowISBNPage({
     status: await book.getStatus(),
   };
   return (
-    <Stack spacing={2}>
-      <Typography variant="h4" component="h1">
-        本の返却
-      </Typography>
+    <>
       <Typography variant="body1" component="p">
         「{book.name}」の返却を行います。
       </Typography>
       <Stack spacing={2}>
         <BooksReturn book={bookWithStatus} />
       </Stack>
-    </Stack>
+    </>
   );
-}
+};
