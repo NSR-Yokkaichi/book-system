@@ -6241,11 +6241,14 @@ namespace Tqdev\PhpCrudApi\Database {
                 case 'mysql':
                     return $options + [
                         \PDO::MYSQL_ATTR_FOUND_ROWS => true,
-                        \PDO::ATTR_PERSISTENT => true,
+                        // disable persistent connections to avoid exhausting
+                        // MySQL user connection limits
+                        \PDO::ATTR_PERSISTENT => false,
                     ];
                 case 'pgsql':
                     return $options + [
-                        \PDO::ATTR_PERSISTENT => true,
+                        // disable persistent connections for pgsql as well
+                        \PDO::ATTR_PERSISTENT => false,
                     ];
                 case 'sqlsrv':
                     return $options + [];
