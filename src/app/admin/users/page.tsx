@@ -18,7 +18,7 @@ export async function generateMetadata() {
 
 export default async function UsersPage() {
   const users = await auth.api.listUsers({
-    query: { limit: 100 },
+    query: {},
     headers: await headers(),
   });
   return (
