@@ -14,6 +14,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { isNeedWarn, regist } from "./action";
 
@@ -34,6 +35,7 @@ export default function NewBookClient({
   publishedAt?: Date;
   rakutenLinked?: string;
 }) {
+  const { enqueueSnackbar } = useSnackbar();
   const [inProgress, setInProgress] = useState(false);
   const [resolvedWarning, setResolvedWarning] = useState(false);
   const [warning, setWarning] = useState<{
@@ -101,9 +103,16 @@ export default function NewBookClient({
             return;
           }
         }
-        await regist(formdata);
-        setInProgress(false);
-        router.push("/admin/books");
+        try {
+          await regist(formdata);
+          router.push("/admin/books");
+        } catch {
+          enqueueSnackbar("登録に失敗しました。入力内容を確認してください。", {
+            variant: "error",
+          });
+        } finally {
+          setInProgress(false);
+        }
       }}
     >
       <Button variant="outlined" href={getAutoFillUrl(1)}>

@@ -36,6 +36,7 @@ export const regist = async (formData: FormData) => {
       throw new Error("ISBN・JANがないため楽天APIで問い合わせられません。");
     }
     const bookInfo = await getBookInfoFromISBNorJAN(
+      // biome-ignore lint/style/noNonNullAssertion: 誤検知
       (getOptional("isbn", formData) || getOptional("jan", formData))!,
     );
     if (bookInfo) {
@@ -51,7 +52,8 @@ export const regist = async (formData: FormData) => {
     author: getOptional("author", formData),
     publisher: getOptional("publisher", formData),
     publishedAt: getOptional("publishedAt", formData)
-      ? new Date(getOptional("publishedAt", formData)!)
+      ? // biome-ignore lint/style/noNonNullAssertion: 誤検知
+        new Date(getOptional("publishedAt", formData)!)
       : undefined,
     stickerId: getOptional("stickerId", formData),
     rakutenLinked,
@@ -82,6 +84,7 @@ export const isNeedWarn = async (
         severity: "warning",
       };
   } else if (!stickerId) {
+    // biome-ignore lint/style/noNonNullAssertion: どちらかの値は必ず挿入されている
     const existingBook = await Book.getByISBNorJAN((isbn || jan)!);
     if (existingBook.length > 0)
       return {
