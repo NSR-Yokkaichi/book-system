@@ -232,9 +232,19 @@ export class Book {
    * @returns 本の情報の配列
    * @author yuito-it<yuito@yuito-it.jp>
    */
-  static async getAll(): Promise<Book[]> {
-    const books = await dbClient.book.findMany();
+  static async getAll({
+    take,
+    skip,
+  }: {
+    take?: number;
+    skip?: number;
+  } = {}): Promise<Book[]> {
+    const books = await dbClient.book.findMany({ take, skip });
     return books.map((b) => new Book(b));
+  }
+
+  static async count(): Promise<number> {
+    return await dbClient.book.count();
   }
 
   /**

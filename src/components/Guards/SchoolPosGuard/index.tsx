@@ -1,6 +1,13 @@
 "use client";
 
-import { Dialog, DialogContent, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function SchoolPosGuard({
@@ -68,6 +75,7 @@ export default function SchoolPosGuard({
 }
 
 function GuardPopup({ open }: { open: boolean }) {
+  const router = useRouter();
   return (
     <Dialog open={open} disableEscapeKeyDown>
       <DialogContent>
@@ -78,6 +86,22 @@ function GuardPopup({ open }: { open: boolean }) {
           位置情報が確認できないか、学校の位置情報の範囲外にいるようです。場所を確認してください。
         </Typography>
       </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => {
+            router.push("/");
+          }}
+        >
+          ホームへ
+        </Button>
+        <Button
+          onClick={() => {
+            router.refresh();
+          }}
+        >
+          再試行
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 }

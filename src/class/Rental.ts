@@ -136,8 +136,17 @@ export class Rental {
     );
   }
 
-  static async getAll(): Promise<Rental[]> {
-    const rentals = await dbClient.rental.findMany();
+  static async getAll({
+    take,
+    skip,
+  }: {
+    take?: number;
+    skip?: number;
+  } = {}): Promise<Rental[]> {
+    const rentals = await dbClient.rental.findMany({
+      take,
+      skip,
+    });
     return rentals.map(
       (rental) =>
         new Rental(

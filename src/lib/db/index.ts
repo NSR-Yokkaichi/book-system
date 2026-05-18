@@ -29,6 +29,8 @@ class ModelDelegate<T = any> {
   private buildQuery(args?: {
     where?: Record<string, any>;
     include?: Record<string, boolean>;
+    take?: number;
+    skip?: number;
   }) {
     const params = new URLSearchParams();
 
@@ -85,12 +87,25 @@ class ModelDelegate<T = any> {
       }
     }
 
+    // page=1,20で20件ずつの1ページ目を意味するため、skip と take から page パラメータを計算して追加する
+    // takeのみの場合は、size=takeで指定する
+    if (args?.take !== undefined) {
+      const page =
+        args.skip !== undefined ? Math.floor(args.skip / args.take) + 1 : 1;
+      params.append("page", `${page},${args.take}`);
+    } else if (args?.skip !== undefined) {
+      // takeがない場合は、skipの分だけスキップして残り全件を取る形になる。php-crud-apiはpage=2,1000のように大きな数を指定することでこれを実現できる。
+      params.append("page", `${Math.floor(args.skip / 1000) + 1},1000`);
+    }
+
     const qs = params.toString();
     return qs ? `?${qs}` : "";
   }
 
   async findMany(args?: {
     where?: Record<string, any>;
+    take?: number;
+    skip?: number;
     include?: Record<string, boolean>;
   }): Promise<T[]> {
     if (process.env.NEXT_PHASE === "phase-production-build") {

@@ -1,8 +1,10 @@
 import { Button, Stack, Typography } from "@mui/material";
 import type { Metadata } from "next";
+import { Suspense, use } from "react";
 import { Book } from "@/class/Book";
 import { CampusConfig } from "@/class/Campus";
 import BookList from "@/components/Lists/BookList";
+import PaginationClient from "@/components/Lists/Pagination";
 
 export const dynamic = "force-dynamic";
 
@@ -15,16 +17,12 @@ export async function generateMetadata() {
   return metadata;
 }
 
-export default async function Home() {
-  const books = await Book.getAll();
-
-  const booksWithStatus = await Promise.all(
-    books.map(async (book) => {
-      const status = await book.getStatus();
-      return { ...book, status };
-    }),
-  );
-
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: number }>;
+}) {
+  const { page } = await searchParams;
   return (
     <Stack>
       <Typography variant="h4" gutterBottom>
@@ -41,7 +39,42 @@ export default async function Home() {
       >
         新しい本を登録
       </Button>
-      <BookList booksWithStatus={booksWithStatus} isAdmin={true} />
+      <Stack spacing={2} justifyContent={"center"} mt={2} width={"100%"}>
+        <Suspense fallback={<Typography>Loading books...</Typography>}>
+          <BookListComponent page={page} />
+        </Suspense>
+        <Suspense fallback={<Typography>Loading pagination...</Typography>}>
+          <BookListPagination page={page} />
+        </Suspense>
+      </Stack>
     </Stack>
   );
 }
+
+const BookListComponent = ({ page = 1 }: { page?: number }) => {
+  // max: 15件
+  // skip: (page - 1) * 15
+  const books = use(Book.getAll({ take: 15, skip: (page - 1) * 15 }));
+
+  const booksWithStatus = use(
+    Promise.all(
+      books.map(async (book) => {
+        const status = await book.getStatus();
+        return { ...book, status };
+      }),
+    ),
+  );
+  return <BookList booksWithStatus={booksWithStatus} isAdmin={true} />;
+};
+
+const BookListPagination = ({ page = 1 }: { page?: number }) => {
+  const bookCount = use(Book.count());
+  const totalPages = Math.ceil(bookCount / 15);
+  return (
+    <PaginationClient
+      basePath="/books"
+      totalPages={totalPages === 0 ? 1 : totalPages}
+      page={page}
+    />
+  );
+};
